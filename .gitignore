@@ -1,0 +1,8 @@
+node_modules
+ignored
+listen_api_test
+BE/config
+BE/testsql.js
+db.json
+.DS_Store
+migrations.bk
