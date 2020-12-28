@@ -1,42 +1,55 @@
 const util = require('util')
-const db = require('./models');
-const episodes = require('./models/episodes');
-const records = require('./models/records');
+const db = require('../models');
 const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records } = db;
 
 const getMe = async (req, res, next) => {
-  const me = await Users.findOne({
-    where: {
-      username: ''
-    },
-    attributes: ['username', 'email', 'isAdmin'],
-    include: [
-      {
-        model: Podcasts,
-        as: 'subscriptions',
-        attributes: ['id'],
-        through: {
-          attributes: []
-        }
+  try {
+    const me = await Users.findOne({
+      where: {
+        username: 'jon'
       },
-      {
-        model: Playlists,
-        attributes: ['id', 'name'],
-        include: {
-          model: Episodes,
+      attributes: ['username', 'email', 'isAdmin'],
+      include: [
+        {
+          model: Podcasts,
+          as: 'subscriptions',
           attributes: ['id'],
           through: {
             attributes: []
           }
+        },
+        {
+          model: Playlists,
+          attributes: ['id', 'name'],
+          include: {
+            model: Episodes,
+            attributes: ['id'],
+            through: {
+              attributes: []
+            }
+          }
+        },
+        {
+          model: Records,
+          as: 'playedRecords',
+          attributes: ['episodeId', 'progress']
         }
-      },
-      {
-        model: Records,
-        as: 'playedRecords',
-        attributes: ['episodeId', 'progress']
-      }
-    ]
-  })
-
+      ]
+    })
+    if (!me || !me.username) return next();
+    res.locals.data = me;
+    res.locals.ok = true;
+  } catch (error) {
+    console.log(error);
+    res.locals.error = error;
+  }
   next();
 }
+
+const getUserByUsername = async (req, res, next) => {
+  next()
+}
+
+const userControllers = { getMe }
+
+module.exports = userControllers
