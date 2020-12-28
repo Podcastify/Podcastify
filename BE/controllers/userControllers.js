@@ -6,7 +6,7 @@ const getMe = async (req, res, next) => {
   try {
     const me = await Users.findOne({
       where: {
-        username: 'jon'
+        username: 'john'
       },
       attributes: ['username', 'email', 'isAdmin'],
       include: [
