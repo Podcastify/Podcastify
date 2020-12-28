@@ -6,3 +6,4 @@ BE/testsql.js
 db.json
 .DS_Store
 migrations.bk
+ecosystem.config.js
