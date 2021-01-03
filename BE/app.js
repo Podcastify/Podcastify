@@ -5,8 +5,10 @@ const cors = require('cors');
 var logger = require('morgan');
 const flash = require('connect-flash');
 const listenKey = process.env._listenKey;
+const secret = process.env._secret;
+const { requiredLogin } = require('./controllers/userControllers')
 
-var indexRouter = require('./routes/index');
+var meRouter = require('./routes/me');
 var usersRouter = require('./routes/users');
 const listenAPIRouter = require('./routes/listenAPI');
 
@@ -15,6 +17,7 @@ var app = express();
 const init = (req, res, next) => {
   res.locals.ok = false;
   app.locals.listenKey = listenKey;
+  app.locals.secret = secret
   next();
 }
 
@@ -27,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 app.use(init)
 
-app.use('/', indexRouter);
+app.use('/me', requiredLogin, meRouter);
 app.use('/users', usersRouter);
 app.use('/listenAPI', listenAPIRouter);
 

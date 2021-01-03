@@ -1,3 +1,6 @@
+// TODO users/register
+// TODO users/login
+
 var express = require('express');
 var router = express.Router();
 const { getMe } = require('../controllers/userControllers');
