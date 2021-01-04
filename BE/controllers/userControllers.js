@@ -3,9 +3,42 @@
 
 
 // const util = require('util')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const db = require('../models');
 const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records } = db;
+
+const register = async (req, res, next) => {
+  // console.log(req.body)
+  const { username, password } = req.body;
+  if (!username || !password) {
+    res.locals.errorMessage = 'Username, password are required'
+    return res.status(400).send(JSON.stringify(res.locals))
+  }
+  const saltRounds = 10;
+  const hash = bcrypt.hashSync(password, saltRounds)
+
+  try {
+    const newUser = await Users.create(
+      {
+        username,
+        password: hash
+      }
+    )
+
+    const token = jwt.sign({ id: newUser.id, username: newUser.username }, res.app.locals.secret);
+    res.locals.token = token;
+    res.locals.ok = true;
+  } catch (err) {
+    res.locals.error = err;
+    return res.status(500).send(JSON.stringify(res.locals))
+  }
+  next();
+}
+
+const login = async (req, res, next) => {
+  const { username, password } = req.body;
+}
 
 const requiredLogin = async (req, res, next) => {
   const authHeader = req.headers['authorization'] || '';
@@ -75,6 +108,6 @@ const getUserByUsername = async (req, res, next) => {
   next()
 }
 
-const userControllers = { getMe, requiredLogin, getUserByUsername }
+const userControllers = { getMe, requiredLogin, getUserByUsername, register }
 
 module.exports = userControllers
