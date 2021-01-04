@@ -1,7 +1,3 @@
-// TODO 登入
-// TODO 註冊
-
-
 // const util = require('util')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -25,14 +21,13 @@ const register = async (req, res, next) => {
         password: hash
       }
     )
-
-    const token = jwt.sign({ id: newUser.id, username: newUser.username }, res.app.locals.secret);
-    res.locals.token = token;
-    res.locals.ok = true;
   } catch (err) {
-    res.locals.error = err.errors[0].message;
+    res.locals.error = err.errors[0].message; //FIXME catch err
     return res.status(500).send(JSON.stringify(res.locals))
   }
+  const token = jwt.sign({ id: newUser.id, username: newUser.username }, res.app.locals.secret);
+  res.locals.token = token;
+  res.locals.ok = true;
   next();
 }
 
@@ -65,7 +60,7 @@ const login = async (req, res, next) => {
     res.locals.token = token;
     res.locals.ok = true;
   } catch (err) {
-    res.locals.error = err.errors[0].message;
+    res.locals.error = err.errors[0].message; //FIXME catch err
     return res.status(500).send(JSON.stringify(res.locals))
   }
   next()
