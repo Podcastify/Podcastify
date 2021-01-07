@@ -7,11 +7,20 @@ const StyledForm = styled.form`
   font-family: Helvetica;
 `;
 
+const StyledFormTitle = styled.h1`
+  height: 83px;
+  font-size: 59px;
+  line-height: 1.2;
+  letter-spacing: 5px;
+  color: #ffffff;
+  font-weight: normal;
+`
+
 export default function UserForm() {
 
   return (
     <StyledForm>
-      <h1>FORM</h1>
+      <StyledFormTitle>FORM</StyledFormTitle>
       <Input />
       <Input />
       <Input />

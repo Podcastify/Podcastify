@@ -1,20 +1,20 @@
 //TODO caret styling
 
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 const StyledInputContainer = styled.div`
-  & ~ & :{
-    margin-top: 10px
+  & ~ & {
+    margin-top: 18px
   }
 `
 
 const StyledInput = styled.input`
   width: 100%;
   height: 72px;
+  padding-left: 18px;
   box-sizing: border-box;
   border: 3px solid #FFFFFF;
   border-radius: 14px;
-  padding-left: 28px;
   color: #FFFFFF;
   font-size: 30px;
   line-height: 1.2;
@@ -22,8 +22,8 @@ const StyledInput = styled.input`
   background: rgba(0, 0, 0, 0);
   transition: all 0.5s;
   &:hover {
-    opacity: 1;
-    background: #9D9D9D;
+    opacity: .5;
+    background: rgb(65, 47, 42);
   }
   ${({ type }) =>
     (type === "button" || type === 'submit')
@@ -34,13 +34,27 @@ const StyledInput = styled.input`
     }`
   }
   &:focus {
-    background: rgba(0, 0, 0, 0.5);
+    background: #9d9d9d;
+    opacity: 1;
     caret-color: white;
   }
+  &:focus::placeholder {
+    color: transparent;
+  }
+`
+
+const StyledInputTitle = styled.h3`
+  margin: 0px 0px 20px 5px;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: 3px;
+  color: #ffffff;
+  font-weight: normal;
 `
 
 const FormInputErrorMessage = styled.div`
   height: 28px;
+  margin-top: 5px;
   color: #e9502e;
   font-size: 20px;
   text-align: left;
@@ -49,13 +63,13 @@ const FormInputErrorMessage = styled.div`
 export default function Input(props) {
   return (
     <StyledInputContainer>
-      <h3>帳號</h3>
+      <StyledInputTitle>title</StyledInputTitle>
       <StyledInput
         {...props}
         placeholder="帳 號"
         pattern="/[a-zA-Z0-9]/g"
       />
-      <FormInputErrorMessage>錯誤訊息</FormInputErrorMessage>
+      <FormInputErrorMessage></FormInputErrorMessage>
     </StyledInputContainer>
   )
 }
