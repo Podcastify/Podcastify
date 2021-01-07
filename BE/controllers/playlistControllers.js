@@ -1,4 +1,3 @@
-//TODO change playlist name
 //TODO add episode to playlist
 //TODO remove episode from playlist
 
@@ -31,7 +30,7 @@ const addPlaylist = async (req, res, next) => {
   try {
     newPlaylist = await Playlists.create(
       {
-        name,
+        ...req.body,
         userId: id
       }
     )
@@ -93,4 +92,31 @@ const deletePlaylist = async (req, res, next) => {
   next();
 }
 
-module.exports = { addPlaylist, getPlaylists, deletePlaylist };
+const editPlaylist = async (req, res, next) => {
+  const userId = req.jwtData.id;
+  const playlistId = req.params.id;
+  const { name } = req.body;
+  try {
+    const result = await Playlists.update(
+      {
+        name
+      },
+      {
+        where: {
+          id: playlistId,
+          userId
+        }
+      }
+    );
+    if (result == 0) {
+      res.locals.errorMessage = 'Cannot edit this playlist because you do not own it or it does not exist.';
+      return res.status(400).send(JSON.stringify(res.locals));
+    }
+  } catch (err) {
+    res.locals.error = err;
+    return res.status(500).send(JSON.stringify(res.locals));
+  }
+  next();
+}
+
+module.exports = { addPlaylist, getPlaylists, deletePlaylist, editPlaylist };
