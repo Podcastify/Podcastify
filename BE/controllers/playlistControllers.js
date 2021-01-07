@@ -1,4 +1,3 @@
-//TODO delete a playlist
 //TODO change playlist name
 //TODO add episode to playlist
 //TODO remove episode from playlist
@@ -71,7 +70,27 @@ const getPlaylists = async (req, res, next) => {
 }
 
 const deletePlaylist = async (req, res, next) => {
-
+  const userId = req.jwtData.id;
+  const playlistId = req.params.id;
+  try {
+    const result = await Playlists.destroy(
+      {
+        where: {
+          id: playlistId,
+          userId
+        }
+      }
+    )
+    if (result === 0) {
+      res.locals.errorMessage = 'Cannot delete this playlist because you do not own it or it does not exist.';
+      return res.status(400).send(JSON.stringify(res.locals));
+    }
+  } catch (err) {
+    console.log(err)
+    res.locals.error = err;
+    return res.status(500).send(JSON.stringify(res.locals));
+  }
+  next();
 }
 
-module.exports = { addPlaylist, getPlaylists };
+module.exports = { addPlaylist, getPlaylists, deletePlaylist };

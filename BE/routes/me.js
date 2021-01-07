@@ -4,7 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
-const { addPlaylist, getPlaylists } = require('../controllers/playlistControllers');
+const { addPlaylist, getPlaylists, deletePlaylist } = require('../controllers/playlistControllers');
 const { getMe } = require('../controllers/userControllers');
 
 /* GET home page. */
@@ -23,9 +23,8 @@ router.post('/playlist', addPlaylist, function (req, res, next) {
   res.send(JSON.stringify(res.locals));
 });
 
-router.delete('/playlist/:id', function (req, res, next) {
+router.delete('/playlist/:id', deletePlaylist, function (req, res, next) {
   res.locals.ok = true;
-  res.locals.playlistId = req.params.id;
   res.send(JSON.stringify(res.locals));
 })
 
