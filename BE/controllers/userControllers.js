@@ -36,7 +36,6 @@ const login = async (req, res, next) => {
     res.locals.errorMessage = 'Invalid inputs, please check your username or password again.'
     res.status(400).send(JSON.stringify(res.locals));
   }
-
   let { username, password } = req.body;
   if (!username || !password) {
     res.locals.errorMessage = 'Username, password are required'
@@ -72,7 +71,6 @@ const requiredLogin = async (req, res, next) => {
   const authHeader = req.headers['authorization'] || '';
   const token = authHeader.replace('Bearer ', '');
   let jwtData;
-
   try {
     jwtData = jwt.verify(token, res.app.locals.secret);
   } catch (error) {
