@@ -13,9 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       // models.Users.belongsToMany(models.Podcasts, { through: Subscriptions });
       // models.Podcasts.belongsToMany(models.Users, { through: Subscriptions });
+      // Subscriptions.(models.Podcasts);
+      // Subscriptions.belongsTo(models.Users)
     }
   };
   Subscriptions.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     podcastId: DataTypes.STRING,
     userId: DataTypes.INTEGER
   }, {
