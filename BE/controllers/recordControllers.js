@@ -1,6 +1,6 @@
 const db = require('../models');
 const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records, PlaylistEpisode } = db;
-//TODO get records of the user
+
 const getUserPlayedRecord = async (req, res, next) => {
   const userId = req.jwtData.id;
   let record;
@@ -22,7 +22,6 @@ const getUserPlayedRecord = async (req, res, next) => {
   next();
 }
 
-//TODO write to records
 const writeRecord = async (req, res, next) => {
   const userId = req.jwtData.id;
   const { episodeId } = req.params;

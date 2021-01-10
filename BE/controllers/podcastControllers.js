@@ -1,5 +1,4 @@
 const db = require('../models');
-const subscriptions = require('../models/subscriptions');
 const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records, PlaylistEpisode } = db;
 
 const getUserSubscriptions = async (req, res, next) => {
@@ -23,7 +22,6 @@ const getUserSubscriptions = async (req, res, next) => {
       ]
     })
   } catch (err) {
-    console.log(err)
     res.locals.error = err;
     return res.status(400).json(res.locals)
   }
