@@ -179,8 +179,6 @@ const addEpisodeToPlaylist = async (req, res, next) => {
   } catch (err) {
 
   }
-  console.log('created tags:', result);
-  console.log({ values })
   if (result > 0) {
     res.locals.errorMessage = 'Duplicate episode in the playlist.'
     return res.status(400).json(res.locals);

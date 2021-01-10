@@ -112,9 +112,10 @@ const getMe = async (req, res, next) => {
         {
           model: Records,
           as: 'playedRecords',
-          attributes: ['episodeId', 'progress']
+          attributes: ['episodeId', 'progress'],
         }
-      ]
+      ],
+      order: [[{ model: Records, as: 'playedRecords' }, 'updatedAt', 'DESC']]
     })
     if (!me || !me.username) return next();
     res.locals.data = me;

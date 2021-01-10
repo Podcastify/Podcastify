@@ -1,5 +1,3 @@
-// TODO me/record
-
 var express = require('express');
 var router = express.Router();
 const {
@@ -11,16 +9,14 @@ const {
   removeEpisodeFromPlaylist,
   checkPlaylistOwnership
 } = require('../controllers/playlistControllers');
-const {
-  validator,
-  blockIdData,
-} = require('../utils');
+const { validator, blockIdData, } = require('../utils');
 const { getMe } = require('../controllers/userControllers');
 const {
   getUserSubscriptions,
   subscribe,
   unsubscribe
 } = require('../controllers/podcastControllers');
+const { getUserPlayedRecord, writeRecord } = require('../controllers/recordControllers');
 
 /* GET home page. */
 router.get('/', getMe, function (req, res, next) {
@@ -84,6 +80,18 @@ router.post('/subscription/:podcastId', subscribe, (req, res, next) => {
 
 // DELETE
 router.delete('/subscription/:podcastId', unsubscribe, (req, res, next) => {
+  res.locals.ok = true;
+  res.json(res.locals);
+})
+
+/* record */
+router.get('/record', getUserPlayedRecord, (req, res, next) => {
+  res.locals.ok = true;
+  res.json(res.locals);
+})
+
+// POST data: {progerss = 0}
+router.post('/record/:episodeId', writeRecord, (req, res, next) => {
   res.locals.ok = true;
   res.json(res.locals);
 })

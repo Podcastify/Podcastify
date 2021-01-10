@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   records.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     userId: DataTypes.INTEGER,
     episodeId: DataTypes.STRING,
     progress: DataTypes.INTEGER

@@ -16,8 +16,8 @@ const forwardRequest = async (req, res, next) => {
     res.locals.data = result.data;
     res.locals.ok = true;
   } catch (error) {
-    console.error(error);
     res.locals.error = error;
+    return res.status(500).json(res.locals);
   }
   next();
 }
