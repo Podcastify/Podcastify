@@ -1,4 +1,3 @@
-// TODO me/subcription
 // TODO me/record
 
 var express = require('express');
@@ -19,7 +18,8 @@ const {
 const { getMe } = require('../controllers/userControllers');
 const {
   getUserSubscriptions,
-  subscribe
+  subscribe,
+  unsubscribe
 } = require('../controllers/podcastControllers');
 
 /* GET home page. */
@@ -78,6 +78,12 @@ router.get('/subscription', getUserSubscriptions, (req, res, next) => {
 
 // POST
 router.post('/subscription/:podcastId', subscribe, (req, res, next) => {
+  res.locals.ok = true;
+  res.json(res.locals);
+})
+
+// DELETE
+router.delete('/subscription/:podcastId', unsubscribe, (req, res, next) => {
   res.locals.ok = true;
   res.json(res.locals);
 })

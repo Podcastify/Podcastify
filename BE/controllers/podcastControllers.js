@@ -2,7 +2,6 @@ const db = require('../models');
 const subscriptions = require('../models/subscriptions');
 const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records, PlaylistEpisode } = db;
 
-//TODO get user subcriptions
 const getUserSubscriptions = async (req, res, next) => {
   const userId = req.jwtData.id;
   let subscriptions
@@ -11,6 +10,9 @@ const getUserSubscriptions = async (req, res, next) => {
       attributes: ['id'],
       include: [
         {
+          where: {
+            id: userId
+          },
           model: Users,
           as: 'subscribers',
           attributes: [],
@@ -29,11 +31,10 @@ const getUserSubscriptions = async (req, res, next) => {
   next();
 }
 
-//TODO subscribe
+//TODO minor issue: prevent duplicated rows
 const subscribe = async (req, res, next) => {
   const userId = req.jwtData.id;
   const { podcastId } = req.params;
-  console.log({ userId, podcastId })
   try {
     const result = await Podcasts.create(
       {
@@ -51,17 +52,33 @@ const subscribe = async (req, res, next) => {
       }
     )
   } catch (err) {
-    console.log(err)
     res.locals.error = err;
     return res.status(400).json(res.locals)
   }
   next();
 }
 
-
-//TODO unsubscribe
+const unsubscribe = async (req, res, next) => {
+  const userId = req.jwtData.id;
+  const { podcastId } = req.params;
+  try {
+    const result = await Subscriptions.destroy(
+      {
+        where: {
+          userId,
+          podcastId
+        }
+      }
+    )
+  } catch (err) {
+    res.locals.error = err;
+    return res.status(400).json(res.locals);
+  }
+  next();
+}
 
 module.exports = {
   getUserSubscriptions,
-  subscribe
+  subscribe,
+  unsubscribe
 };
