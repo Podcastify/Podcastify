@@ -6,13 +6,13 @@ const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records } = db;
 const saltRounds = 10;
 
 const register = async (req, res, next) => {
-  // console.log(req.body)
-  const { username, password } = req.body;
+  let { username, password } = req.body;
   if (!username || !password) {
     res.locals.errorMessage = 'Username, password are required'
     return res.status(400).send(JSON.stringify(res.locals))
   }
   const hash = bcrypt.hashSync(password, saltRounds)
+  username = username.toLowerCase();
 
   try {
     const newUser = await Users.create(
@@ -36,14 +36,15 @@ const login = async (req, res, next) => {
     res.locals.errorMessage = 'Invalid inputs, please check your username or password again.'
     res.status(400).send(JSON.stringify(res.locals));
   }
-
-  const { username, password } = req.body;
+  let { username, password } = req.body;
   if (!username || !password) {
     res.locals.errorMessage = 'Username, password are required'
     return res.status(400).send(JSON.stringify(res.locals))
   }
+  username = username.toLowerCase();
+  let user;
   try {
-    const user = await Users.findOne(
+    user = await Users.findOne(
       {
         where: {
           username
@@ -53,16 +54,16 @@ const login = async (req, res, next) => {
         raw: true,
       }
     )
-    if (!user) return handleInvalidInputs();
-    if (!bcrypt.compareSync(password, user.password)) return handleInvalidInputs()
-
-    const token = jwt.sign({ id: user.id, username: user.username }, res.app.locals.secret);
-    res.locals.token = token;
-    res.locals.ok = true;
   } catch (err) {
     res.locals.error = err.errors[0].message; //FIXME catch err
     return res.status(500).send(JSON.stringify(res.locals))
   }
+  if (!user) return handleInvalidInputs();
+  if (!bcrypt.compareSync(password, user.password)) return handleInvalidInputs()
+
+  const token = jwt.sign({ id: user.id, username: user.username }, res.app.locals.secret);
+  res.locals.token = token;
+  res.locals.ok = true;
   next()
 }
 
@@ -70,9 +71,6 @@ const requiredLogin = async (req, res, next) => {
   const authHeader = req.headers['authorization'] || '';
   const token = authHeader.replace('Bearer ', '');
   let jwtData;
-  console.log('secret:', res.app.locals.secret);
-  console.log({ token, authHeader });
-
   try {
     jwtData = jwt.verify(token, res.app.locals.secret);
   } catch (error) {
@@ -88,7 +86,7 @@ const getMe = async (req, res, next) => {
   try {
     const me = await Users.findOne({
       where: {
-        username: 'john'
+        username: req.jwtData.username
       },
       attributes: ['username', 'email', 'isAdmin'],
       include: [
@@ -122,8 +120,6 @@ const getMe = async (req, res, next) => {
     res.locals.data = me;
     res.locals.ok = true;
   } catch (error) {
-    // console.log(error);
-    // res.locals.error = error;
     res.locals.errorMessage = 'Server failure. Please try again later.'
     res.status(500).send(JSON.stringify(res.locals));
   }
