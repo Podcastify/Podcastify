@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Subscriptions.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     podcastId: DataTypes.STRING,
     userId: DataTypes.INTEGER
   }, {

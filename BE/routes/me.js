@@ -17,7 +17,10 @@ const {
   blockIdData,
 } = require('../utils');
 const { getMe } = require('../controllers/userControllers');
-const { getUserSubscriptions } = require('../controllers/podcastControllers');
+const {
+  getUserSubscriptions,
+  subscribe
+} = require('../controllers/podcastControllers');
 
 /* GET home page. */
 router.get('/', getMe, function (req, res, next) {
@@ -69,6 +72,12 @@ router.delete('/playlist/:playlistId/:episodeId', checkPlaylistOwnership, remove
 
 /* subscription */
 router.get('/subscription', getUserSubscriptions, (req, res, next) => {
+  res.locals.ok = true;
+  res.json(res.locals);
+})
+
+// POST
+router.post('/subscription/:podcastId', subscribe, (req, res, next) => {
   res.locals.ok = true;
   res.json(res.locals);
 })
