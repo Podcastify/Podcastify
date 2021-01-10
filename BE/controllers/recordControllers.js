@@ -10,7 +10,8 @@ const getUserPlayedRecord = async (req, res, next) => {
         where: {
           userId
         },
-        attributes: ['episodeId', 'progress']
+        attributes: ['episodeId', 'progress'],
+        order: [['updatedAt', 'DESC']]
       }
     )
   } catch (err) {
@@ -22,5 +23,55 @@ const getUserPlayedRecord = async (req, res, next) => {
 }
 
 //TODO write to records
+const writeRecord = async (req, res, next) => {
+  const userId = req.jwtData.id;
+  const { episodeId } = req.params;
+  const { progress } = req.body
+  let record;
+  try {
+    record = await Records.findOne(
+      {
+        where: {
+          userId,
+          episodeId
+        }
+      }
+    );
+  } catch (err) {
+    res.locals.error = err;
+    return res.status(400).json(res.locals);
+  }
+  if (record) {
+    try {
+      await Records.update(
+        {
+          progress
+        },
+        {
+          where: {
+            userId,
+            episodeId
+          }
+        }
+      )
+    } catch (err) {
+      res.locals.error = err;
+      return res.status(400).json(res.locals);
+    }
+  } else {
+    try {
+      await Records.create(
+        {
+          userId,
+          episodeId
+        }
+      )
+    } catch (err) {
+      res.locals.error = err;
+      return res.status(400).json(res.locals);
+    }
+  }
+  next();
+}
 
-module.exports = { getUserPlayedRecord }
+module.exports = { getUserPlayedRecord, writeRecord }

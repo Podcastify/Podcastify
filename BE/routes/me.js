@@ -18,7 +18,7 @@ const {
   subscribe,
   unsubscribe
 } = require('../controllers/podcastControllers');
-const { getUserPlayedRecord } = require('../controllers/recordControllers');
+const { getUserPlayedRecord, writeRecord } = require('../controllers/recordControllers');
 
 /* GET home page. */
 router.get('/', getMe, function (req, res, next) {
@@ -88,6 +88,12 @@ router.delete('/subscription/:podcastId', unsubscribe, (req, res, next) => {
 
 /* record */
 router.get('/record', getUserPlayedRecord, (req, res, next) => {
+  res.locals.ok = true;
+  res.json(res.locals);
+})
+
+// POST data: {progerss = 0}
+router.post('/record/:episodeId', writeRecord, (req, res, next) => {
   res.locals.ok = true;
   res.json(res.locals);
 })
