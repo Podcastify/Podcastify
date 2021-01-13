@@ -4,6 +4,7 @@ import { MEDIA_QUERY_MD, MEDIA_QUERY_LG } from "../constants/breakpoints";
 
 const Container = styled.div`
   height: 100%;
+  background-color: black;
 `;
 
 const Player = styled.div`
@@ -31,6 +32,14 @@ const PlaylistControl = styled.div`
 
   & path {
     fill: ${(props) => props.theme.primary_color};
+
+    :hover {
+      fill: ${(props) => props.theme.primary_color_grey};
+    }
+
+    :active {
+      fill: ${(props) => props.theme.click_color};
+    }
   }
 
   svg {
@@ -112,6 +121,12 @@ const PrevControl = styled.div`
     cursor: pointer;
   }
 
+  & rect {
+    :active {
+      fill: #da937a;
+    }
+  }
+
   ${MEDIA_QUERY_MD} {
     svg {
       width: 16px;
@@ -141,6 +156,12 @@ const PlayControl = styled.div`
     cursor: pointer;
   }
 
+  & rect {
+    :active {
+      fill: #da937a;
+    }
+  }
+
   svg {
     width: 55px;
     height: 55px;
@@ -155,8 +176,8 @@ const PlayControl = styled.div`
 
   ${MEDIA_QUERY_LG} {
     svg {
-      width: 70px;
-      height: 70px;
+      width: 65px;
+      height: 65px;
     }
   }
 `;

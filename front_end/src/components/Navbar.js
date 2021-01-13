@@ -239,7 +239,11 @@ export default function Navbar() {
             <Images.PodcastifyLogo />
           </PodcastifyLogoControl>
           <SearchBox>
-            <SearchInput type="search" placeholder="Search" />
+            <SearchInput
+              type="search"
+              placeholder="Search"
+              inputMode="search"
+            />
             <MagnifierControl>
               <Images.Magnifier />
             </MagnifierControl>

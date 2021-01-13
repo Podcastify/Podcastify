@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar";
+import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider } from "styled-components";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
+      <MusicPlayer />
     </ThemeProvider>
   );
 }
