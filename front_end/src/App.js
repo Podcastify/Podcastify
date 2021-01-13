@@ -1,20 +1,19 @@
+import Navbar from "./components/Navbar";
+import MusicPlayer from "./components/MusicPlayer";
+import styled, { ThemeProvider } from "styled-components";
+
 function App() {
+  const theme = {
+    primary_color: "lightblue",
+    primary_color_grey: "darkgray",
+    primary_color_orange: "#e9502e",
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Navbar />
+      <MusicPlayer />
+    </ThemeProvider>
   );
 }
 

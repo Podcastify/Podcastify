@@ -8,6 +8,7 @@ import { ReactComponent as Mute } from "../images/Mute_default.svg";
 import { ReactComponent as Avatar } from "../images/User_default.svg";
 import { ReactComponent as PodcastifyLogo } from "../images/Logo.svg";
 import { ReactComponent as ListenApiLogo } from "../images/Logo_power_by_Listennotes.svg";
+import { ReactComponent as Magnifier } from "../images/Magnifier.svg";
 
 export default {
   PlayBtn,
@@ -20,4 +21,5 @@ export default {
   Avatar,
   PodcastifyLogo,
   ListenApiLogo,
+  Magnifier,
 };
