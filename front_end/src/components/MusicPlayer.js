@@ -2,10 +2,16 @@ import styled from "styled-components";
 import Icon from "./Images";
 import { MEDIA_QUERY_MD, MEDIA_QUERY_LG } from "../constants/breakpoints";
 
+const Container = styled.div`
+  height: 100%;
+  background-color: black;
+`;
+
 const Player = styled.div`
   display: flex;
   justify-content: space-between;
-  height: calc(100% / 12);
+  box-sizing: border-box;
+  height: 10vh;
   margin: 15px 5px;
   border-radius: 50px;
   border: solid 3px ${(props) => props.theme.primary_color_grey};
@@ -26,6 +32,14 @@ const PlaylistControl = styled.div`
 
   & path {
     fill: ${(props) => props.theme.primary_color};
+
+    :hover {
+      fill: ${(props) => props.theme.primary_color_grey};
+    }
+
+    :active {
+      fill: ${(props) => props.theme.click_color};
+    }
   }
 
   svg {
@@ -107,17 +121,23 @@ const PrevControl = styled.div`
     cursor: pointer;
   }
 
+  & rect {
+    :active {
+      fill: #da937a;
+    }
+  }
+
   ${MEDIA_QUERY_MD} {
     svg {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
     }
   }
 
   ${MEDIA_QUERY_LG} {
     svg {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
     }
   }
 `;
@@ -136,22 +156,28 @@ const PlayControl = styled.div`
     cursor: pointer;
   }
 
+  & rect {
+    :active {
+      fill: #da937a;
+    }
+  }
+
   svg {
-    width: 40px;
-    height: 40px;
+    width: 55px;
+    height: 55px;
   }
 
   ${MEDIA_QUERY_MD} {
     svg {
-      width: 42px;
-      height: 42px;
+      width: 60px;
+      height: 60px;
     }
   }
 
   ${MEDIA_QUERY_LG} {
     svg {
-      width: 45px;
-      height: 45px;
+      width: 65px;
+      height: 65px;
     }
   }
 `;
@@ -163,10 +189,10 @@ const PauseControl = styled(PlayControl)`
 const NextControl = styled(PrevControl)``;
 const Progress = styled.div`
   width: calc(100% / 12 * 5);
-  height: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const ProgressBar = styled.div`
@@ -226,11 +252,11 @@ const DurationTime = styled.div``;
 const Sound = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: 0px 15px 0px 0px;
   padding: 10px 5px;
   width: calc(100% / 12 * 1.2);
-  height: 100%;
 
   ${MEDIA_QUERY_MD} {
     margin: 0px 20px 0px 0px;
@@ -269,59 +295,61 @@ const MuteControl = styled(SoundOnControl)`
 export default function MusicPlayer() {
   const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
   return (
-    <Player>
-      <PlaylistControl>
-        <Icon.PlaylistBtn />
-      </PlaylistControl>
-      <Audio>
-        <Source src={src} type="audio/mp3" />
-      </Audio>
-      <Context>
-        <EpisodeName>S2 EP35//咖啡廳，你你你你你你你你</EpisodeName>
-        <ChannelName>
-          喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!
-        </ChannelName>
-      </Context>
-      <Control>
-        <PrevControl>
-          <Icon.PreviousBtn />
-        </PrevControl>
-        <PlayPauseControl>
-          <PlayControl>
-            <Icon.PlayBtn />
-          </PlayControl>
-          <PauseControl>
-            <Icon.PauseBtn />
-          </PauseControl>
-        </PlayPauseControl>
-        <NextControl>
-          <Icon.NextBtn />
-        </NextControl>
-      </Control>
-      <Progress>
-        <ProgressBar>
-          <ProgressCurrent />
-          <ProgressBarCircle />
-        </ProgressBar>
-        <Timing>
-          <StartTime>00:00</StartTime>
-          <DurationTime>07:01</DurationTime>
-        </Timing>
-      </Progress>
-      <Sound>
-        <SoundBar>
-          <SoundBarCurrent />
-          <SoundBarCircle />
-        </SoundBar>
-        <SoundIcon>
-          <SoundOnControl>
-            <Icon.SoundOn />
-          </SoundOnControl>
-          <MuteControl>
-            <Icon.Mute />
-          </MuteControl>
-        </SoundIcon>
-      </Sound>
-    </Player>
+    <Container>
+      <Player>
+        <PlaylistControl>
+          <Icon.PlaylistBtn />
+        </PlaylistControl>
+        <Audio>
+          <Source src={src} type="audio/mp3" />
+        </Audio>
+        <Context>
+          <EpisodeName>S2 EP35//咖啡廳，你你你你你你你你</EpisodeName>
+          <ChannelName>
+            喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!
+          </ChannelName>
+        </Context>
+        <Control>
+          <PrevControl>
+            <Icon.PreviousBtn />
+          </PrevControl>
+          <PlayPauseControl>
+            <PlayControl>
+              <Icon.PlayBtn />
+            </PlayControl>
+            <PauseControl>
+              <Icon.PauseBtn />
+            </PauseControl>
+          </PlayPauseControl>
+          <NextControl>
+            <Icon.NextBtn />
+          </NextControl>
+        </Control>
+        <Progress>
+          <ProgressBar>
+            <ProgressCurrent />
+            <ProgressBarCircle />
+          </ProgressBar>
+          <Timing>
+            <StartTime>00:00</StartTime>
+            <DurationTime>07:01</DurationTime>
+          </Timing>
+        </Progress>
+        <Sound>
+          <SoundBar>
+            <SoundBarCurrent />
+            <SoundBarCircle />
+          </SoundBar>
+          <SoundIcon>
+            <SoundOnControl>
+              <Icon.SoundOn />
+            </SoundOnControl>
+            <MuteControl>
+              <Icon.Mute />
+            </MuteControl>
+          </SoundIcon>
+        </Sound>
+      </Player>
+    </Container>
   );
 }
