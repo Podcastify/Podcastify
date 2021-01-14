@@ -28,14 +28,14 @@ const BtnContainer = styled.button`
   }
 `;
 
-const Button = styled.div`
+const ButtonName = styled.div`
   text-align: center;
   margin: 0 10px;
 `;
 
 const BtnLogInContainer = styled.div`
   cursor: pointer;
-  width: 8%;
+  width: 100px;
   font-size: 17px;
   border: 3px solid #d0d0d0;
   border-radius: 14px;
@@ -62,16 +62,16 @@ const BtnLogInContainer = styled.div`
   }
 `;
 
-const BtnLogIn = styled(Button)`
+const BtnLogIn = styled(ButtonName)`
   letter-spacing: 6px;
   text-align: center;
 `;
 
-export default function Button() {
+export default function ButtonGroup() {
   return (
     <>
       <BtnContainer>
-        <Button>管理我的帳戶</Button>
+        <ButtonName>管理我的帳戶</ButtonName>
       </BtnContainer>
       <div>------</div>
       <BtnLogInContainer>

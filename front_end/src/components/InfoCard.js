@@ -2,14 +2,13 @@ import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 
 const InfoCardWrapper = styled.section`
-  margin: 0 10px;
-  width: 15%;
-  border: 1px solid #9d9d9d;
+  margin: 0 auto;
+  width: 40vh;
 `;
 
 const InfoCardPhoto = styled.div`
-  width: 100%;
-  padding-bottom: 85%;
+  width: 40vh;
+  height: 40vh;
   background: url(${DemoImage}) center / cover;
   text-decoration: none;
 `;
@@ -28,10 +27,11 @@ const InfoCardTitle = styled.h2`
 
 const InfoCardContent = styled.div`
   margin-top: 24px;
+  width: 100%;
   color: #3b3b3b;
-  font-size: 18px;
+  font-size: 20px;
   letter-spacing: 0.3px;
-  line-height: 1.3;
+  line-height: 1.6;
   text-overflow: ellipsis;
   overflow: hidden;
   overflow-wrap: break-word;
@@ -46,7 +46,7 @@ export default function InfoCard() {
       <InfoCardPhoto />
       <InfoCardTitle>社畜日記</InfoCardTitle>
       <InfoCardContent>
-        用隨性的對話包裝知識， 用認真的口吻胡說八道。
+        用隨性的對話包裝知識，用認真的口吻胡說八道。
         我們閒聊也談正經事，讓生硬的國際大事變得鬆軟。用隨性的對話包裝知識，
         用認真的口吻胡說八道。 我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
       </InfoCardContent>
