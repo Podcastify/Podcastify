@@ -31,6 +31,7 @@ const StyledInput = styled.input`
       opacity: 1;
       background: #0079F2;
       border-color: #0079F2;
+      cursor: pointer;
     }`
   }
   &:focus {
@@ -60,14 +61,25 @@ const FormInputErrorMessage = styled.div`
   text-align: left;
 `
 
-export default function Input(props) {
+export default function Input({ title, attributes, handlers }) {
+  
+  const { handleChange, handleValidationCheck } = handlers;
+
+  const handleInputChange = (e) => {
+    handleChange(attributes.name, e.target.value);
+  }
+
+  const handleValidation = (e) => {
+    handleValidationCheck(attributes.name, e.target.validationMessage)
+  }
   return (
     <StyledInputContainer>
-      <StyledInputTitle>title</StyledInputTitle>
+      <StyledInputTitle>{ title }</StyledInputTitle>
       <StyledInput
-        {...props}
-        placeholder="帳 號"
-        pattern="/[a-zA-Z0-9]/g"
+        {...attributes}
+        onInvalid={handleValidation}
+        onChange={handleInputChange}
+        onBlur={handleValidation}
       />
       <FormInputErrorMessage></FormInputErrorMessage>
     </StyledInputContainer>
