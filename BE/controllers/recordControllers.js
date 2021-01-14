@@ -1,41 +1,45 @@
-const db = require('../models');
-const { Users, Podcasts, Playlists, Episodes, Subscriptions, Records, PlaylistEpisode } = db;
+const db = require("../models");
+const {
+  Users,
+  Podcasts,
+  Playlists,
+  Episodes,
+  Subscriptions,
+  Records,
+  PlaylistEpisode,
+} = db;
 
 const getUserPlayedRecord = async (req, res, next) => {
   const userId = req.jwtData.id;
   let record;
   try {
-    record = await Records.findAll(
-      {
-        where: {
-          userId
-        },
-        attributes: ['episodeId', 'progress'],
-        order: [['updatedAt', 'DESC']]
-      }
-    )
+    record = await Records.findAll({
+      where: {
+        userId,
+      },
+      attributes: ["episodeId", "progress"],
+      order: [["updatedAt", "DESC"]],
+    });
   } catch (err) {
     res.locals.error = err;
     return res.status(400).json(res.locals);
   }
   res.locals.data = record;
   next();
-}
+};
 
 const writeRecord = async (req, res, next) => {
   const userId = req.jwtData.id;
   const { episodeId } = req.params;
-  const { progress } = req.body
+  const { progress } = req.body;
   let record;
   try {
-    record = await Records.findOne(
-      {
-        where: {
-          userId,
-          episodeId
-        }
-      }
-    );
+    record = await Records.findOne({
+      where: {
+        userId,
+        episodeId,
+      },
+    });
   } catch (err) {
     res.locals.error = err;
     return res.status(400).json(res.locals);
@@ -44,33 +48,31 @@ const writeRecord = async (req, res, next) => {
     try {
       await Records.update(
         {
-          progress
+          progress,
         },
         {
           where: {
             userId,
-            episodeId
-          }
+            episodeId,
+          },
         }
-      )
+      );
     } catch (err) {
       res.locals.error = err;
       return res.status(400).json(res.locals);
     }
   } else {
     try {
-      await Records.create(
-        {
-          userId,
-          episodeId
-        }
-      )
+      await Records.create({
+        userId,
+        episodeId,
+      });
     } catch (err) {
       res.locals.error = err;
       return res.status(400).json(res.locals);
     }
   }
   next();
-}
+};
 
-module.exports = { getUserPlayedRecord, writeRecord }
+module.exports = { getUserPlayedRecord, writeRecord };

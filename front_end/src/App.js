@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar";
 import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import Register from './pages/Register';
+import Register from "./pages/Register";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -23,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
     position: fixed;
     z-index: -99;   
   }
-`
+`;
 
 function App() {
   const theme = {

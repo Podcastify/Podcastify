@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Subscriptions extends Model {
     /**
@@ -16,19 +14,22 @@ module.exports = (sequelize, DataTypes) => {
       // Subscriptions.(models.Podcasts);
       // Subscriptions.belongsTo(models.Users)
     }
-  };
-  Subscriptions.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
+  }
+  Subscriptions.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      podcastId: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
     },
-    podcastId: DataTypes.STRING,
-    userId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Subscriptions',
-    underscored: true,
-  });
+    {
+      sequelize,
+      modelName: "Subscriptions",
+      underscored: true,
+    }
+  );
   return Subscriptions;
 };
