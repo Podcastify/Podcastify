@@ -1,18 +1,18 @@
-const querystring = require('querystring')
-const axios = require('axios');
-const listenUrl = 'https://listen-api.listennotes.com/api/v2';
+const querystring = require("querystring");
+const axios = require("axios");
+const listenUrl = "https://listen-api.listennotes.com/api/v2";
 
 const forwardRequest = async (req, res, next) => {
   const { originalUrl } = req;
-  const forwardUrl = originalUrl.replace('/listenAPI', '');
+  const forwardUrl = originalUrl.replace("/listenAPI", "");
   try {
     const result = await axios({
-      method: 'get',
+      method: "get",
       url: listenUrl + forwardUrl,
       headers: {
-        'X-ListenAPI-Key': res.app.locals.listenKey
-      }
-    })
+        "X-ListenAPI-Key": res.app.locals.listenKey,
+      },
+    });
     res.locals.data = result.data;
     res.locals.ok = true;
   } catch (error) {
@@ -20,6 +20,6 @@ const forwardRequest = async (req, res, next) => {
     return res.status(500).json(res.locals);
   }
   next();
-}
+};
 
-module.exports = { forwardRequest }
+module.exports = { forwardRequest };
