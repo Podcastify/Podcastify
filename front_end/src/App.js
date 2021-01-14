@@ -2,14 +2,22 @@ import Navbar from "./components/Navbar";
 import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background: #3E3A39;
   }
   body::after {
     content: "";
-    
+    background: #3E3A39;
+    mix-blend-mode: screen;
+    opacity: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    z-index: -99;   
   }
   body::before {
     content: "";
@@ -21,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
     bottom: 0;
     right: 0;
     position: fixed;
-    z-index: -99;   
+    z-index: -98;   
   }
 `;
 
@@ -35,10 +43,10 @@ function App() {
   };
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Register />
-    </div>
+      <Login />
+    </ThemeProvider>
   );
 }
 

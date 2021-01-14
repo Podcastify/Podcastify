@@ -6,6 +6,7 @@ const StyledInputContainer = styled.div`
   & ~ & {
     margin-top: 18px;
   }
+  ${({id}) => id === "login" && `margin-top: 70px !important;`}
 `;
 
 const StyledInput = styled.input`
@@ -41,6 +42,9 @@ const StyledInput = styled.input`
   &:focus::placeholder {
     color: transparent;
   }
+  &::placeholder {
+    color: #bbbbbb;
+  }
 `;
 
 const StyledInputTitle = styled.h3`
@@ -71,7 +75,7 @@ export default function Input({ title, attributes, handlers }) {
     handleValidationCheck(attributes.name, e.target.validationMessage);
   };
   return (
-    <StyledInputContainer>
+    <StyledInputContainer id={attributes.id}>
       <StyledInputTitle>{title}</StyledInputTitle>
       <StyledInput
         {...attributes}

@@ -1,10 +1,9 @@
-//TODO Register page layout
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 
-const RegisterPageWrapper = styled.div`
+const LoginPageWrapper = styled.div`
   max-width: 1920px;
   height: 100vh;
   padding: 25px 30px;
@@ -14,11 +13,11 @@ const StyledLogo = styled(Images.PodcastifyLogo)`
   cursor: pointer;
 `;
 
-const RegisterForm = styled(UserForm)`
+const LoginForm = styled(UserForm)`
   margin: auto auto;
 `;
 
-export default function Register() {
+export default function Login() {
   const formInputs = [
     {
       attributes: {
@@ -46,32 +45,20 @@ export default function Register() {
     },
     {
       attributes: {
-        type: "password",
-        name: "password_double_check",
-        id: "password_doucle_check",
-        placeholder: "再次輸入密碼",
-        required: true,
-        value: "",
-      },
-      title: "",
-      errorMessage: "",
-    },
-    {
-      attributes: {
         type: "submit",
-        name: "submit",
-        id: "submit",
+        name: "login",
+        id: "login",
         required: true,
-        value: "確認註冊",
+        value: "登入",
       },
       title: "",
       errorMessage: "",
     },
   ];
   return (
-    <RegisterPageWrapper>
+    <LoginPageWrapper>
       <StyledLogo />
-      <RegisterForm formTitle={"會員註冊"} formInputs={formInputs}/>
-    </RegisterPageWrapper>
+      <LoginForm formTitle={"會員登入"} formInputs={formInputs}/>
+    </LoginPageWrapper>
   );
 }
