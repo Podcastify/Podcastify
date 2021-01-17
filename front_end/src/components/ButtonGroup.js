@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 
-const BtnContainer = styled.button`
+export const BtnContainer = styled.button`
   cursor: pointer;
   font-size: 17px;
   border: 3px solid #d0d0d0;
@@ -28,12 +27,12 @@ const BtnContainer = styled.button`
   }
 `;
 
-const ButtonName = styled.div`
+export const ButtonName = styled.div`
   text-align: center;
   margin: 0 10px;
 `;
 
-const BtnLogInContainer = styled.div`
+export const BtnLogInContainer = styled.div`
   cursor: pointer;
   width: 100px;
   font-size: 17px;
@@ -62,21 +61,7 @@ const BtnLogInContainer = styled.div`
   }
 `;
 
-const BtnLogIn = styled(ButtonName)`
+export const BtnLogIn = styled(ButtonName)`
   letter-spacing: 6px;
   text-align: center;
 `;
-
-export default function ButtonGroup() {
-  return (
-    <>
-      <BtnContainer>
-        <ButtonName>管理我的帳戶</ButtonName>
-      </BtnContainer>
-      <div>------</div>
-      <BtnLogInContainer>
-        <BtnLogIn>登入</BtnLogIn>
-      </BtnLogInContainer>
-    </>
-  );
-}
