@@ -178,12 +178,13 @@ const AvatarControl = styled.div`
   }
 `;
 
+// 會員管理對話框，可註解
 const ListControl = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
 
-// 會員管理對話框
+// 會員管理對話框，可註解
 const Lists = styled.ul`
   padding: 0;
   margin-right: 0.2rem;
@@ -211,6 +212,7 @@ const Lists = styled.ul`
   }
 `;
 
+// 會員管理對話框，可註解
 const ListItem = styled.li`
   list-style: none;
   text-align: center;
