@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
-import { BtnLogInContainer, BtnLogIn } from "../components/ButtonGroup";
 import coverImg from "../images/loginPageCover.jpg"
 
 const LoginPageWrapper = styled.div`
@@ -30,7 +29,7 @@ const MainContainer = styled.main`
 const CoverImage = styled.div`
   height: 100vh;
   width: 57%;  
-  background-image: url(https://images.pexels.com/photos/813940/pexels-photo-813940.jpeg);
+  background-image: url(${coverImg});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -41,41 +40,6 @@ const FormArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
-
-const ForwardToRegisterBlock = styled.div`
-  margin: 0 auto;
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  color: #bababa;
-  font-size: 30px;
-  letter-spacing: 6px;
-`
-
-const ForwardToRegisterTitle = styled.h3`
-  margin-bottom: 16px;
-  font-weight: normal;
-  font-size: 30px;
-`
-
-const ForwardRegisterPageButton = styled(BtnLogInContainer)`
-  width: auto;
-  height: 72px;
-  padding: 0;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 30px;
-  transition: all 0.5s;
-  color: #aaaaaa;
-  border-color: #aaaaaa;
-  &:hover {
-    background: #0079F2;
-    border-color: #00709f2;
-  }
 `
 
 export default function Login() {
