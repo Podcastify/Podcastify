@@ -10,7 +10,6 @@ import {
 
 const Container = styled.div`
   height: 100%;
-  background-color: black;
 `;
 
 const Player = styled.div`
