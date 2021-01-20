@@ -1,27 +1,44 @@
 import styled from "styled-components";
 import Icon from "./Images";
-import { MEDIA_QUERY_MD, MEDIA_QUERY_LG } from "../constants/breakpoints";
+import {
+  MEDIA_QUERY_XS,
+  MEDIA_QUERY_SM,
+  MEDIA_QUERY_MD,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
+} from "../constants/breakpoints";
 
 const Container = styled.div`
   height: 100%;
-  background-color: black;
 `;
 
 const Player = styled.div`
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
-  height: 10vh;
   margin: 15px 5px;
   border-radius: 50px;
+  height: 70px;
   border: solid 3px ${(props) => props.theme.primary_color_grey};
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_SM} {
     margin: 19px 5px;
+    height: 75px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    margin: 21px 5px;
+    height: 80px;
   }
 
   ${MEDIA_QUERY_LG} {
+    margin: 22.5px 5px;
+    height: 85px;
+  }
+
+  ${MEDIA_QUERY_XL} {
     margin: 24px 5px;
+    height: 100px;
   }
 `;
 
@@ -29,17 +46,22 @@ const PlaylistControl = styled.div`
   display: flex;
   align-items: center;
   margin: 0px 10px 0px 20px;
+  cursor: pointer;
+
+  &:hover {
+    path {
+      fill: ${(props) => props.theme.primary_color_grey};
+    }
+  }
+
+  &:active {
+    path {
+      fill: ${(props) => props.theme.click_color};
+    }
+  }
 
   & path {
     fill: ${(props) => props.theme.primary_color};
-
-    :hover {
-      fill: ${(props) => props.theme.primary_color_grey};
-    }
-
-    :active {
-      fill: ${(props) => props.theme.click_color};
-    }
   }
 
   svg {
@@ -47,7 +69,7 @@ const PlaylistControl = styled.div`
     height: 15px;
   }
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_SM} {
     margin: 0px 10px 0px 25px;
 
     svg {
@@ -56,12 +78,30 @@ const PlaylistControl = styled.div`
     }
   }
 
-  ${MEDIA_QUERY_LG} {
+  ${MEDIA_QUERY_MD} {
     margin: 0px 10px 0px 30px;
 
     svg {
       width: 23px;
       height: 23px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    margin: 0px 10px 0px 40px;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  ${MEDIA_QUERY_XL} {
+    margin: 0px 10px 0px 58px;
+
+    svg {
+      width: 40px;
+      height: 40px;
     }
   }
 `;
@@ -76,7 +116,7 @@ const Context = styled.div`
   align-items: center;
   justify-content: center;
 
-  ${MEDIA_QUERY_LG} {
+  ${MEDIA_QUERY_XL} {
     width: calc(100% / 12 * 1.8);
   }
 `;
@@ -90,12 +130,20 @@ const EpisodeName = styled.div`
   font-size: 10px;
   margin-bottom: 5px;
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_SM} {
     font-size: 12px;
   }
 
+  ${MEDIA_QUERY_MD} {
+    font-size: 14px;
+  }
+
   ${MEDIA_QUERY_LG} {
-    font-size: 13px;
+    font-size: 18px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 26px;
   }
 `;
 
@@ -127,17 +175,31 @@ const PrevControl = styled.div`
     }
   }
 
+  ${MEDIA_QUERY_SM} {
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
   ${MEDIA_QUERY_MD} {
     svg {
-      width: 16px;
-      height: 16px;
+      width: 17px;
+      height: 17px;
     }
   }
 
   ${MEDIA_QUERY_LG} {
     svg {
-      width: 18px;
-      height: 18px;
+      width: 19px;
+      height: 19px;
+    }
+  }
+
+  ${MEDIA_QUERY_XL} {
+    svg {
+      width: 21px;
+      height: 21px;
     }
   }
 `;
@@ -167,17 +229,31 @@ const PlayControl = styled.div`
     height: 55px;
   }
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_SM} {
     svg {
       width: 60px;
       height: 60px;
     }
   }
 
-  ${MEDIA_QUERY_LG} {
+  ${MEDIA_QUERY_MD} {
     svg {
       width: 65px;
       height: 65px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    svg {
+      width: 75px;
+      height: 75px;
+    }
+  }
+
+  ${MEDIA_QUERY_XL} {
+    svg {
+      width: 90px;
+      height: 90px;
     }
   }
 `;
@@ -205,6 +281,10 @@ const ProgressBar = styled.div`
   &:hover {
     cursor: pointer;
   }
+
+  ${MEDIA_QUERY_XL} {
+    height: 9px;
+  }
 `;
 
 const ProgressCurrent = styled.div`
@@ -216,6 +296,10 @@ const ProgressCurrent = styled.div`
   top: 0%;
   border-radius: 50px;
   z-index: 3;
+
+  ${MEDIA_QUERY_XL} {
+    height: 9.5px;
+  }
 `;
 
 const ProgressBarCircle = styled.div`
@@ -228,6 +312,10 @@ const ProgressBarCircle = styled.div`
   transform: translate(-50%, -50%);
   background-color: ${(props) => props.theme.primary_color_orange};
   z-index: 3;
+
+  ${MEDIA_QUERY_XL} {
+    padding: 4px;
+  }
 `;
 
 const Timing = styled.div`
@@ -235,14 +323,27 @@ const Timing = styled.div`
   justify-content: space-between;
   font-size: 10px;
   font-family: Helvetica;
+  margin-top: 2px;
   color: ${(props) => props.theme.primary_color_grey};
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_SM} {
     font-size: 12px;
+    margin-top: 3px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 14px;
+    margin-top: 5px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 14px;
+    font-size: 16px;
+    margin-top: 6px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 18px;
+    margin-top: 7px;
   }
 `;
 
@@ -254,16 +355,24 @@ const Sound = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0px 15px 0px 0px;
+  margin: 0px 70px 0px 0px;
   padding: 10px 5px;
   width: calc(100% / 12 * 1.2);
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_XS} {
+    display: none;
+  }
+
+  ${MEDIA_QUERY_SM} {
     margin: 0px 20px 0px 0px;
   }
 
+  ${MEDIA_QUERY_MD} {
+    margin: 0px 30px 0px 0px;
+  }
+
   ${MEDIA_QUERY_LG} {
-    margin: 0px 25px 0px 0px;
+    margin: 0px 45px 0px 0px;
   }
 `;
 
@@ -272,19 +381,35 @@ const SoundBar = styled(ProgressBar)`
 `;
 const SoundBarCurrent = styled(ProgressCurrent)``;
 const SoundBarCircle = styled(ProgressBarCircle)``;
-const SoundIcon = styled.div``;
+const SoundIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const SoundOnControl = styled.div`
   height: 12px;
-  position: relative;
+  margin: 2px;
 
   svg {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%);
-    width: 12px;
-    height: 12px;
+    width: 18px;
+    height: 18px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    margin: 4px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    margin: 5px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    margin: 6px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    margin: 7px;
   }
 `;
 
