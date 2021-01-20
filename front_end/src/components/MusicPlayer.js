@@ -9,7 +9,14 @@ import {
 } from "../constants/breakpoints";
 
 const Container = styled.div`
-  height: 100%;
+  /* height: 100%; */
+  // 以下為新增，MusicPlayer 固定在下方，並加上背景
+  background-color: rgba(62, 58, 57, 1);
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 3;
 `;
 
 const Player = styled.div`

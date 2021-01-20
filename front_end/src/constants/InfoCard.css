@@ -1,0 +1,10 @@
+.rec.rec-arrow {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* round buttons on hover */
+.rec.rec-arrow:hover,
+.rec.rec-arrow:active,
+.rec.rec-arrow:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+}

@@ -17,7 +17,6 @@ const StyledFormTitle = styled.h1`
 `;
 
 export default function UserForm({ formTitle, className, formInputs }) {
-
   const { inputs, handlers } = useInputs(formInputs);
 
   return (
