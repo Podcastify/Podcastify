@@ -7,7 +7,7 @@ import {
   MEDIA_QUERY_LG,
 } from "../constants/breakpoints";
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.aside`
   width: 20vw;
   height: 59vh;
   padding: 18px 20px;
@@ -35,6 +35,7 @@ const SidebarContainer = styled.div`
     border: none;
     padding: 5px 0;
     height: 75vh;
+    top: 70px;
     display: none;
   }
 `;
@@ -44,7 +45,7 @@ const SidebarTitleWrapper = styled.div`
 `;
 
 const SidebarTitle = styled.h3`
-  font-size: 20px;
+  font-size: 25px;
   margin: 4px 10px;
   font-weight: 500;
   color: #ffffff;
@@ -66,7 +67,7 @@ const SidebarListWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  max-width: 40vh;
+  width: 100%;
   min-height: 60px;
   padding: 10px 20px;
   border-radius: 20px;
@@ -110,7 +111,6 @@ const SidebarListRight = styled.div`
 `;
 
 const SidebarListTitle = styled.div`
-  width: 10vw;
   font-size: 18px;
   text-decoration: none;
   overflow: hidden;

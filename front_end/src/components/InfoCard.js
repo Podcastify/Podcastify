@@ -8,7 +8,7 @@ import {
 import Carousel from "react-elastic-carousel";
 import "../constants/InfoCard.css";
 
-const PodcastInfoContainer = styled.div`
+const PodcastInfoContainer = styled.main`
   width: 70%;
   margin-left: 25%;
   margin-bottom: 200px;
@@ -29,7 +29,7 @@ const PodcastInfoContainer = styled.div`
 
   ${MEDIA_QUERY_SM} {
     padding: 0 10px;
-    margin-bottom: 90px;
+    margin-bottom: 120px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -41,7 +41,7 @@ const PodcastInfoContainer = styled.div`
 
   ${MEDIA_QUERY_XS} {
     padding: 0 10px;
-    margin-bottom: 90px;
+    margin-bottom: 120px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -53,7 +53,7 @@ const PodcastInfoContainer = styled.div`
   }
 `;
 
-const PodcastInfoWrapper = styled.div`
+const PodcastInfoWrapper = styled.section`
   & + & {
     margin-top: 50px;
 

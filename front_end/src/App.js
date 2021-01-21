@@ -46,8 +46,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Login />
-      {/* <HomePage /> */}
+      {/* <Login /> */}
+      <HomePage />
     </ThemeProvider>
   );
 }
