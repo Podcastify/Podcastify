@@ -4,6 +4,8 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
+import SearchPage from "./pages/SearchPage";
+import MyLoveChannelPage from "./pages/MyLoveChannelPage";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -47,7 +49,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       {/* <Login /> */}
-      <HomePage />
+      {/* <HomePage /> */}
+      {/* <SearchPage /> */}
+      <MyLoveChannelPage />
     </ThemeProvider>
   );
 }
