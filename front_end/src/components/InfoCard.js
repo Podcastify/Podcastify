@@ -54,6 +54,7 @@ const PodcastInfoContainer = styled.main`
 `;
 
 const PodcastInfoWrapper = styled.section`
+  box-sizing: border-box;
   & + & {
     margin-top: 50px;
 
@@ -76,14 +77,15 @@ const PodcastInfoTitle = styled.div`
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 26px;
+    font-size: 28px;
   }
 `;
 
 const InfoCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-items: center;
+  align-items: left;
   margin: 20px 0;
 `;
 
@@ -94,8 +96,12 @@ const InfoCardPhoto = styled.div`
   text-decoration: none;
 
   ${MEDIA_QUERY_SM} {
-    width: 200px;
-    height: 190px;
+    width: 180px;
+    height: 180px;
+  }
+  ${MEDIA_QUERY_XS} {
+    width: 210px;
+    height: 210px;
   }
 `;
 
@@ -126,16 +132,18 @@ const InfoCardContent = styled.div`
   -webkit-line-clamp: 4; //行數
   -webkit-box-orient: vertical;
 
-  ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_XS} {
     margin-top: 10px;
+    width: 210px;
+    font-size: 18px;
   }
 `;
 
 const breakPoints = [
   { width: 1, itemsToShow: 1, pagination: false },
-  { width: 368, itemsToShow: 2, pagination: false },
-  { width: 550, itemsToShow: 3, pagination: false },
-  { width: 768, itemsToShow: 4, pagination: false },
+  { width: 380, itemsToShow: 2, pagination: false },
+  { width: 570, itemsToShow: 3, pagination: false },
+  { width: 850, itemsToShow: 4, pagination: false },
 ];
 
 export default function InfoCard() {

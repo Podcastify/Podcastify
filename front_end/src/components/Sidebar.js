@@ -19,10 +19,6 @@ const SidebarContainer = styled.aside`
   top: 100px;
   margin: 0 10px;
 
-  ${MEDIA_QUERY_LG} {
-    max-width: 30%;
-  }
-
   ${MEDIA_QUERY_MD} {
     display: none;
   }
@@ -107,6 +103,11 @@ const SidebarListRight = styled.div`
     & path {
       fill: ${(props) => props.theme.primary_color_grey};
     }
+
+    ${MEDIA_QUERY_LG} {
+      width: 32px;
+      height: 32px;
+    }
   }
 `;
 
@@ -115,6 +116,10 @@ const SidebarListTitle = styled.div`
   text-decoration: none;
   overflow: hidden;
   line-height: 1.5;
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 16px;
+  }
 `;
 
 const SidebarListContent = styled.div`
