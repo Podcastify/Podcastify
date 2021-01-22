@@ -6,7 +6,7 @@ const StyledInputContainer = styled.div`
   & ~ & {
     margin-top: 18px;
   }
-  ${({id}) => id === "login" && `margin-top: 70px !important;`}
+  ${({ id }) => id === "login" && `margin-top: 70px !important;`}
 `;
 
 const StyledInput = styled.input`

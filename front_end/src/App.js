@@ -3,6 +3,7 @@ import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import HomePage from "./pages/HomePage";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -45,7 +46,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Login />
+      {/* <Login /> */}
+      <HomePage />
     </ThemeProvider>
   );
 }

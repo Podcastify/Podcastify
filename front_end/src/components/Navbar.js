@@ -14,6 +14,12 @@ const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   height: 60px;
+  // 以下為新增，Navbar 固定在最上方
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 3;
 
   ${MEDIA_QUERY_SM} {
     height: 70px;
@@ -440,14 +446,14 @@ export default function Navbar() {
           <Images.Avatar />
         </AvatarControl>
       </Nav>
-      <ListControl>
+      {/* <ListControl>
         <Lists>
           <ListItem>會員您好</ListItem>
           <ListItem>會員資料管理</ListItem>
           <ListItem>訂閱中的頻道</ListItem>
           <ListItem>登出</ListItem>
         </Lists>
-      </ListControl>
+      </ListControl> */}
     </NavigationBar>
   );
 }
