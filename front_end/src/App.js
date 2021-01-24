@@ -12,6 +12,7 @@ import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import MyLoveChannelPage from "./pages/MyLoveChannelPage";
 import { UserContext } from './context/context';
+import { getMe } from './webAPI/users'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -51,6 +52,19 @@ function App() {
     click_color: "#0079f2",
   };
   const [user, setUser] = useState(null);
+  useEffect(() => {
+    const token = window.localStorage.getItem('podcastifyToken');
+    getMe(token)
+      .then(result => {
+        if (result.ok) {
+          setUser(result.data)
+        } else {
+          window.localStorage.removeItem('podcastifyToken');
+          setUser(null);
+        }
+      })
+    console.log(user)
+  }, [user])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

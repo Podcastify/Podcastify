@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Link } from "react-router-dom"
 import Images from "./Images";
 import styled from "styled-components";
 import {
@@ -8,6 +9,8 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import { UserContext } from "../context/context";
+import { useEffect } from "react/cjs/react.development";
 
 const NavigationBar = styled.div``;
 const Nav = styled.nav`
@@ -427,9 +430,74 @@ const ListItem = styled.li`
 export default function Navbar() {
   const [isShowList, setIsShowList] = useState(false);
 
-  const toggleList = e => {
+  const { user, setUser } = useContext(UserContext);
+
+  const [listItems, setListItems] = useState([
+    {
+      title: '訪客您好'
+    },
+    {
+      title: '登入',
+      attributes: {
+        to: '/login'
+      },
+    },
+    {
+      title: '註冊',
+      attributes: {
+        to: '/register'
+      }
+    }
+  ]);
+
+  useEffect(() => {
+    let items
+    if (user) {
+      items = [
+        {
+          title: `${user.username} 您好`,
+        },
+        {
+          title: '會員資料管理'
+        },
+        {
+          title: '訂閱中的頻道'
+        },
+        {
+          title: '登出',
+          attributes: {
+            onClick: () => {
+              window.localStorage.removeItem('podcastifyToken')
+            }
+          }
+        }
+      ]
+    } else {
+      items = [
+        {
+          title: '訪客您好'
+        },
+        {
+          title: '登入',
+          attributes: {
+            to: '/login'
+          },
+        },
+        {
+          title: '註冊',
+          attributes: {
+            to: '/register'
+          }
+        }
+      ]
+    }
+    setListItems(items)
+  }, [user])
+
+  const toggleList = () => {
     setIsShowList(!isShowList);
   }
+
   return (
     <NavigationBar>
       <Nav>
@@ -455,10 +523,9 @@ export default function Navbar() {
           <Images.Avatar />
           <ListControl isShow={isShowList}>
             <Lists>
-              <ListItem>會員您好</ListItem>
-              <ListItem>會員資料管理</ListItem>
-              <ListItem>訂閱中的頻道</ListItem>
-              <ListItem>登出</ListItem>
+              {listItems.map(el =>
+                <Link {...el.attributes}><ListItem>{el.title}</ListItem></Link>
+              )}
             </Lists>
           </ListControl>
         </AvatarControl>
