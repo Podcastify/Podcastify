@@ -1,45 +1,47 @@
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import {
+  MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
   MEDIA_QUERY_LG,
 } from "../constants/breakpoints";
 
 const SidebarContainer = styled.div`
-  box-sizing: border-box;
   width: 20vw;
-  height: 70vh;
+  height: 59vh;
+  padding: 18px 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 28px;
-  padding: 20px;
   position: fixed;
   top: 100px;
-  margin: 0 20px;
-
-  ${MEDIA_QUERY_MD} {
-    width: 30vh;
-  }
+  margin: 0 10px;
 
   ${MEDIA_QUERY_SM} {
+    display: none;
+  }
+
+  ${MEDIA_QUERY_XS} {
     width: 95%;
-    height: 58vh;
-    margin: 0;
-    padding: 0;
-    top: 80px;
     border: none;
+    padding: 5px 0;
+    height: 75vh;
+    top: 70px;
+    /* display: none; */
   }
 `;
 
 const InfoCardWrapper = styled.div`
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 20px;
+  padding: 20px 0px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
   ${MEDIA_QUERY_MD} {
-    width: 70%;
+    width: 100%;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -50,49 +52,71 @@ const InfoCardWrapper = styled.div`
 `;
 
 const InfoCardPhoto = styled.div`
-  width: 27vh;
-  height: 26vh;
+  width: 190px;
+  height: 190px;
   background: url(${DemoImage}) center / cover;
   text-decoration: none;
 
   ${MEDIA_QUERY_LG} {
-    width: 27vh;
-    height: 25vh;
+    width: 190px;
+    height: 190px;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 18vh;
-    height: 18vh;
+    width: 150px;
+    height: 150px;
   }
 
   ${MEDIA_QUERY_SM} {
-    width: 230px;
-    height: 200px;
+    width: 120px;
+    height: 120px;
+  }
+  ${MEDIA_QUERY_XS} {
+    width: 210px;
+    height: 210px;
   }
 `;
 
 const InfoCardBlock = styled.div`
-  display: block;
+  width: 190px;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+
+  ${MEDIA_QUERY_LG} {
+    width: 190px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 150px;
+  }
 
   ${MEDIA_QUERY_SM} {
+    width: 130px;
     margin-top: 6px;
-    width: 75vw;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    margin-top: 15px;
+    width: 280px;
     display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
   }
 `;
 
-const InfoCardButtonContainer = styled.button`
+const InfoCardButton = styled.button`
   box-sizing: border-box;
   cursor: pointer;
-  width: 5rem;
+  width: 100px;
   height: 2.5rem;
   font-size: 1rem;
   border: 2px solid #d0d0d0;
   color: #d0d0d0;
   text-decoration: none;
   background: rgba(255, 255, 255, 0);
-  margin-top: 10px;
 
   &:focus {
     outline: none;
@@ -111,26 +135,47 @@ const InfoCardButtonContainer = styled.button`
     background: #0079f2;
     border: 3px solid #0079f2;
   }
-`;
 
-const InfoCardButtonName = styled.div`
-  text-align: center;
-  margin: 0 10px;
+  ${MEDIA_QUERY_SM} {
+    width: 80px;
+    margin-top: 0px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    width: 80px;
+    margin-top: 0px;
+  }
 `;
 
 const InfoCardTitle = styled.h2`
   color: white;
+  margin-top: 10px 0 15px 0;
   font-weight: bold;
   line-height: 1.19;
   letter-spacing: 0.6px;
   text-decoration: none;
-  width: 120px;
+  width: 180px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
+  ${MEDIA_QUERY_LG} {
+    width: 100px;
+  }
+
   ${MEDIA_QUERY_MD} {
-    width: 20vh;
+    width: 100px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 22px;
+    width: 130px;
+    margin-top: 6px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    width: 100px;
+    margin: 10px 0 10px 0;
   }
 `;
 
@@ -145,33 +190,38 @@ const InfoCardContent = styled.div`
   overflow: hidden;
   overflow-wrap: break-word;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 
-  ${MEDIA_QUERY_MD} {
-    width: 20vh;
+  ${MEDIA_QUERY_LG} {
+    width: 190px;
   }
 
-  ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_MD} {
+    width: 150px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_SM} {
-    margin-top: 6px;
-    width: 75vw;
+    width: 120px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    width: 280px;
+    margin-top: 10px;
+    -webkit-line-clamp: 4;
   }
 `;
 
-export default function InfoCard() {
+export default function ChannelSidebar() {
   return (
     <SidebarContainer>
       <InfoCardWrapper>
         <InfoCardPhoto />
         <InfoCardBlock>
           <InfoCardTitle>社畜日記</InfoCardTitle>
-          <InfoCardButtonContainer>
-            <InfoCardButtonName>訂閱</InfoCardButtonName>
-          </InfoCardButtonContainer>
+          <InfoCardButton>訂閱</InfoCardButton>
         </InfoCardBlock>
         <InfoCardContent>
           用隨性的對話包裝知識， 用認真的口吻胡說八道。
