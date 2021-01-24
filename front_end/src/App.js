@@ -1,11 +1,17 @@
-import Navbar from "./components/Navbar";
-import MusicPlayer from "./components/MusicPlayer";
+import { useEffect, useContext, useState, createContext } from "react";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import MyLoveChannelPage from "./pages/MyLoveChannelPage";
+import { UserContext } from './context/context';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -44,15 +50,33 @@ function App() {
     hover_color: "#8fe2ff",
     click_color: "#0079f2",
   };
+  const [user, setUser] = useState(null);
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      {/* <Login /> */}
-      {/* <HomePage /> */}
-      {/* <SearchPage /> */}
-      <MyLoveChannelPage />
-    </ThemeProvider>
+    <UserContext.Provider value={{ user, setUser }}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Router>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/">
+              <HomePage />
+            </Route>
+            <Route path="/myFav">
+              <MyLoveChannelPage />
+            </Route>
+            <Route path="/search">
+              <SearchPage />
+            </Route>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </UserContext.Provider>
   );
 }
 

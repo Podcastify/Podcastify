@@ -1,8 +1,10 @@
 //TODO Register page layout
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useHistory } from 'react-router-dom';
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
+import useInputs from "../hooks/useInputs";
 
 const RegisterPageWrapper = styled.div`
   max-width: 1920px;
@@ -19,6 +21,11 @@ const RegisterForm = styled(UserForm)`
 `;
 
 export default function Register() {
+  const history = useHistory()
+  const handleToLoginBtn = e => {
+    e.preventDefault();
+    history.push('/login');
+  }
   const formInputs = [
     {
       attributes: {
@@ -67,11 +74,28 @@ export default function Register() {
       title: "",
       errorMessage: "",
     },
+    {
+      attributes: {
+        type: "button",
+        name: "toLogin",
+        id: "toLogin",
+        required: true,
+        value: "前往登入",
+        onClick: handleToLoginBtn
+      },
+      title: "已經是會員了？",
+      errorMessage: "",
+    },
   ];
+  const { inputs, handlers } = useInputs(formInputs);
   return (
     <RegisterPageWrapper>
       <StyledLogo />
-      <RegisterForm formTitle={"會員註冊"} formInputs={formInputs}/>
+      <RegisterForm
+        formTitle={"會員註冊"}
+        inputs={inputs}
+        handlers={handlers}
+      />
     </RegisterPageWrapper>
   );
 }

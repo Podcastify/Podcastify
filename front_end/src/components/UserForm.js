@@ -16,11 +16,11 @@ const StyledFormTitle = styled.h1`
   font-weight: normal;
 `;
 
-export default function UserForm({ formTitle, className, formInputs }) {
-  const { inputs, handlers } = useInputs(formInputs);
+export default function UserForm({ formTitle, className, inputs, handlers, onSubmit }) {
+  // const { inputs, handlers } = useInputs(formInputs);
 
   return (
-    <StyledForm className={className}>
+    <StyledForm className={className} onSubmit={onSubmit} method="post">
       <StyledFormTitle>{formTitle}</StyledFormTitle>
       {inputs.map((input) => (
         <Input {...input} handlers={handlers} key={input.attributes.name} />
