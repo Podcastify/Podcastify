@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Images from "./Images";
 import styled from "styled-components";
 import {
@@ -268,8 +269,11 @@ const AvatarControl = styled.div`
 
 // 會員管理對話框，可註解
 const ListControl = styled.div`
-  display: flex;
+  display: ${({ isShow }) => isShow ? 'flex;' : 'none;'};
+  position: fixed;
+  top: 10%;
   justify-content: flex-end;
+  z-index: 10;
 `;
 
 // 會員管理對話框，可註解
@@ -421,6 +425,11 @@ const ListItem = styled.li`
 `;
 
 export default function Navbar() {
+  const [isShowList, setIsShowList] = useState(false);
+
+  const toggleList = e => {
+    setIsShowList(!isShowList);
+  }
   return (
     <NavigationBar>
       <Nav>
@@ -442,18 +451,18 @@ export default function Navbar() {
             <Images.ListenApiLogo />
           </ListenApiLogoControl>
         </LeftSection>
-        <AvatarControl>
+        <AvatarControl onClick={toggleList} >
           <Images.Avatar />
+          <ListControl isShow={isShowList}>
+            <Lists>
+              <ListItem>會員您好</ListItem>
+              <ListItem>會員資料管理</ListItem>
+              <ListItem>訂閱中的頻道</ListItem>
+              <ListItem>登出</ListItem>
+            </Lists>
+          </ListControl>
         </AvatarControl>
       </Nav>
-      {/* <ListControl>
-        <Lists>
-          <ListItem>會員您好</ListItem>
-          <ListItem>會員資料管理</ListItem>
-          <ListItem>訂閱中的頻道</ListItem>
-          <ListItem>登出</ListItem>
-        </Lists>
-      </ListControl> */}
     </NavigationBar>
   );
 }
