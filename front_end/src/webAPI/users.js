@@ -14,6 +14,34 @@ const login = async (data) => {
   return result;
 }
 
+const getMe = async (token) => {
+  const endpoint = apiUrl + '/me';
+  const options = {
+    headers: {
+      'authorization': 'Bearer ' + token
+    }
+  }
+  const response = await fetch(endpoint, options);
+  const result = await response.json();
+  return result;
+}
+
+const register = async (data) => {
+  const endpoint = apiUrl + '/users/register';
+  const options = {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }
+  const response = await fetch(endpoint, options);
+  const result = await response.json()
+  return result;
+}
+
 export {
-  login
+  login,
+  getMe,
+  register
 }

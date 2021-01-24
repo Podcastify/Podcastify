@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import useInputs from "../hooks/useInputs";
+import { register } from '../webAPI/users'
+
 
 const RegisterPageWrapper = styled.div`
   max-width: 1920px;
@@ -25,6 +27,35 @@ export default function Register() {
   const handleToLoginBtn = e => {
     e.preventDefault();
     history.push('/login');
+  }
+  const handleRegister = async e => {
+    e.preventDefault();
+    const filters = ['username', 'password'];
+    const registerInformation = {};
+    inputs.forEach(input => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          registerInformation[filter] = input.attributes.value
+        }
+      }
+    })
+    let result
+    try {
+      console.log('sending req');
+      result = await register(registerInformation);
+      console.log(result);
+    } catch (err) {
+      console.log(err)
+    }
+    console.log('has res');
+    if (result.ok) {
+      console.log('req success');
+      history.push('/');
+    } else {
+      console.log('req fail');
+      alert(result.errorMessage || result.error);
+      return;
+    }
   }
   const formInputs = [
     {
@@ -95,6 +126,7 @@ export default function Register() {
         formTitle={"會員註冊"}
         inputs={inputs}
         handlers={handlers}
+        onSubmit={handleRegister}
       />
     </RegisterPageWrapper>
   );

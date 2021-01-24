@@ -3,7 +3,7 @@ import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import coverImg from "../images/loginPageCover.jpg";
-import { login } from "../webAPI/users";
+import { login, getMe } from "../webAPI/users";
 import useInputs from "../hooks/useInputs";
 import { UserContext } from "../context/context";
 import { useHistory } from 'react-router-dom';
@@ -74,6 +74,8 @@ export default function Login() {
     if (result.ok) {
       window.localStorage.removeItem('podcastifyToken');
       window.localStorage.setItem('podcastifyToken', result.token)
+      const loggedInUser = await getMe(result.token);
+      setUser(loggedInUser);
       history.push('/');
     } else {
       window.localStorage.removeItem('podcastifyToken');
