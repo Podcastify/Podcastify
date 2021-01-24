@@ -467,7 +467,8 @@ export default function Navbar() {
           title: '登出',
           attributes: {
             onClick: () => {
-              window.localStorage.removeItem('podcastifyToken')
+              window.localStorage.removeItem('podcastifyToken');
+              setUser(null)
             }
           }
         }
