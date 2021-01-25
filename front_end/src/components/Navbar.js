@@ -431,6 +431,7 @@ export default function Navbar() {
 
   const { user, setUser } = useContext(UserContext);
 
+
   const [listItems, setListItems] = useState([
     {
       title: '訪客您好',
@@ -460,6 +461,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    console.log(user);
     let items;
     if (user) {
       items = [
@@ -528,7 +530,7 @@ export default function Navbar() {
       ]
     };
     setListItems(items)
-  }, [user])
+  }, [user, setUser])
 
   return (
     <NavigationBar>

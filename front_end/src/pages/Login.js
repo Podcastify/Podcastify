@@ -75,7 +75,7 @@ export default function Login() {
       window.localStorage.removeItem('podcastifyToken');
       window.localStorage.setItem('podcastifyToken', result.token)
       const loggedInUser = await getMe(result.token);
-      setUser(loggedInUser);
+      setUser(loggedInUser.data);
       history.push('/');
     } else {
       window.localStorage.removeItem('podcastifyToken');
