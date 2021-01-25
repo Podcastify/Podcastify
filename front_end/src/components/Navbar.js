@@ -493,7 +493,7 @@ export default function Navbar() {
       ]
     }
     setListItems(items)
-  }, [user])
+  }, [user, setUser])
 
   const toggleList = () => {
     setIsShowList(!isShowList);
