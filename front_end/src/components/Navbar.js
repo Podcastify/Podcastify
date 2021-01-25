@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom"
 import Images from "./Images";
 import styled from "styled-components";
@@ -10,7 +10,6 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import { UserContext } from "../context/context";
-import { useEffect } from "react/cjs/react.development";
 
 const NavigationBar = styled.div``;
 const Nav = styled.nav`
@@ -434,7 +433,13 @@ export default function Navbar() {
 
   const [listItems, setListItems] = useState([
     {
-      title: '訪客您好'
+      title: '訪客您好',
+      attributes: {
+        to: '/',
+        onClick: e => {
+          e.preventDefault();
+        }
+      }
     },
     {
       title: '登入',
@@ -450,25 +455,49 @@ export default function Navbar() {
     }
   ]);
 
+  const toggleList = () => {
+    setIsShowList(!isShowList);
+  }
+
   useEffect(() => {
-    let items
+    let items;
     if (user) {
       items = [
         {
-          title: `${user.username} 您好`,
+          title: user.username + ' 您好',
+          attributes: {
+            to: '/',
+            onClick: e => {
+              e.preventDefault();
+            }
+          }
         },
         {
-          title: '會員資料管理'
+          title: '訂閱中的頻道',
+          attributes: {
+            to: '/subscription',
+            onClick: e => {
+              e.preventDefault()
+            }
+          },
         },
         {
-          title: '訂閱中的頻道'
+          title: '管理會員資料',
+          attributes: {
+            to: '/management',
+            onClick: e => {
+              e.preventDefault();
+            }
+          }
         },
         {
           title: '登出',
           attributes: {
-            onClick: () => {
+            to: '/',
+            onClick: e => {
+              e.preventDefault();
               window.localStorage.removeItem('podcastifyToken');
-              setUser(null)
+              setUser(null);
             }
           }
         }
@@ -476,7 +505,13 @@ export default function Navbar() {
     } else {
       items = [
         {
-          title: '訪客您好'
+          title: '訪客您好',
+          attributes: {
+            to: '/',
+            onClick: e => {
+              e.preventDefault();
+            }
+          }
         },
         {
           title: '登入',
@@ -491,13 +526,9 @@ export default function Navbar() {
           }
         }
       ]
-    }
+    };
     setListItems(items)
-  }, [user, setUser])
-
-  const toggleList = () => {
-    setIsShowList(!isShowList);
-  }
+  }, [user])
 
   return (
     <NavigationBar>
@@ -525,7 +556,7 @@ export default function Navbar() {
           <ListControl isShow={isShowList}>
             <Lists>
               {listItems.map(el =>
-                <Link {...el.attributes}><ListItem>{el.title}</ListItem></Link>
+                <Link {...el.attributes} key={el.title}><ListItem>{el.title}</ListItem></Link>
               )}
             </Lists>
           </ListControl>
