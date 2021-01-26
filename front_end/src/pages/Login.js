@@ -41,6 +41,8 @@ const CoverImage = styled.div`
 const FormArea = styled.div`
   width: 43%;
   display: flex;
+  box-sizing: border-box;
+  padding: 5px;
   flex-direction: column;
   align-items: center;
 `

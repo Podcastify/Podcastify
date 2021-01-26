@@ -6,6 +6,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import { MEDIA_QUERY_XL, MEDIA_QUERY_LG, MEDIA_QUERY_MD, MEDIA_QUERY_SM, MEDIA_QUERY_XS } from "./constants/breakpoints";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
@@ -15,6 +16,14 @@ import { UserContext } from './context/context';
 import { getMe } from './webAPI/users'
 
 const GlobalStyle = createGlobalStyle`
+  html {
+    ${MEDIA_QUERY_LG} {
+      font-size: 14px;
+    }
+    ${MEDIA_QUERY_MD} {
+      font-size: 10px;
+    }
+  }
   body {
   }
   body::after {

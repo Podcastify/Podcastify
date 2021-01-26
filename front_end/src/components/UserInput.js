@@ -4,20 +4,20 @@
 import styled from "styled-components";
 const StyledInputContainer = styled.div`
   & ~ & {
-    margin-top: 18px;
+    margin-top: 1rem;
   }
-  ${({ id }) => id === "login" && `margin-top: 70px !important;`}
+  ${({ id }) => id === "login" && `margin-top: 4.5rem !important;`}
 `;
 
 const StyledInput = styled.input`
   width: 100%;
-  height: 72px;
-  padding-left: 18px;
+  height: 4.5rem;
+  padding-left: 1rem;
   box-sizing: border-box;
   border: 3px solid #ffffff;
-  border-radius: 14px;
+  border-radius: 1rem;
   color: #ffffff;
-  font-size: 30px;
+  font-size: 2rem;
   line-height: 1.2;
   opacity: 0.5;
   background: rgba(0, 0, 0, 0);
@@ -48,8 +48,8 @@ const StyledInput = styled.input`
 `;
 
 const StyledInputTitle = styled.h3`
-  margin: 0px 0px 20px 5px;
-  font-size: 30px;
+  margin: 0px 0px 2rem .3rem;
+  font-size: 2rem;
   line-height: 1.2;
   letter-spacing: 3px;
   color: #ffffff;
@@ -57,10 +57,10 @@ const StyledInputTitle = styled.h3`
 `;
 
 const FormInputErrorMessage = styled.div`
-  height: 28px;
-  margin-top: 5px;
+  height: 1.75rem;
+  margin-top: .3rem;
   color: #e9502e;
-  font-size: 20px;
+  font-size: 1.25rem;
   text-align: left;
 `;
 

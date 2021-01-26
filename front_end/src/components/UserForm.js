@@ -3,13 +3,13 @@ import styled from "styled-components";
 import Input from "./UserInput";
 import useInputs from "../hooks/useInputs";
 const StyledForm = styled.form`
-  max-width: 522px;
+  max-width: 32.7rem;
   font-family: Helvetica;
 `;
 
 const StyledFormTitle = styled.h1`
-  height: 83px;
-  font-size: 59px;
+  height: 5rem;
+  font-size: 3.75rem;
   line-height: 1.2;
   letter-spacing: 5px;
   color: #ffffff;
