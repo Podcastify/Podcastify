@@ -1,4 +1,5 @@
-export const MEDIA_QUERY_XL = "@media screen and (min-width: 1120px)";
+export const MEDIA_QUERY_XXL = "@media screen and (min-width: 1440px)";
+export const MEDIA_QUERY_XL = "@media screen and (min-width: 1120px) and (max-width: 1439px)";
 export const MEDIA_QUERY_LG =
   "@media screen and (min-width: 992px) and (max-width: 1199px)";
 export const MEDIA_QUERY_MD =

@@ -6,7 +6,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import { MEDIA_QUERY_XL, MEDIA_QUERY_LG, MEDIA_QUERY_MD, MEDIA_QUERY_SM, MEDIA_QUERY_XS } from "./constants/breakpoints";
+import { MEDIA_QUERY_XL, MEDIA_QUERY_LG, MEDIA_QUERY_MD, MEDIA_QUERY_SM, MEDIA_QUERY_XS, MEDIA_QUERY_XXL } from "./constants/breakpoints";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
@@ -17,8 +17,11 @@ import { getMe } from './webAPI/users'
 
 const GlobalStyle = createGlobalStyle`
   html {
+    ${MEDIA_QUERY_XL} {
+      font-size: 12px;
+    }
     ${MEDIA_QUERY_LG} {
-      font-size: 14px;
+      font-size: 12px;
     }
     ${MEDIA_QUERY_MD} {
       font-size: 10px;
