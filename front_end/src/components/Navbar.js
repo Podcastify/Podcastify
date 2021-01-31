@@ -6,6 +6,7 @@ import {
   MEDIA_QUERY_MD,
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
+  MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
 
 const NavigationBar = styled.div``;
@@ -13,15 +14,16 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  /* height: 60px; */
+  height: 13vh;
   // 以下為新增，Navbar 固定在最上方
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   left: 0;
   z-index: 3;
 
-  ${MEDIA_QUERY_SM} {
+  /* ${MEDIA_QUERY_SM} {
     height: 70px;
   }
 
@@ -34,8 +36,12 @@ const Nav = styled.nav`
   }
 
   ${MEDIA_QUERY_XL} {
-    height: 110px;
+    height: 100px;
   }
+
+  ${MEDIA_QUERY_XXL} {
+    height: 110px;
+  } */
 `;
 
 const LeftSection = styled.div`
@@ -46,11 +52,11 @@ const LeftSection = styled.div`
 
 const PodcastifyLogoControl = styled.div`
   display: flex;
-  margin: 6px 10px;
+  margin: 6px 8px 6px 10px;
 
   svg {
     width: 100px;
-    height: 40px;
+    height: 65px;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -78,6 +84,14 @@ const PodcastifyLogoControl = styled.div`
   }
 
   ${MEDIA_QUERY_XL} {
+    margin: 15px 20px;
+    svg {
+      width: 200px;
+      height: 60px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
     margin: 20px;
     svg {
       width: 280px;
@@ -87,10 +101,10 @@ const PodcastifyLogoControl = styled.div`
 `;
 
 const SearchBox = styled.div`
-  width: calc(100% / 12 * 5);
+  width: calc(100% / 12 * 7.5);
   height: 100%;
   position: relative;
-  margin-right: 16px;
+  margin-right: 12px;
 
   ${MEDIA_QUERY_SM} {
     width: calc(100% / 12 * 4);
@@ -108,6 +122,10 @@ const SearchBox = styled.div`
   ${MEDIA_QUERY_XL} {
     width: calc(100% / 12 * 3.5);
   }
+
+  ${MEDIA_QUERY_XXL} {
+    width: calc(100% / 12 * 3.5);
+  }
 `;
 
 const SearchInput = styled.input`
@@ -115,37 +133,37 @@ const SearchInput = styled.input`
   border-radius: 50px;
   box-sizing: border-box;
   width: 100%;
+  height: 35px;
   padding: 2px 2px 2px 8px;
-  font-size: 12px;
-  background-color: ${(props) => props.theme.primary_color_grey};
-  border: 1px solid ${(props) => props.theme.primary_color};
+  font-size: 15px;
+  background-color: ${(props) => props.theme.white_opacity};
+  border: 1px solid ${(props) => props.theme.white};
   outline: none;
-  caret-color: ${(props) => props.theme.primary_color};
+  caret-color: ${(props) => props.theme.white};
 
   &::placeholder {
-    color: ${(props) => props.theme.primary_color};
-    font-size: 12px;
+    color: ${(props) => props.theme.white};
+    font-size: 15px;
     font-family: Helvetica;
     padding: 4px;
   }
 
-  ${MEDIA_QUERY_SM} {
-    height: 20px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    height: 30px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    height: 35px;
-  }
-
   ${MEDIA_QUERY_XL} {
+    height: 45px;
+    font-size: 20px;
+    padding-left: 20px;
+    border: 2px solid ${(props) => props.theme.white};
+
+    &::placeholder {
+      font-size: 20px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
     height: 57px;
     font-size: 20px;
     padding-left: 20px;
-    border: 2px solid ${(props) => props.theme.primary_color};
+    border: 2px solid ${(props) => props.theme.white};
 
     &::placeholder {
       font-size: 20px;
@@ -162,11 +180,19 @@ const MagnifierControl = styled.div`
   padding: 5px 10px;
 
   svg {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
   }
 
   ${MEDIA_QUERY_XL} {
+    transform: translate(-25%, -50%);
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
     transform: translate(-25%, -50%);
     svg {
       width: 24px;
@@ -208,6 +234,13 @@ const ListenApiLogoControl = styled.div`
 
   ${MEDIA_QUERY_XL} {
     svg {
+      width: 250px;
+      height: 75px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    svg {
       width: 300px;
       height: 80px;
     }
@@ -222,8 +255,8 @@ const AvatarControl = styled.div`
   cursor: pointer;
 
   svg {
-    width: 35px;
-    height: 35px;
+    width: 42px;
+    height: 42px;
   }
 
   & rect {
@@ -260,6 +293,14 @@ const AvatarControl = styled.div`
   ${MEDIA_QUERY_XL} {
     margin-right: 15px;
     svg {
+      width: 65px;
+      height: 65px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    margin-right: 15px;
+    svg {
       width: 78.5px;
       height: 78.5px;
     }
@@ -278,8 +319,8 @@ const Lists = styled.ul`
   margin-right: 4px;
   position: relative;
   border-radius: 6px;
-  color: ${(props) => props.theme.primary_color};
-  background-color: ${(props) => props.theme.primary_color_grey};
+  color: ${(props) => props.theme.white};
+  background-color: ${(props) => props.theme.white_opacity};
   width: 100px;
   font-size: 15px;
   z-index: 3;
@@ -292,7 +333,7 @@ const Lists = styled.ul`
     width: 0;
     height: 0;
     border: 16px solid transparent;
-    border-bottom-color: ${(props) => props.theme.primary_color_grey};
+    border-bottom-color: ${(props) => props.theme.white_opacity};
     border-top: 0;
     border-right: 0;
     margin-left: 20px;
@@ -313,7 +354,7 @@ const Lists = styled.ul`
       width: 0;
       height: 0;
       border: 18px solid transparent;
-      border-bottom-color: ${(props) => props.theme.primary_color_grey};
+      border-bottom-color: ${(props) => props.theme.white_opacity};
       border-top: 0;
       border-right: 0;
       margin-left: 20px;
@@ -335,7 +376,7 @@ const Lists = styled.ul`
       width: 0;
       height: 0;
       border: 20px solid transparent;
-      border-bottom-color: ${(props) => props.theme.primary_color_grey};
+      border-bottom-color: ${(props) => props.theme.white_opacity};
       border-top: 0;
       border-right: 0;
       margin-left: 30px;
@@ -357,7 +398,7 @@ const Lists = styled.ul`
       width: 0;
       height: 0;
       border: 22px solid transparent;
-      border-bottom-color: ${(props) => props.theme.primary_color_grey};
+      border-bottom-color: ${(props) => props.theme.white_opacity};
       border-top: 0;
       border-right: 0;
       margin-left: 30px;
@@ -365,7 +406,7 @@ const Lists = styled.ul`
     }
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     margin-right: 15px;
     width: 210px;
     font-size: 26px;
@@ -379,7 +420,7 @@ const Lists = styled.ul`
       width: 0;
       height: 0;
       border: 30px solid transparent;
-      border-bottom-color: ${(props) => props.theme.primary_color_grey};
+      border-bottom-color: ${(props) => props.theme.white_opacity};
       border-top: 0;
       border-right: 0;
       margin-left: 30px;
@@ -407,7 +448,7 @@ const ListItem = styled.li`
     cursor: pointer;
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     padding: 15px;
 
     &:first-child {

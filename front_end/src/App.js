@@ -1,8 +1,18 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import MyLoveChannelPage from "./pages/MyLoveChannelPage";
+import Channel from "./pages/Channel";
+// import Register from "./pages/Register";
+// import Login from "./pages/Login";
+// import HomePage from "./pages/HomePage";
+// import SearchPage from "./pages/SearchPage";
+// import MyLoveChannelPage from "./pages/MyLoveChannelPage";
 
 const GlobalStyle = createGlobalStyle`
   body {
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: Helvetica;
   }
   body::after {
     content: "";
@@ -32,9 +42,11 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   const theme = {
-    primary_color: "#ffffff",
-    primary_color_grey: "darkgray",
-    primary_color_orange: "#e9502e",
+    white: "#ffffff",
+    white_opacity: "rgba(255, 255, 255, 0.5)",
+    grey_opacity: "rgba(157, 157, 157, 0.5)",
+    orange: "#e9502e",
+    orange_opacity: "rgba(233, 80, 46, 0.5)",
     hover_color: "#8fe2ff",
     click_color: "#0079f2",
   };
@@ -42,10 +54,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {/* <Login /> */}
+      <Channel />
       {/* <HomePage /> */}
+      {/* <Login /> */}
       {/* <SearchPage /> */}
-      <MyLoveChannelPage />
+      {/* <MyLoveChannelPage /> */}
     </ThemeProvider>
   );
 }

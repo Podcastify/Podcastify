@@ -6,13 +6,13 @@ import {
   MEDIA_QUERY_MD,
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
+  MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
 
 const Container = styled.div`
-  /* height: 100%; */
   // 以下為新增，MusicPlayer 固定在下方，並加上背景
   background-color: rgba(62, 58, 57, 1);
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
@@ -25,27 +25,16 @@ const Player = styled.div`
   box-sizing: border-box;
   margin: 15px 5px;
   border-radius: 50px;
-  height: 70px;
-  border: solid 3px ${(props) => props.theme.primary_color_grey};
-
-  ${MEDIA_QUERY_SM} {
-    margin: 19px 5px;
-    height: 75px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    margin: 21px 5px;
-    height: 80px;
-  }
+  height: 12vh;
+  border: solid 3px ${(props) => props.theme.white_opacity};
 
   ${MEDIA_QUERY_LG} {
-    margin: 22.5px 5px;
-    height: 85px;
+    margin: 10px 5px;
+    height: 13vh;
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     margin: 24px 5px;
-    height: 100px;
   }
 `;
 
@@ -57,7 +46,7 @@ const PlaylistControl = styled.div`
 
   &:hover {
     path {
-      fill: ${(props) => props.theme.primary_color_grey};
+      fill: ${(props) => props.theme.white_opacity};
     }
   }
 
@@ -68,7 +57,7 @@ const PlaylistControl = styled.div`
   }
 
   & path {
-    fill: ${(props) => props.theme.primary_color};
+    fill: ${(props) => props.theme.white};
   }
 
   svg {
@@ -103,7 +92,7 @@ const PlaylistControl = styled.div`
     }
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     margin: 0px 10px 0px 58px;
 
     svg {
@@ -123,7 +112,7 @@ const Context = styled.div`
   align-items: center;
   justify-content: center;
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     width: calc(100% / 12 * 1.8);
   }
 `;
@@ -133,29 +122,21 @@ const EpisodeName = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: ${(props) => props.theme.primary_color};
-  font-size: 10px;
+  color: ${(props) => props.theme.white};
+  font-size: 14px;
   margin-bottom: 5px;
 
-  ${MEDIA_QUERY_SM} {
-    font-size: 12px;
+  ${MEDIA_QUERY_XS} {
+    font-size: 10px;
   }
 
-  ${MEDIA_QUERY_MD} {
-    font-size: 14px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    font-size: 18px;
-  }
-
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     font-size: 26px;
   }
 `;
 
 const ChannelName = styled(EpisodeName)`
-  color: ${(props) => props.theme.primary_color_grey};
+  color: ${(props) => props.theme.white_opacity};
   margin: 0;
 `;
 
@@ -203,7 +184,7 @@ const PrevControl = styled.div`
     }
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     svg {
       width: 21px;
       height: 21px;
@@ -232,32 +213,25 @@ const PlayControl = styled.div`
   }
 
   svg {
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
   }
 
-  ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_XS} {
     svg {
-      width: 60px;
-      height: 60px;
+      width: 55px;
+      height: 55px;
     }
   }
 
   ${MEDIA_QUERY_MD} {
-    svg {
-      width: 65px;
-      height: 65px;
-    }
-  }
-
-  ${MEDIA_QUERY_LG} {
     svg {
       width: 75px;
       height: 75px;
     }
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     svg {
       width: 90px;
       height: 90px;
@@ -282,20 +256,20 @@ const ProgressBar = styled.div`
   height: 7px;
   margin: 5px 10px;
   position: relative;
-  background-color: ${(props) => props.theme.primary_color_grey};
+  background-color: ${(props) => props.theme.white_opacity};
   border-radius: 50px;
 
   &:hover {
     cursor: pointer;
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     height: 9px;
   }
 `;
 
 const ProgressCurrent = styled.div`
-  background-color: ${(props) => props.theme.primary_color_orange};
+  background-color: ${(props) => props.theme.orange};
   position: absolute;
   height: 7.5px;
   width: 20px;
@@ -304,23 +278,23 @@ const ProgressCurrent = styled.div`
   border-radius: 50px;
   z-index: 3;
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     height: 9.5px;
   }
 `;
 
 const ProgressBarCircle = styled.div`
   position: absolute;
-  border: 3px solid ${(props) => props.theme.primary_color};
+  border: 3px solid ${(props) => props.theme.white};
   border-radius: 50%;
   padding: 2px;
   top: 50%;
   left: 0%;
   transform: translate(-50%, -50%);
-  background-color: ${(props) => props.theme.primary_color_orange};
+  background-color: ${(props) => props.theme.orange};
   z-index: 3;
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     padding: 4px;
   }
 `;
@@ -328,34 +302,35 @@ const ProgressBarCircle = styled.div`
 const Timing = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
-  font-family: Helvetica;
+  font-size: 14px;
   margin-top: 2px;
-  color: ${(props) => props.theme.primary_color_grey};
+  color: ${(props) => props.theme.white_opacity};
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 10px;
+    margin-top: 2px;
+  }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 12px;
     margin-top: 3px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 14px;
     margin-top: 5px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 16px;
     margin-top: 6px;
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     font-size: 18px;
     margin-top: 7px;
   }
 `;
 
-const StartTime = styled.div``;
-const DurationTime = styled.div``;
+const StartTime = styled.time``;
+const DurationTime = styled.time``;
 
 const Sound = styled.div`
   display: flex;
@@ -415,7 +390,7 @@ const SoundOnControl = styled.div`
     margin: 6px;
   }
 
-  ${MEDIA_QUERY_XL} {
+  ${MEDIA_QUERY_XXL} {
     margin: 7px;
   }
 `;
