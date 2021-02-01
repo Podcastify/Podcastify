@@ -1,11 +1,11 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Playlist from "./pages/Playlist";
-// import Channel from "./pages/Channel";
+import Channel from "./pages/Channel";
 // import Register from "./pages/Register";
 // import Login from "./pages/Login";
-// import HomePage from "./pages/HomePage";
-// import SearchPage from "./pages/SearchPage";
-// import MyLoveChannelPage from "./pages/MyLoveChannelPage";
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import MyLoveChannel from "./pages/MyLoveChannel";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -57,11 +57,12 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Playlist />
-      {/* <HomePage /> */}
+      {/* <Playlist /> */}
+      <Channel />
+      {/* <Home /> */}
       {/* <Login /> */}
-      {/* <SearchPage /> */}
-      {/* <MyLoveChannelPage /> */}
+      {/* <Search /> */}
+      {/* <MyLoveChannel /> */}
     </ThemeProvider>
   );
 }
