@@ -31,19 +31,20 @@ const Main = styled.main`
   padding-left: 13.5px;
 
   ${MEDIA_QUERY_XS} {
-    top: 100px;
     left: unset;
     width: 82%;
     height: 70vh;
   }
 
   ${MEDIA_QUERY_SM} {
-    top: 80px;
+    left: unset;
+    width: 82%;
+    height: 74vh;
   }
 
   ${MEDIA_QUERY_MD} {
-    top: 90px;
-    height: 78vh;
+    top: 10%;
+    height: 77vh;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -379,7 +380,17 @@ const Text = styled.div`
     margin-left: 13.5px;
   }
 
-  ${MEDIA_QUERY_XS}, ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_SM} {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: unset;
+    margin-left: 13.5px;
+  }
+
+  ${MEDIA_QUERY_XS} {
     font-size: 20px;
     display: flex;
     flex-direction: column;
@@ -481,7 +492,19 @@ const DetailsBlock = styled.div`
   position: relative;
   border-radius: 10px;
 
-  ${MEDIA_QUERY_XS}, ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_SM} {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      border-top: 2px solid ${(props) => props.theme.white};
+    }
+  }
+
+  ${MEDIA_QUERY_XS} {
     &::before {
       content: "";
       position: absolute;

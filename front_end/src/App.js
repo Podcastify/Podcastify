@@ -1,5 +1,5 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import Playlist from "./pages/Playlist";
+// import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
