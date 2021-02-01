@@ -5,65 +5,109 @@ import {
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
   MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 
-const SidebarContainer = styled.div`
-  width: 20vw;
-  height: 59vh;
+export const SidebarContainer = styled.aside`
+  width: 22vw;
+  height: 72vh;
   padding: 18px 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 28px;
-  position: fixed;
-  top: 100px;
-  margin: 0 10px;
+
+  ${MEDIA_QUERY_XL} {
+    height: 71vh;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    height: 69vh;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 25%;
+  }
 
   ${MEDIA_QUERY_SM} {
-    display: none;
+    width: 100%;
+    border: none;
+    padding: 5px 0;
   }
 
   ${MEDIA_QUERY_XS} {
-    width: 95%;
+    width: 100%;
     border: none;
     padding: 5px 0;
-    height: 75vh;
-    top: 70px;
-    /* display: none; */
+    height: 60vh;
+    margin-bottom: 20px;
   }
 `;
 
 const InfoCardWrapper = styled.div`
-  box-sizing: border-box;
   padding: 20px 0px;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  overflow-y: scroll;
+
+  // 在 chrome, Safari 上隱藏 scrollbar
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // 在 IE, Edge 上隱藏 scrollbar
+  -ms-overflow-style: none;
+
+  ${MEDIA_QUERY_LG} {
+    padding: 0;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    padding: 10px 0px;
+  }
 
   ${MEDIA_QUERY_MD} {
     width: 100%;
+    padding: 0;
   }
 
   ${MEDIA_QUERY_SM} {
     width: 100%;
     align-items: center;
     justify-content: center;
+    overflow-y: unset;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    padding: 0px 0px 20px 0px;
+    overflow-y: unset;
   }
 `;
 
 const InfoCardPhoto = styled.div`
-  width: 190px;
-  height: 190px;
+  width: 300px;
+  max-width: 100%;
+  height: 260px;
   background: url(${DemoImage}) center / cover;
   text-decoration: none;
 
+  ${MEDIA_QUERY_XL} {
+    width: 200px;
+    max-width: 100%;
+    height: 200px;
+  }
+
   ${MEDIA_QUERY_LG} {
     width: 190px;
+    max-width: 100%;
     height: 190px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 150px;
+    max-width: 100%;
     height: 150px;
   }
 
@@ -71,35 +115,40 @@ const InfoCardPhoto = styled.div`
     width: 120px;
     height: 120px;
   }
+
   ${MEDIA_QUERY_XS} {
-    width: 210px;
-    height: 210px;
+    width: 235px;
+    height: 200px;
+  }
+`;
+
+const InfoCardContent = styled.div`
+  width: 89%;
+  height: 60%;
+
+  ${MEDIA_QUERY_MD} {
+    width: 98%;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    width: 100%;
+    height: 188px;
   }
 `;
 
 const InfoCardBlock = styled.div`
-  width: 190px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: left;
   flex-direction: column;
 
-  ${MEDIA_QUERY_LG} {
-    width: 190px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: 150px;
-  }
-
   ${MEDIA_QUERY_SM} {
-    width: 130px;
     margin-top: 6px;
   }
 
   ${MEDIA_QUERY_XS} {
-    margin-top: 15px;
-    width: 280px;
+    margin: 23px 0;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -107,14 +156,52 @@ const InfoCardBlock = styled.div`
   }
 `;
 
+const InfoCardTitle = styled.h2`
+  color: ${(props) => props.theme.white};
+  margin: 20px 0px 60px 0px;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 1.19;
+  letter-spacing: 0.6px;
+  text-decoration: none;
+  width: 100%;
+  /* 資訊需完整提供 */
+  word-break: break-word;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 24px;
+    margin: 20px 0px 30px 0px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 22px;
+    margin: 20px 0px 30px 0px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 20px;
+    margin: 20px 0px 40px 0px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 22px;
+    margin-top: 6px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 25px;
+    width: 180px;
+    margin: 10px 0 10px 0;
+  }
+`;
+
 const InfoCardButton = styled.button`
-  box-sizing: border-box;
   cursor: pointer;
-  width: 100px;
-  height: 2.5rem;
-  font-size: 1rem;
-  border: 2px solid #d0d0d0;
-  color: #d0d0d0;
+  width: 140px;
+  height: 60px;
+  font-size: 26.5px;
+  border: 2px solid ${(props) => props.theme.grey_opacity};
+  color: ${(props) => props.theme.white};
   text-decoration: none;
   background: rgba(255, 255, 255, 0);
 
@@ -124,109 +211,98 @@ const InfoCardButton = styled.button`
 
   &:hover {
     border: hidden;
-    color: #ffffff;
-    background: #8fe2ff;
-    border: 3px solid #8fe2ff;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.hover_color};
+    border: 3px solid ${(props) => props.theme.hover_color};
   }
 
   &:active {
     border: hidden;
-    color: #ffffff;
-    background: #0079f2;
-    border: 3px solid #0079f2;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.click_color};
+    border: 3px solid ${(props) => props.theme.click_color};
   }
 
-  ${MEDIA_QUERY_SM} {
-    width: 80px;
-    margin-top: 0px;
+  ${MEDIA_QUERY_XL} {
+    width: 120px;
+    height: 50px;
+    font-size: 22px;
   }
-
-  ${MEDIA_QUERY_XS} {
-    width: 80px;
-    margin-top: 0px;
-  }
-`;
-
-const InfoCardTitle = styled.h2`
-  color: white;
-  margin-top: 10px 0 15px 0;
-  font-weight: bold;
-  line-height: 1.19;
-  letter-spacing: 0.6px;
-  text-decoration: none;
-  width: 180px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 
   ${MEDIA_QUERY_LG} {
-    width: 100px;
+    width: 90px;
+    height: 45px;
+    font-size: 18px;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 100px;
+    width: 90px;
+    height: 50px;
+    font-size: 18px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 22px;
-    width: 130px;
-    margin-top: 6px;
+    width: 80px;
+    margin-top: 0px;
   }
 
   ${MEDIA_QUERY_XS} {
-    width: 100px;
-    margin: 10px 0 10px 0;
+    width: 80px;
+    height: 34px;
+    font-size: 15px;
   }
 `;
 
-const InfoCardContent = styled.div`
+const InfoCardText = styled.div`
+  width: 100%;
   margin-top: 24px;
-  width: 190px;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 15px;
+  color: ${(props) => props.theme.white};
+  font-size: 25px;
   letter-spacing: 0.3px;
   line-height: 1.6;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  /* 資訊需完整提供 */
+  word-break: break-word;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 20px;
+  }
 
   ${MEDIA_QUERY_LG} {
-    width: 190px;
+    font-size: 16px;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 150px;
     margin-top: 10px;
+    font-size: 18px;
   }
 
   ${MEDIA_QUERY_SM} {
-    width: 120px;
+    font-size: 18px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_XS} {
-    width: 280px;
-    margin-top: 10px;
-    -webkit-line-clamp: 4;
+    font-size: 15px;
+    margin: 0;
+    color: ${(props) => props.theme.white};
   }
 `;
 
-export default function ChannelSidebar() {
+export function ChannelSidebar() {
   return (
     <SidebarContainer>
       <InfoCardWrapper>
         <InfoCardPhoto />
-        <InfoCardBlock>
-          <InfoCardTitle>社畜日記</InfoCardTitle>
-          <InfoCardButton>訂閱</InfoCardButton>
-        </InfoCardBlock>
         <InfoCardContent>
-          用隨性的對話包裝知識， 用認真的口吻胡說八道。
-          我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-          用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
+          <InfoCardBlock>
+            <InfoCardTitle>社畜日記</InfoCardTitle>
+            <InfoCardButton>訂閱</InfoCardButton>
+          </InfoCardBlock>
+          <InfoCardText>
+            用隨性的對話包裝知識， 用認真的口吻胡說八道。
+            我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
+            用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
+          </InfoCardText>
         </InfoCardContent>
       </InfoCardWrapper>
     </SidebarContainer>
