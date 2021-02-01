@@ -34,7 +34,7 @@ const Main = styled.main`
     top: 100px;
     left: unset;
     width: 82%;
-    height: 70vh;
+    height: 80vh;
   }
 
   ${MEDIA_QUERY_SM} {

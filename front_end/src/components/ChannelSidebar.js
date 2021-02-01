@@ -9,14 +9,14 @@ import {
 } from "../constants/breakpoints";
 
 export const SidebarContainer = styled.aside`
-  width: 22vw;
+  width: 20vw;
   height: 72vh;
   padding: 18px 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 28px;
 
   ${MEDIA_QUERY_XL} {
-    height: 71vh;
+    height: 70vh;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -47,7 +47,6 @@ const InfoCardWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   overflow-y: scroll;
@@ -60,17 +59,17 @@ const InfoCardWrapper = styled.div`
   // 在 IE, Edge 上隱藏 scrollbar
   -ms-overflow-style: none;
 
-  ${MEDIA_QUERY_LG} {
-    padding: 0;
+  ${MEDIA_QUERY_XL} {
+    padding: 10px 0;
   }
 
-  ${MEDIA_QUERY_XL} {
-    padding: 10px 0px;
+  ${MEDIA_QUERY_LG} {
+    padding: 10px 0;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 100%;
-    padding: 0;
+    padding: 10px 0;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -90,8 +89,13 @@ const InfoCardPhoto = styled.div`
   width: 300px;
   max-width: 100%;
   height: 260px;
-  background: url(${DemoImage}) center / cover;
   text-decoration: none;
+  /* background: url(${DemoImage}) center / cover; */
+
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
 
   ${MEDIA_QUERY_XL} {
     width: 200px;
@@ -112,8 +116,8 @@ const InfoCardPhoto = styled.div`
   }
 
   ${MEDIA_QUERY_SM} {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 180px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -138,13 +142,30 @@ const InfoCardContent = styled.div`
 
 const InfoCardBlock = styled.div`
   width: 100%;
+  padding: 0px 10px;
   display: flex;
   justify-content: center;
   align-items: left;
   flex-direction: column;
 
+  ${MEDIA_QUERY_XL} {
+    padding: 0px 10px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    padding: 0px 4px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    padding: 0px 20px;
+  }
+
   ${MEDIA_QUERY_SM} {
     margin-top: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -158,7 +179,7 @@ const InfoCardBlock = styled.div`
 
 const InfoCardTitle = styled.h2`
   color: ${(props) => props.theme.white};
-  margin: 20px 0px 60px 0px;
+  margin: 10px 0px 60px 0px;
   font-weight: bold;
   font-size: 32px;
   line-height: 1.19;
@@ -184,8 +205,11 @@ const InfoCardTitle = styled.h2`
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 22px;
-    margin-top: 6px;
+    /* font-size: 22px;
+    margin-top: 6px; */
+    font-size: 25px;
+    width: 180px;
+    margin: 10px 0 10px 0;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -242,8 +266,11 @@ const InfoCardButton = styled.button`
   }
 
   ${MEDIA_QUERY_SM} {
+    /* width: 80px;
+    margin-top: 0px; */
     width: 80px;
-    margin-top: 0px;
+    height: 34px;
+    font-size: 15px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -254,26 +281,29 @@ const InfoCardButton = styled.button`
 `;
 
 const InfoCardText = styled.div`
+  padding: 0px 10px;
   width: 100%;
   margin-top: 24px;
   color: ${(props) => props.theme.white};
   font-size: 25px;
   letter-spacing: 0.3px;
   line-height: 1.6;
-  /* 資訊需完整提供 */
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
     font-size: 20px;
+    padding: 0px 10px;
   }
 
   ${MEDIA_QUERY_LG} {
     font-size: 16px;
+    padding: 0px 4px;
   }
 
   ${MEDIA_QUERY_MD} {
     margin-top: 10px;
     font-size: 18px;
+    padding: 0px 20px;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -288,11 +318,13 @@ const InfoCardText = styled.div`
   }
 `;
 
-export function ChannelSidebar() {
+export default function ChannelSidebar() {
   return (
     <SidebarContainer>
       <InfoCardWrapper>
-        <InfoCardPhoto />
+        <InfoCardPhoto>
+          <img src={DemoImage} alt="" />
+        </InfoCardPhoto>
         <InfoCardContent>
           <InfoCardBlock>
             <InfoCardTitle>社畜日記</InfoCardTitle>
