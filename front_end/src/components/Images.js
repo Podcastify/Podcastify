@@ -15,6 +15,8 @@ import { ReactComponent as PodcastPlayBtn } from "../images/List_Play_Button_def
 import { ReactComponent as PodcastPauseBtn } from "../images/List_Pause_Button_default.svg";
 import { ReactComponent as CollapseBtn } from "../images/Collapse.svg";
 import { ReactComponent as AddToPlayListBtn } from "../images/add_to_playlist_button.svg";
+import { ReactComponent as DeleteBtn } from "../images/Delete_from_list_Default.svg";
+import { ReactComponent as RenamePlaylistBtn } from "../images/My_Playlist_rename.svg";
 
 export default {
   PlayBtn,
@@ -34,4 +36,6 @@ export default {
   PodcastPauseBtn,
   CollapseBtn,
   AddToPlayListBtn,
+  DeleteBtn,
+  RenamePlaylistBtn,
 };

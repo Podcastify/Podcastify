@@ -8,8 +8,8 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 
-const SidebarContainer = styled.aside`
-  width: 20vw;
+export const SidebarContainer = styled.aside`
+  width: 22vw;
   height: 72vh;
   padding: 18px 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
@@ -288,7 +288,7 @@ const InfoCardText = styled.div`
   }
 `;
 
-export default function ChannelSidebar() {
+export function ChannelSidebar() {
   return (
     <SidebarContainer>
       <InfoCardWrapper>

@@ -1,5 +1,6 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import Channel from "./pages/Channel";
+import Playlist from "./pages/Playlist";
+// import Channel from "./pages/Channel";
 // import Register from "./pages/Register";
 // import Login from "./pages/Login";
 // import HomePage from "./pages/HomePage";
@@ -14,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     font-family: Helvetica;
   }
+
   body::after {
     content: "";
     background: #3E3A39;
@@ -44,6 +46,7 @@ function App() {
   const theme = {
     white: "#ffffff",
     white_opacity: "rgba(255, 255, 255, 0.5)",
+    white_opacity_10: "rgba(255, 255, 255, 0.1)",
     grey_opacity: "rgba(157, 157, 157, 0.5)",
     orange: "#e9502e",
     orange_opacity: "rgba(233, 80, 46, 0.5)",
@@ -54,7 +57,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Channel />
+      <Playlist />
       {/* <HomePage /> */}
       {/* <Login /> */}
       {/* <SearchPage /> */}

@@ -281,7 +281,7 @@ const Summary = styled.summary`
   }
 
   ${MEDIA_QUERY_MD} {
-    background-color: rgba(256, 256, 256, 0.1);
+    background-color: ${(props) => props.theme.white_opacity_10};
     ${(props) =>
       props.open &&
       `
@@ -290,7 +290,7 @@ const Summary = styled.summary`
   }
 
   ${MEDIA_QUERY_SM} {
-    background-color: rgba(256, 256, 256, 0.1);
+    background-color: ${(props) => props.theme.white_opacity_10};
     ${(props) =>
       props.open &&
       `
@@ -299,7 +299,7 @@ const Summary = styled.summary`
   }
 
   ${MEDIA_QUERY_XS} {
-    background-color: rgba(256, 256, 256, 0.1);
+    background-color: ${(props) => props.theme.white_opacity_10};
     ${(props) =>
       props.open &&
       `
