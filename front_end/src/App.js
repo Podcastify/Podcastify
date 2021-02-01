@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
@@ -6,6 +7,7 @@ import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import MyLoveChannelPage from "./pages/MyLoveChannelPage";
+import { UserContext } from "./context/context";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -44,14 +46,35 @@ function App() {
     hover_color: "#8fe2ff",
     click_color: "#0079f2",
   };
+  const [userInfo, setUserInfo] = useState(null);
+  const [userSubscription, setUserSubscription] = useState(null);
+  const [userPlaylists, setUserPlaylists] = useState(null);
+  const [userPlayedRecord, setUserPlayedRecord] = useState(null);
+
+  useEffect(() => {
+    // 在這邊把會員的訂閱等資訊放入 state 中
+  }, [])
+
+  const userContextValue = {
+    userInfo,
+    userSubscription,
+    userPlaylists,
+    userPlayedRecord,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {/* <Login /> */}
-      {/* <HomePage /> */}
-      {/* <SearchPage /> */}
-      <MyLoveChannelPage />
+      <UserContext.Provider value={userContextValue}>
+        {/* <Login /> */}
+        {/* <HomePage /> */}
+        {/* <SearchPage /> */}
+        <MyLoveChannelPage />
+      </UserContext.Provider>
     </ThemeProvider>
   );
 }
