@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 import MusicPlayer from "../components/MusicPlayer";
-import ChannelSidebar from "../components/ChannelSidebar";
+import { ChannelSidebar } from "../components/ChannelSidebar";
 import Images from "../components/Images";
 import styled from "styled-components";
 import {
@@ -676,6 +676,240 @@ export default function Channel() {
                     <AddText>加入播放清單</AddText>
                   </AddToPlayList>
                   <CollapseControl onClick={onToggle}>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
                     <Images.CollapseBtn />
                   </CollapseControl>
                 </DetailsBlock>
