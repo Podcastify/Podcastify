@@ -1,6 +1,6 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Playlist from "./pages/Playlist";
-// import Channel from "./pages/Channel";
+import Channel from "./pages/Channel";
 // import Register from "./pages/Register";
 // import Login from "./pages/Login";
 // import HomePage from "./pages/HomePage";
@@ -57,7 +57,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Playlist />
+      <Channel />
       {/* <HomePage /> */}
       {/* <Login /> */}
       {/* <SearchPage /> */}
