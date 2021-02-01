@@ -9,13 +9,12 @@ import Carousel from "react-elastic-carousel";
 import "../constants/InfoCard.css";
 
 const PodcastInfoContainer = styled.main`
-  width: 70%;
-  margin-left: 25%;
-  margin-bottom: 200px;
-  position: relative;
-  display: block;
-  top: 90px;
-  left: 30px;
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: fill-available;
+  margin: 10px 40px;
 
   ${MEDIA_QUERY_MD} {
     width: 100%;

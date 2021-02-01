@@ -1,11 +1,12 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
-// import Register from "./pages/Register";
-// import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import MyLoveChannel from "./pages/MyLoveChannel";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -57,12 +58,32 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {/* <Playlist /> */}
-      <Channel />
-      {/* <Home /> */}
-      {/* <Login /> */}
-      {/* <Search /> */}
-      {/* <MyLoveChannel /> */}
+      <Home />
+      {/* <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/search">
+            <Search />
+          </Route>
+          <Route path="/mychannel">
+            <MyLoveChannel />
+          </Route>
+          <Route path="/myplaylist">
+            <Playlist />
+          </Route>
+           <Route path="/channel">
+            <Channel />
+          </Route>
+        </Switch>
+      </Router> */}
     </ThemeProvider>
   );
 }
