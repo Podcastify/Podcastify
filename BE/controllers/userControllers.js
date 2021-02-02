@@ -106,6 +106,7 @@ const getMe = async (req, res, next) => {
         },
         {
           model: Playlists,
+          as: "playlists",
           attributes: ["id", "name"],
           include: {
             model: Episodes,

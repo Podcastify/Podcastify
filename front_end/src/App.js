@@ -1,11 +1,14 @@
+
+import { useEffect, useState } from "react";
+import Navbar from "./components/Navbar";
+import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-// import Playlist from "./pages/Playlist";
-import Channel from "./pages/Channel";
-// import Register from "./pages/Register";
-// import Login from "./pages/Login";
-import Home from "./pages/Home";
-import Search from "./pages/Search";
-import MyLoveChannel from "./pages/MyLoveChannel";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import HomePage from "./pages/HomePage";
+import SearchPage from "./pages/SearchPage";
+import MyLoveChannelPage from "./pages/MyLoveChannelPage";
+import { UserContext, PageStatusContext } from "./context/context";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -53,16 +56,49 @@ function App() {
     hover_color: "#8fe2ff",
     click_color: "#0079f2",
   };
+  const [userInfo, setUserInfo] = useState(null);
+  const [userSubscription, setUserSubscription] = useState(null);
+  const [userPlaylists, setUserPlaylists] = useState(null);
+  const [userPlayedRecord, setUserPlayedRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    /* 
+      在這邊把會員的訂閱等資訊放入 state 中
+      拿到的資料可以用 destructure 寫成下面這樣
+      {playlists, subscription, playedRecord, ...userInfo}
+      再分別填入 state 中。
+      之後要修改把新的東西放進 setState() 中
+    */
+  }, [])
+
+  const pageStatusContextValue = {
+    isLoading, setIsLoading
+  }
+
+  const userContextValue = {
+    userInfo,
+    userSubscription,
+    userPlaylists,
+    userPlayedRecord,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord,
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {/* <Playlist /> */}
-      <Channel />
-      {/* <Home /> */}
-      {/* <Login /> */}
-      {/* <Search /> */}
-      {/* <MyLoveChannel /> */}
+      <PageStatusContext.Provider value={pageStatusContextValue}>
+        <UserContext.Provider value={userContextValue}>
+          {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
+          {/* <Login /> */}
+          {/* <HomePage /> */}
+          {/* <SearchPage /> */}
+          <MyLoveChannelPage />
+        </UserContext.Provider>
+      </PageStatusContext.Provider>
     </ThemeProvider>
   );
 }

@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import MusicPlayer from "../components/MusicPlayer";
-import { ChannelSidebar } from "../components/ChannelSidebar";
+import ChannelSidebar from "../components/ChannelSidebar";
+import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import styled from "styled-components";
 import {
@@ -18,79 +19,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Main = styled.main`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 11%;
-  left: 0;
-  width: 100%;
-  height: 73vh;
-  padding-left: 13.5px;
-
-  ${MEDIA_QUERY_XS} {
-    left: unset;
-    width: 82%;
-    height: 74vh;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    left: unset;
-    width: 82%;
-    height: 74vh;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    top: 10%;
-    height: 77vh;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    top: 12%;
-  }
-
-  ${MEDIA_QUERY_XL} {
-    top: 12%;
-  }
-`;
-
-const Div = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-
-  // 在 chrome, Safari 上隱藏 scrollbar
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  // 在 IE, Edge 上隱藏 scrollbar
-  -ms-overflow-style: none;
-
-  ${MEDIA_QUERY_XL} {
-    overflow-y: unset;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    overflow-y: unset;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    overflow-y: unset;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    flex-direction: column;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    flex-direction: column;
-  }
 `;
 
 const PlayList = styled.section`
@@ -171,6 +99,7 @@ const TitleHeader = styled.div`
   ${MEDIA_QUERY_LG} {
     margin-left: 68.5px;
     font-size: 18px;
+    padding: 7px 0 10px 0;
   }
 
   ${MEDIA_QUERY_XL} {
@@ -218,6 +147,23 @@ const ChannelNameHeader = styled(EpisodeTitleHeader)`
 const Body = styled.div`
   width: 100%;
   border-top: 3px solid ${(props) => props.theme.white_opacity};
+  overflow-y: scroll;
+
+  // 在 chrome, Safari 上隱藏 scrollbar
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // 在 IE, Edge 上隱藏 scrollbar
+  -ms-overflow-style: none;
+
+  ${MEDIA_QUERY_XS} {
+    overflow-y: unset;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    overflow-y: unset;
+  }
 
   ${MEDIA_QUERY_MD} {
     border: none;
@@ -699,6 +645,84 @@ export default function Channel() {
                     <AddText>加入播放清單</AddText>
                   </AddToPlayList>
                   <CollapseControl onClick={onToggle}>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
+                    <Images.CollapseBtn />
+                  </CollapseControl>
+                </DetailsBlock>
+              </Details>
+              <Details>
+                <Summary>
+                  <PlayBtnControl>
+                    <Images.PodcastPlayBtn />
+                  </PlayBtnControl>
+                  <Text>
+                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
+                    <EpisodeDescription>
+                      30歲上班族的心底牢騷大噴發！
+                    </EpisodeDescription>
+                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
+                  </Text>
+                  <AddToPlayListControl>
+                    <Images.AddToPlayListBtn />
+                  </AddToPlayListControl>
+                </Summary>
+                <DetailsBlock>
+                  <DetailsHeader>
+                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
+                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
+                  </DetailsHeader>
+                  <EpisodeDetails>
+                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                    <br />
+                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
+                    <br />
+                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
+                  </EpisodeDetails>
+                  <AddToPlayList>
+                    <AddControl>
+                      <Images.AddToPlayListBtn />
+                    </AddControl>
+                    <AddText>加入播放清單</AddText>
+                  </AddToPlayList>
+                  <CollapseControl>
                     <Images.CollapseBtn />
                   </CollapseControl>
                 </DetailsBlock>
