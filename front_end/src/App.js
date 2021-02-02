@@ -10,7 +10,6 @@ import SearchPage from "./pages/SearchPage";
 import MyLoveChannelPage from "./pages/MyLoveChannelPage";
 import { UserContext, PageStatusContext } from "./context/context";
 
-
 const GlobalStyle = createGlobalStyle`
   body {
   }

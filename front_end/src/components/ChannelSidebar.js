@@ -29,6 +29,7 @@ export const SidebarContainer = styled.aside`
 
   ${MEDIA_QUERY_SM} {
     width: 100%;
+    height: 60vh;
     border: none;
     padding: 5px 0;
   }

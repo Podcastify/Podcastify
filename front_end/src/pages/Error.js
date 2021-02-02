@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import Images from "../components/Images";
+import { Main } from "../components/Main";
 import styled from "styled-components";
 import {
   MEDIA_QUERY_XS,
@@ -18,19 +19,17 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Main = styled.main`
+const Wrapper = styled(Main)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 12%;
-  left: 0;
   width: 100%;
   height: 88vh;
+  padding: 0;
 
-  ${MEDIA_QUERY_XXL} {
-    top: 11%;
+  ${MEDIA_QUERY_LG} {
+    height: 87vh;
   }
 `;
 
@@ -117,7 +116,7 @@ export default function Error() {
   return (
     <Container>
       <Navbar />
-      <Main>
+      <Wrapper>
         <ErrorControl>
           <Images.Error />
         </ErrorControl>
@@ -125,7 +124,7 @@ export default function Error() {
           <FirstLine>歐噢！好像出現某些錯誤</FirstLine>
           <SecondLine>請嘗試重新整理頁面</SecondLine>
         </Text>
-      </Main>
+      </Wrapper>
     </Container>
   );
 }
