@@ -11,7 +11,6 @@ import {
 
 const Container = styled.div`
   // 以下為新增，MusicPlayer 固定在下方，並加上背景
-  background-color: rgba(62, 58, 57, 1);
   position: absolute;
   bottom: 0;
   right: 0;
@@ -22,26 +21,54 @@ const Container = styled.div`
 const Player = styled.div`
   display: flex;
   justify-content: space-between;
-  box-sizing: border-box;
+  position: relative;
+  height: 9vh;
   margin: 15px 5px;
   border-radius: 50px;
-  height: 9vh;
   border: solid 3px ${(props) => props.theme.white_opacity};
+
+  ${MEDIA_QUERY_XS} {
+    border-radius: 0;
+    border: none;
+    margin: 15px 15px 0px 15px;
+    align-items: center;
+    height: 14vh;
+    width: fill-available;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    border-radius: 0;
+    border: none;
+    margin: 15px 15px 0px 15px;
+    align-items: center;
+    height: 14vh;
+    width: fill-available;
+    display: flex;
+    justify-content: flex-start;
+  }
 
   ${MEDIA_QUERY_LG} {
     margin: 10px 5px;
     height: 13vh;
   }
 
+  ${MEDIA_QUERY_XL} {
+    margin: 20px 5px;
+    height: 10vh;
+  }
+
   ${MEDIA_QUERY_XXL} {
     margin: 24px 5px;
+    height: 10vh;
   }
 `;
 
 const PlaylistControl = styled.div`
   display: flex;
   align-items: center;
-  margin: 0px 10px 0px 20px;
+  margin: 18px 20px 0 0;
   cursor: pointer;
 
   &:hover {
@@ -61,16 +88,16 @@ const PlaylistControl = styled.div`
   }
 
   svg {
-    width: 15px;
-    height: 15px;
+    width: 30px;
+    height: 35px;
   }
 
   ${MEDIA_QUERY_SM} {
-    margin: 0px 10px 0px 25px;
+    margin: 0 24px 0 0;
 
     svg {
-      width: 18px;
-      height: 18px;
+      width: 30px;
+      height: 35px;
     }
   }
 
@@ -92,6 +119,15 @@ const PlaylistControl = styled.div`
     }
   }
 
+  ${MEDIA_QUERY_XL} {
+    margin: 0px 10px 0px 50px;
+
+    svg {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
   ${MEDIA_QUERY_XXL} {
     margin: 0px 10px 0px 58px;
 
@@ -105,152 +141,6 @@ const PlaylistControl = styled.div`
 const Audio = styled.audio``;
 const Source = styled.source``;
 
-const Context = styled.div`
-  width: calc(100% / 12 * 1.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  ${MEDIA_QUERY_XXL} {
-    width: calc(100% / 12 * 1.8);
-  }
-`;
-
-const EpisodeName = styled.div`
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: ${(props) => props.theme.white};
-  font-size: 14px;
-  margin-bottom: 5px;
-
-  ${MEDIA_QUERY_XS} {
-    font-size: 10px;
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    font-size: 26px;
-  }
-`;
-
-const ChannelName = styled(EpisodeName)`
-  color: ${(props) => props.theme.white_opacity};
-  margin: 0;
-`;
-
-const Control = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const PrevControl = styled.div`
-  svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  &:hover {
-    opacity: 0.5;
-    cursor: pointer;
-  }
-
-  & rect {
-    :active {
-      fill: #da937a;
-    }
-  }
-
-  ${MEDIA_QUERY_SM} {
-    svg {
-      width: 15px;
-      height: 15px;
-    }
-  }
-
-  ${MEDIA_QUERY_MD} {
-    svg {
-      width: 17px;
-      height: 17px;
-    }
-  }
-
-  ${MEDIA_QUERY_LG} {
-    svg {
-      width: 19px;
-      height: 19px;
-    }
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    svg {
-      width: 21px;
-      height: 21px;
-    }
-  }
-`;
-
-const PlayPauseControl = styled.div`
-  margin: 0 3px;
-`;
-
-const PlayControl = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    opacity: 0.5;
-    cursor: pointer;
-  }
-
-  & rect {
-    :active {
-      fill: #da937a;
-    }
-  }
-
-  svg {
-    width: 60px;
-    height: 60px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    svg {
-      width: 55px;
-      height: 55px;
-    }
-  }
-
-  ${MEDIA_QUERY_MD} {
-    svg {
-      width: 75px;
-      height: 75px;
-    }
-  }
-
-  ${MEDIA_QUERY_LG} {
-    svg {
-      width: 57px;
-      height: 57px;
-    }
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    svg {
-      width: 90px;
-      height: 90px;
-    }
-  }
-`;
-
-const PauseControl = styled(PlayControl)`
-  display: none;
-`;
-
-const NextControl = styled(PrevControl)``;
 const Progress = styled.div`
   width: calc(100% / 12 * 5);
   padding: 10px;
@@ -258,8 +148,35 @@ const Progress = styled.div`
   flex-direction: column;
   justify-content: center;
 
+  ${MEDIA_QUERY_XL} {
+    padding: 0 10px;
+  }
+
   ${MEDIA_QUERY_LG} {
     padding: 0 10px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    padding: 0 10px;
+    width: calc(100% / 12 * 4);
+  }
+
+  ${MEDIA_QUERY_SM} {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    width: calc(100% / 12 * 11.3);
+  }
+
+  ${MEDIA_QUERY_XS} {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    width: calc(100% / 12 * 11.3);
   }
 `;
 
@@ -280,6 +197,16 @@ const ProgressBar = styled.div`
 
   ${MEDIA_QUERY_LG} {
     margin: 2px 10px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    height: 5px;
+    margin: 0;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    height: 5px;
+    margin: 0;
   }
 `;
 
@@ -322,12 +249,11 @@ const Timing = styled.div`
   color: ${(props) => props.theme.white_opacity};
 
   ${MEDIA_QUERY_XS} {
-    font-size: 10px;
-    margin-top: 2px;
+    display: none;
   }
 
   ${MEDIA_QUERY_SM} {
-    margin-top: 3px;
+    display: none;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -347,6 +273,193 @@ const Timing = styled.div`
 const StartTime = styled.time``;
 const DurationTime = styled.time``;
 
+const Context = styled.div`
+  width: calc(100% / 12 * 1.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  ${MEDIA_QUERY_XXL} {
+    width: calc(100% / 12 * 1.8);
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: calc(100% / 12 * 2.5);
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    width: calc(100% / 12 * 5);
+    margin: 18px 40px 0 0;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    width: calc(100% / 12 * 4.5);
+    margin: 18px 40px 0 0;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+`;
+
+const EpisodeName = styled.div`
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: ${(props) => props.theme.white};
+  font-size: 14px;
+  margin-bottom: 5px;
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 10px;
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    font-size: 26px;
+  }
+`;
+
+const ChannelName = styled(EpisodeName)`
+  color: ${(props) => props.theme.white_opacity};
+  margin: 0;
+`;
+
+const Control = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  ${MEDIA_QUERY_SM} {
+    margin-top: 15px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    margin-top: 15px;
+  }
+`;
+
+const PrevControl = styled.div`
+  svg {
+    width: 18px;
+    height: 14px;
+  }
+
+  &:hover {
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+  & rect {
+    :active {
+      fill: #da937a;
+    }
+  }
+
+  ${MEDIA_QUERY_SM} {
+    svg {
+      width: 20px;
+      height: 16px;
+    }
+  }
+
+  ${MEDIA_QUERY_MD} {
+    svg {
+      width: 22px;
+      height: 18px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    svg {
+      width: 19px;
+      height: 19px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    svg {
+      width: 21px;
+      height: 21px;
+    }
+  }
+`;
+
+const PlayPauseControl = styled.div`
+  ${MEDIA_QUERY_MD} {
+    margin: 0 8px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    margin: 0 12px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    margin: 0 12px;
+  }
+`;
+
+const PlayControl = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+  & rect {
+    :active {
+      fill: #da937a;
+    }
+  }
+
+  svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    svg {
+      width: 53px;
+      height: 53px;
+    }
+  }
+
+  ${MEDIA_QUERY_MD} {
+    svg {
+      width: 75px;
+      height: 75px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    svg {
+      width: 57px;
+      height: 57px;
+    }
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    svg {
+      width: 90px;
+      height: 90px;
+    }
+  }
+`;
+
+const PauseControl = styled(PlayControl)`
+  display: none;
+`;
+
+const NextControl = styled(PrevControl)`
+  margin-right: 30px;
+`;
+
 const Sound = styled.div`
   display: flex;
   flex-direction: column;
@@ -361,11 +474,11 @@ const Sound = styled.div`
   }
 
   ${MEDIA_QUERY_SM} {
-    margin: 0px 20px 0px 0px;
+    display: none;
   }
 
   ${MEDIA_QUERY_MD} {
-    margin: 0px 30px 0px 0px;
+    display: none;
   }
 
   ${MEDIA_QUERY_LG} {

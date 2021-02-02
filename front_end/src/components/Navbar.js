@@ -144,7 +144,6 @@ const SearchInput = styled.input`
   &::placeholder {
     color: ${(props) => props.theme.white};
     font-size: 15px;
-    font-family: Helvetica;
     padding: 4px;
   }
 
