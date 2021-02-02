@@ -25,7 +25,7 @@ const Player = styled.div`
   box-sizing: border-box;
   margin: 15px 5px;
   border-radius: 50px;
-  height: 12vh;
+  height: 9vh;
   border: solid 3px ${(props) => props.theme.white_opacity};
 
   ${MEDIA_QUERY_LG} {
@@ -231,6 +231,13 @@ const PlayControl = styled.div`
     }
   }
 
+  ${MEDIA_QUERY_LG} {
+    svg {
+      width: 57px;
+      height: 57px;
+    }
+  }
+
   ${MEDIA_QUERY_XXL} {
     svg {
       width: 90px;
@@ -250,6 +257,10 @@ const Progress = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  ${MEDIA_QUERY_LG} {
+    padding: 0 10px;
+  }
 `;
 
 const ProgressBar = styled.div`
@@ -265,6 +276,10 @@ const ProgressBar = styled.div`
 
   ${MEDIA_QUERY_XXL} {
     height: 9px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    margin: 2px 10px;
   }
 `;
 
@@ -355,6 +370,7 @@ const Sound = styled.div`
 
   ${MEDIA_QUERY_LG} {
     margin: 0px 45px 0px 0px;
+    padding: 0;
   }
 `;
 
@@ -410,6 +426,16 @@ export default function MusicPlayer() {
         <Audio>
           <Source src={src} type="audio/mp3" />
         </Audio>
+        <Progress>
+          <ProgressBar>
+            <ProgressCurrent />
+            <ProgressBarCircle />
+          </ProgressBar>
+          <Timing>
+            <StartTime>00:00</StartTime>
+            <DurationTime>07:01</DurationTime>
+          </Timing>
+        </Progress>
         <Context>
           <EpisodeName>S2 EP35//咖啡廳，你你你你你你你你</EpisodeName>
           <ChannelName>
@@ -432,16 +458,6 @@ export default function MusicPlayer() {
             <Icon.NextBtn />
           </NextControl>
         </Control>
-        <Progress>
-          <ProgressBar>
-            <ProgressCurrent />
-            <ProgressBarCircle />
-          </ProgressBar>
-          <Timing>
-            <StartTime>00:00</StartTime>
-            <DurationTime>07:01</DurationTime>
-          </Timing>
-        </Progress>
         <Sound>
           <SoundBar>
             <SoundBarCurrent />
