@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Users.hasMany(models.Playlists);
+      Users.hasMany(models.Playlists, { as: "playlists" });
       // Users.hasMany(models.Subscriptions)
       Users.belongsToMany(models.Podcasts, {
         through: models.Subscriptions,
