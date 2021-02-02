@@ -13,9 +13,9 @@ const register = async (req, res, next) => {
   }
   const hash = bcrypt.hashSync(password, saltRounds);
   username = username.toLowerCase();
-
+  let newUser;
   try {
-    const newUser = await Users.create({
+    newUser = await Users.create({
       username,
       password: hash,
     });
@@ -106,6 +106,7 @@ const getMe = async (req, res, next) => {
         },
         {
           model: Playlists,
+          as: "playlists",
           attributes: ["id", "name"],
           include: {
             model: Episodes,

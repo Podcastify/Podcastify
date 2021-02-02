@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import MusicPlayer from "./components/MusicPlayer";
@@ -9,9 +10,16 @@ import SearchPage from "./pages/SearchPage";
 import MyLoveChannelPage from "./pages/MyLoveChannelPage";
 import { UserContext, PageStatusContext } from "./context/context";
 
+
 const GlobalStyle = createGlobalStyle`
   body {
   }
+
+  * {
+    box-sizing: border-box;
+    font-family: Helvetica;
+  }
+
   body::after {
     content: "";
     background: #3E3A39;
@@ -40,9 +48,12 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   const theme = {
-    primary_color: "#ffffff",
-    primary_color_grey: "darkgray",
-    primary_color_orange: "#e9502e",
+    white: "#ffffff",
+    white_opacity: "rgba(255, 255, 255, 0.5)",
+    white_opacity_10: "rgba(255, 255, 255, 0.1)",
+    grey_opacity: "rgba(157, 157, 157, 0.5)",
+    orange: "#e9502e",
+    orange_opacity: "rgba(233, 80, 46, 0.5)",
     hover_color: "#8fe2ff",
     click_color: "#0079f2",
   };

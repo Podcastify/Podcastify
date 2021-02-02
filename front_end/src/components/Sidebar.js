@@ -5,20 +5,11 @@ import {
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
   MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import { SidebarContainer } from "./ChannelSidebar";
 
-const SidebarContainer = styled.aside`
-  width: 20vw;
-  height: 59vh;
-  padding: 18px 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 28px;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 100px;
-  margin: 0 10px;
-
+const SidebarWrapper = styled(SidebarContainer)`
   ${MEDIA_QUERY_MD} {
     display: none;
   }
@@ -26,33 +17,31 @@ const SidebarContainer = styled.aside`
   ${MEDIA_QUERY_SM} {
     display: none;
   }
+
   ${MEDIA_QUERY_XS} {
-    width: 95%;
-    border: none;
-    padding: 5px 0;
-    height: 75vh;
-    top: 70px;
     display: none;
   }
 `;
 
-const SidebarTitleWrapper = styled.div`
-  display: flex;
-`;
-
 const SidebarTitle = styled.h3`
-  font-size: 25px;
-  margin: 4px 10px;
+  font-size: 26px;
+  margin: 2px 10px 20px 30px;
   font-weight: 500;
-  color: #ffffff;
+  color: ${(props) => props.theme.white};
 
-  &:hover {
-    color: rgba(255, 255, 255, 0.4);
+  ${MEDIA_QUERY_LG} {
+    font-size: 23px;
+    margin: 2px 10px 20px 25px;
   }
+
+  /* &:hover {
+    color: rgba(255, 255, 255, 0.4);
+  } */
 `;
 
 const SideListContainer = styled.div`
   overflow-y: scroll;
+  height: 93%;
 
   &::-webkit-scrollbar {
     display: none;
@@ -60,22 +49,34 @@ const SideListContainer = styled.div`
 `;
 
 const SidebarListWrapper = styled.div`
-  box-sizing: border-box;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   width: 100%;
   min-height: 60px;
   padding: 10px 20px;
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: ${(props) => props.theme.white_opacity_10};
   color: white;
   margin: 5px 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  ${MEDIA_QUERY_XL} {
+    padding: 10px 15px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    padding: 10px 12px;
+  }
+
   &:hover {
     background: rgba(233, 80, 46, 0.3);
+
+    svg {
+      display: block;
+    }
   }
 
   &:active {
@@ -85,34 +86,50 @@ const SidebarListWrapper = styled.div`
 
 const SidebarListLeft = styled.div`
   display: block;
+  font-size: 25px;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 20px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 18px;
+  }
 `;
 
 const SidebarListRight = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
 
+const PlaylistPlayBtnControl = styled.div`
   svg {
     width: 35px;
     height: 35px;
+    display: none;
 
     & circle {
-      stroke: ${(props) => props.theme.primary_color_grey};
+      stroke: ${(props) => props.theme.white_opacity};
     }
 
     & path {
-      fill: ${(props) => props.theme.primary_color_grey};
+      fill: ${(props) => props.theme.white_opacity};
+    }
+
+    ${MEDIA_QUERY_XL} {
+      width: 28px;
+      height: 28px;
     }
 
     ${MEDIA_QUERY_LG} {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
     }
   }
 `;
 
 const SidebarListTitle = styled.div`
-  font-size: 18px;
   text-decoration: none;
   overflow: hidden;
   line-height: 1.5;
@@ -123,7 +140,6 @@ const SidebarListTitle = styled.div`
 `;
 
 const SidebarListContent = styled.div`
-  font-size: 18px;
   text-decoration: none;
   overflow: hidden;
   line-height: 1.5;
@@ -131,10 +147,8 @@ const SidebarListContent = styled.div`
 
 export default function Sidebar() {
   return (
-    <SidebarContainer>
-      <SidebarTitleWrapper>
-        <SidebarTitle>我的播放清單</SidebarTitle>
-      </SidebarTitleWrapper>
+    <SidebarWrapper>
+      <SidebarTitle>我的播放清單</SidebarTitle>
       <SideListContainer>
         <SidebarListWrapper>
           <SidebarListLeft>
@@ -142,7 +156,9 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
@@ -152,7 +168,9 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
@@ -162,7 +180,9 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
@@ -172,7 +192,9 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
@@ -182,7 +204,9 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
@@ -192,7 +216,9 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
@@ -202,11 +228,49 @@ export default function Sidebar() {
             <SidebarListContent>社畜日記</SidebarListContent>
           </SidebarListLeft>
           <SidebarListRight>
-            <Icon.PlaylistPlayButton />
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
+            {/* <Icon.PlaylistPauseButton /> */}
+          </SidebarListRight>
+        </SidebarListWrapper>
+        <SidebarListWrapper>
+          <SidebarListLeft>
+            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
+            <SidebarListContent>社畜日記</SidebarListContent>
+          </SidebarListLeft>
+          <SidebarListRight>
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
+            {/* <Icon.PlaylistPauseButton /> */}
+          </SidebarListRight>
+        </SidebarListWrapper>
+        <SidebarListWrapper>
+          <SidebarListLeft>
+            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
+            <SidebarListContent>社畜日記</SidebarListContent>
+          </SidebarListLeft>
+          <SidebarListRight>
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
+            {/* <Icon.PlaylistPauseButton /> */}
+          </SidebarListRight>
+        </SidebarListWrapper>
+        <SidebarListWrapper>
+          <SidebarListLeft>
+            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
+            <SidebarListContent>社畜日記</SidebarListContent>
+          </SidebarListLeft>
+          <SidebarListRight>
+            <PlaylistPlayBtnControl>
+              <Icon.PlaylistPlayButton />
+            </PlaylistPlayBtnControl>
             {/* <Icon.PlaylistPauseButton /> */}
           </SidebarListRight>
         </SidebarListWrapper>
       </SideListContainer>
-    </SidebarContainer>
+    </SidebarWrapper>
   );
 }

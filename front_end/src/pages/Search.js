@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
-import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
+
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import MusicPlayer from "../components/MusicPlayer";
@@ -10,7 +10,7 @@ import {
   MEDIA_QUERY_MD,
 } from "../constants/breakpoints";
 
-const PlaylistContainer = styled.main`
+const SearchPageContainer = styled.div`
   width: 72%;
   margin-left: 28%;
   margin-bottom: 200px;
@@ -52,37 +52,6 @@ const PlaylistContainer = styled.main`
   }
 `;
 
-const SearchPageBlock = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const ManageChannelButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 160px;
-  height: 45px;
-  border: 1px solid ${(props) => props.theme.primary_color_grey};
-  border-radius: 3px;
-  color: ${(props) => props.theme.primary_color};
-  margin-left: 25px;
-  font-size: 15px;
-  padding: 10px 32px;
-
-  &:hover {
-    border-color: transparent;
-    background-color: ${(props) => props.theme.hover_color};
-  }
-
-  &:active {
-    border-color: transparent;
-    background-color: ${(props) => props.theme.click_color};
-  }
-`;
-
 const SearchPageTitle = styled.div`
   font-size: 40px;
   padding: 5px 0;
@@ -94,6 +63,23 @@ const SearchPageTitle = styled.div`
   ${MEDIA_QUERY_MD} {
     font-size: 33px;
   }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 30px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 22px;
+  }
+`;
+
+const PodcastName = styled.span`
+  font-size: 40px;
+  padding: 10px;
+  line-height: 1.2;
+  letter-spacing: normal;
+  font-weight: bold;
+  color: white;
 
   ${MEDIA_QUERY_SM} {
     font-size: 30px;
@@ -143,7 +129,7 @@ const SearchItem = styled.div`
   }
 
   ${MEDIA_QUERY_XS} {
-    margin-right: 30px;
+    margin-right: 5px;
   }
 `;
 
@@ -152,7 +138,6 @@ const InfoCardPhoto = styled.div`
   height: 190px;
   background: url(${DemoImage}) center / cover;
   text-decoration: none;
-  position: relative;
 
   ${MEDIA_QUERY_SM} {
     width: 160px;
@@ -163,24 +148,6 @@ const InfoCardPhoto = styled.div`
     width: 130px;
     height: 130px;
     border-radius: 50%;
-  }
-`;
-
-const DeleteIcon = styled.div`
-  position: absolute;
-  top: -25px;
-  left: -25px;
-
-  svg {
-    width: 50px;
-    height: 50px;
-
-    ${MEDIA_QUERY_XS} {
-      border-radius: 50%;
-      position: absolute;
-      top: 15px;
-      left: 15px;
-    }
   }
 `;
 
@@ -224,83 +191,50 @@ const InfoCardTitle = styled.h2`
   }
 `;
 
-export default function SearchPage() {
+export default function Search() {
   return (
     <>
       <Navbar />
       <Sidebar />
-      <PlaylistContainer>
-        <SearchPageBlock>
-          <SearchPageTitle># 訂閱中的頻道</SearchPageTitle>
-          <ManageChannelButton>管理我的頻道</ManageChannelButton>
-        </SearchPageBlock>
+      <SearchPageContainer>
+        <SearchPageTitle>
+          # 搜尋有關“<PodcastName>ＸＸＸＸＸ</PodcastName>”的頻道
+        </SearchPageTitle>
         <SearchItemWrapper>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
           <SearchItem>
-            <InfoCardPhoto>
-              <DeleteIcon>
-                <DeleteButton />
-              </DeleteIcon>
-            </InfoCardPhoto>
+            <InfoCardPhoto />
             <InfoCardTitle>頻道名稱</InfoCardTitle>
           </SearchItem>
         </SearchItemWrapper>
-      </PlaylistContainer>
+      </SearchPageContainer>
       <MusicPlayer />
     </>
   );
