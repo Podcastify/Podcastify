@@ -2,6 +2,23 @@ import { useContext } from "react";
 import { UserContext } from "../context/context";
 
 export default function useUser() {
-  const { user, setUser } = useContext(UserContext);
-  return { user, setUser }
+  const {
+    userInfo,
+    userSubscription,
+    userPlaylists,
+    userPlayedRecord,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord, } = useContext(UserContext);
+  return {
+    userInfo,
+    userSubscription,
+    userPlaylists,
+    userPlayedRecord,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord,
+  }
 }

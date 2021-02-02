@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import MyLoveChannelPage from "./pages/MyLoveChannelPage";
-import { UserContext } from "./context/context";
+import { UserContext, PageStatusContext } from "./context/context";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -50,6 +50,7 @@ function App() {
   const [userSubscription, setUserSubscription] = useState(null);
   const [userPlaylists, setUserPlaylists] = useState(null);
   const [userPlayedRecord, setUserPlayedRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     /* 
@@ -61,6 +62,10 @@ function App() {
     */
   }, [])
 
+  const pageStatusContextValue = {
+    isLoading, setIsLoading
+  }
+
   const userContextValue = {
     userInfo,
     userSubscription,
@@ -69,18 +74,21 @@ function App() {
     setUserInfo,
     setUserSubscription,
     setUserPlaylists,
-    setUserPlayedRecord
+    setUserPlayedRecord,
   }
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <UserContext.Provider value={userContextValue}>
-        {/* <Login /> */}
-        {/* <HomePage /> */}
-        {/* <SearchPage /> */}
-        <MyLoveChannelPage />
-      </UserContext.Provider>
+      <PageStatusContext.Provider value={pageStatusContextValue}>
+        <UserContext.Provider value={userContextValue}>
+          {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
+          {/* <Login /> */}
+          {/* <HomePage /> */}
+          {/* <SearchPage /> */}
+          <MyLoveChannelPage />
+        </UserContext.Provider>
+      </PageStatusContext.Provider>
     </ThemeProvider>
   );
 }
