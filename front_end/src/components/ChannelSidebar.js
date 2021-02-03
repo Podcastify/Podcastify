@@ -302,7 +302,7 @@ const InfoCardText = styled.div`
   }
 `;
 
-export function ChannelSidebar() {
+export default function ChannelSidebar() {
   return (
     <SidebarContainer>
       <InfoCardWrapper>
