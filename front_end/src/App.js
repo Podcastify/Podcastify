@@ -111,8 +111,8 @@ function App() {
                 <Route path="/search">
                   <Search />
                 </Route>
-                <Route path="/mychannel">
-                  <MyLoveChannel />
+                <Route path="/mysubscription">
+                  <Subscription />
                 </Route>
                 <Route path="/myplaylist">
                   <Playlist />
