@@ -9,7 +9,7 @@ import {
 } from "../constants/breakpoints";
 
 export const SidebarContainer = styled.aside`
-  width: 20vw;
+  width: 22vw;
   height: 72vh;
   padding: 18px 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
@@ -143,23 +143,10 @@ const InfoCardContent = styled.div`
 
 const InfoCardBlock = styled.div`
   width: 100%;
-  padding: 0px 10px;
   display: flex;
   justify-content: center;
   align-items: left;
   flex-direction: column;
-
-  ${MEDIA_QUERY_XL} {
-    padding: 0px 10px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    padding: 0px 4px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    padding: 0px 20px;
-  }
 
   ${MEDIA_QUERY_SM} {
     margin-top: 6px;
@@ -282,7 +269,6 @@ const InfoCardButton = styled.button`
 `;
 
 const InfoCardText = styled.div`
-  padding: 0px 10px;
   width: 100%;
   margin-top: 24px;
   color: ${(props) => props.theme.white};
@@ -293,18 +279,15 @@ const InfoCardText = styled.div`
 
   ${MEDIA_QUERY_XL} {
     font-size: 20px;
-    padding: 0px 10px;
   }
 
   ${MEDIA_QUERY_LG} {
     font-size: 16px;
-    padding: 0px 4px;
   }
 
   ${MEDIA_QUERY_MD} {
     margin-top: 10px;
     font-size: 18px;
-    padding: 0px 20px;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -319,7 +302,7 @@ const InfoCardText = styled.div`
   }
 `;
 
-export default function ChannelSidebar() {
+export function ChannelSidebar() {
   return (
     <SidebarContainer>
       <InfoCardWrapper>

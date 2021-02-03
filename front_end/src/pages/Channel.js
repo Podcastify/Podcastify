@@ -119,6 +119,7 @@ const EpisodeTitleHeader = styled.div`
     width: 170px;
   }
 `;
+
 const EpisodeDescriptionHeader = styled.div`
   width: 450px;
   margin-right: 80px;
@@ -133,6 +134,7 @@ const EpisodeDescriptionHeader = styled.div`
     margin-right: 20px;
   }
 `;
+
 const ChannelNameHeader = styled(EpisodeTitleHeader)`
   ${MEDIA_QUERY_LG} {
     width: 120px;

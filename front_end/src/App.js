@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import MusicPlayer from "./components/MusicPlayer";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
+import Playlist from "./pages/Playlist";
+import Channel from "./pages/Channel";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import HomePage from "./pages/HomePage";
-import SearchPage from "./pages/SearchPage";
-import MyLoveChannelPage from "./pages/MyLoveChannelPage";
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import MyLoveChannel from "./pages/MyLoveChannel";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContext, PageStatusContext } from "./context/context";
 
 const GlobalStyle = createGlobalStyle`
@@ -88,19 +91,40 @@ function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <PageStatusContext.Provider value={pageStatusContextValue}>
+    <PageStatusContext.Provider value={pageStatusContextValue}>
         <UserContext.Provider value={userContextValue}>
           {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
-          {/* <Login /> */}
-          {/* <HomePage /> */}
-          {/* <SearchPage /> */}
-          <MyLoveChannelPage />
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Home />
+            {/* <Router>
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="/register">
+                  <Register />
+                </Route>
+                <Route path="/search">
+                  <Search />
+                </Route>
+                <Route path="/mychannel">
+                  <MyLoveChannel />
+                </Route>
+                <Route path="/myplaylist">
+                  <Playlist />
+                </Route>
+                 <Route path="/channel">
+                  <Channel />
+                </Route>
+              </Switch>
+            </Router> */}
+          <ThemeProvider theme={theme}>
         </UserContext.Provider>
       </PageStatusContext.Provider>
-    </ThemeProvider>
   );
 }
-
 export default App;
