@@ -111,7 +111,7 @@ function App() {
                 <Route path="/search">
                   <Search />
                 </Route>
-                <Route path="/mySubscription">
+                <Route path="/mysubscription">
                   <Subscription />
                 </Route>
                 <Route path="/myplaylist">
