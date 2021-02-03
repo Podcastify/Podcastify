@@ -5,7 +5,7 @@ export const getSearchInfo = (keyword) => {
   // 將字串進行 UTF-8 編碼
   const encodeWord = encodeURIComponent(keyword);
   return fetch(
-    `${apiUrl}/search/?q=${encodeWord}type=episode%2Cpodcast&episode_count_max=40&only_in=title%2Cdescription%2Cauthor%2Caudio&language=Chinese&region=Taiwan`,
+    `${apiUrl}/search/?q=${encodeWord}&type=episode%2C%20podcast&language=Chinese&region=tw&safe_mode=0`,
     {
       method: "GET",
     }
