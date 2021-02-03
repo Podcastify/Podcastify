@@ -224,7 +224,7 @@ const InfoCardTitle = styled.h2`
   }
 `;
 
-export default function MyLoveChannel() {
+export default function Subcription() {
   return (
     <>
       <Navbar />

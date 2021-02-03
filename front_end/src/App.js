@@ -1,15 +1,14 @@
-
 import { useEffect, useState } from "react";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Navbar from "./components/Navbar";
 import MusicPlayer from "./components/MusicPlayer";
-import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
-import MyLoveChannel from "./pages/MyLoveChannel";
+import Subscription from "./pages/Subscription";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContext, PageStatusContext } from "./context/context";
 
@@ -73,11 +72,12 @@ function App() {
       再分別填入 state 中。
       之後要修改把新的東西放進 setState() 中
     */
-  }, [])
+  }, []);
 
   const pageStatusContextValue = {
-    isLoading, setIsLoading
-  }
+    isLoading,
+    setIsLoading,
+  };
 
   const userContextValue = {
     userInfo,
@@ -88,16 +88,16 @@ function App() {
     setUserSubscription,
     setUserPlaylists,
     setUserPlayedRecord,
-  }
+  };
 
   return (
     <PageStatusContext.Provider value={pageStatusContextValue}>
-        <UserContext.Provider value={userContextValue}>
-          {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Home />
-            {/* <Router>
+      <UserContext.Provider value={userContextValue}>
+        {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Home />
+          {/* <Router>
               <Switch>
                 <Route exact path="/">
                   <Home />
@@ -122,9 +122,10 @@ function App() {
                 </Route>
               </Switch>
             </Router> */}
-          <ThemeProvider theme={theme}>
-        </UserContext.Provider>
-      </PageStatusContext.Provider>
+        </ThemeProvider>
+      </UserContext.Provider>
+    </PageStatusContext.Provider>
   );
 }
+
 export default App;
