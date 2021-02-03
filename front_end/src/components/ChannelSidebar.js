@@ -29,7 +29,7 @@ export const SidebarContainer = styled.aside`
 
   ${MEDIA_QUERY_SM} {
     width: 100%;
-    height: 60vh;
+    height: 100%;
     border: none;
     padding: 5px 0;
   }
@@ -38,7 +38,7 @@ export const SidebarContainer = styled.aside`
     width: 100%;
     border: none;
     padding: 5px 0;
-    height: 60vh;
+    height: 100%;
     margin-bottom: 20px;
   }
 `;
@@ -81,7 +81,7 @@ const InfoCardWrapper = styled.div`
   }
 
   ${MEDIA_QUERY_XS} {
-    padding: 0px 0px 20px 0px;
+    padding: 0;
     overflow-y: unset;
   }
 `;
@@ -135,9 +135,14 @@ const InfoCardContent = styled.div`
     width: 98%;
   }
 
+  ${MEDIA_QUERY_SM} {
+    width: 100%;
+    height: 100%;
+  }
+
   ${MEDIA_QUERY_XS} {
     width: 100%;
-    height: 188px;
+    height: 100%;
   }
 `;
 
