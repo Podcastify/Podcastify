@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 
 export default function useInput(formInputs) {
   const [inputs, setInputs] = useState(formInputs);
+  useEffect(() => {
+    setInputs(formInputs)
+  }, [setInputs, formInputs])
   const handleValidationCheck = useCallback(
     (name, invalidMessage) => {
       setInputs(
@@ -23,9 +26,9 @@ export default function useInput(formInputs) {
           return name !== input.attributes.name
             ? input
             : {
-                ...input,
-                attributes: { ...input.attributes, value: newValue },
-              };
+              ...input,
+              attributes: { ...input.attributes, value: newValue },
+            };
         })
       );
     },

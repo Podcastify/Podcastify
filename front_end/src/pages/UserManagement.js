@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Main, Div } from "../components/Main"
 import { UserContext } from "../context/context";
@@ -15,6 +15,7 @@ const Container = styled.div`
 `;
 
 const SectionContainer = styled(Container)`
+  padding: 0 5%;
   flex-direction: column;
   height: 100%;
   width: 100%;
@@ -29,9 +30,11 @@ const PageTitle = styled.h1`
 `
 
 const TitleContainer = styled(SectionContainer)`
+  padding: 0;
   height:auto;
   flex-direction: row;
   align-items: center;
+  justify-content: stretch;
 `
 
 const ManageButton = styled.div`
@@ -46,7 +49,7 @@ const ManageButton = styled.div`
   color: ${(props) => props.theme.primary_color};
   margin-left: 25px;
   font-size: 15px;
-  padding: 10px 32px;
+  padding: 10px 10px;
 
   &:hover {
     border-color: transparent;
@@ -62,14 +65,19 @@ const ManageButton = styled.div`
 export default function UserManagement() {
 
   const { userInfo } = useContext(UserContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const handleManagementBtnClick = (e) => {
+    console.log(formInputs)
+    setIsEditing(!isEditing)
+  }
 
-  const formInputs = [
+  const inputs = [
     {
       attributes: {
         type: "text",
         readOnly: true,
         name: "username",
-        value: "TEST",
+        value: userInfo ? userInfo.username : "TEST",
       },
       title: "帳號"
     },
@@ -78,7 +86,8 @@ export default function UserManagement() {
         type: "password",
         name: "oldPassword",
         value: "",
-        placeholder: "舊密碼"
+        placeholder: "舊密碼",
+        readOnly: !isEditing
       },
       title: "請輸入舊密碼"
     },
@@ -87,7 +96,7 @@ export default function UserManagement() {
         type: "password",
         name: "newPassword",
         value: "",
-        placeholder: "您的新密碼"
+        placeholder: "您的新密碼",
       },
       title: "請輸入新密碼"
     },
@@ -102,6 +111,74 @@ export default function UserManagement() {
     },
   ]
 
+  const [formInputs, setFormInputs] = useState(inputs);
+
+  useEffect(() => {
+    if (isEditing) {
+      setFormInputs([
+        {
+          attributes: {
+            type: "text",
+            readOnly: true,
+            name: "username",
+            value: userInfo ? userInfo.username : "TEST",
+          },
+          title: "帳號"
+        },
+        {
+          attributes: {
+            type: "password",
+            name: "oldPassword",
+            value: "",
+            placeholder: "舊密碼",
+            readOnly: false
+          },
+          title: "請輸入舊密碼"
+        },
+        {
+          attributes: {
+            type: "password",
+            name: "newPassword",
+            value: "",
+            placeholder: "您的新密碼",
+          },
+          title: "請輸入新密碼"
+        },
+        {
+          attributes: {
+            type: "password",
+            name: "newPassword2",
+            value: "",
+            placeholder: "請再輸入一次新密碼"
+          },
+          title: "確認新密碼"
+        },
+      ])
+    } else {
+      setFormInputs([
+        {
+          attributes: {
+            type: "text",
+            readOnly: true,
+            name: "username",
+            value: userInfo ? userInfo.username : "TEST",
+          },
+          title: "帳號"
+        },
+        {
+          attributes: {
+            type: "password",
+            name: "oldPassword",
+            value: "**********",
+            placeholder: "舊密碼",
+            readOnly: true
+          },
+          title: "密碼"
+        },
+      ])
+    }
+  }, [isEditing, setFormInputs])
+
   return (
     <Container>
       <Navbar />
@@ -110,14 +187,18 @@ export default function UserManagement() {
           <SectionContainer>
             <TitleContainer>
               <PageTitle>會員資料</PageTitle>
-              <ManageButton>
+              <ManageButton
+                onClick={handleManagementBtnClick}
+              >
                 管理我的帳戶
               </ManageButton>
               <ManageButton>
-                確認修改
+                確認變更資料
             </ManageButton>
             </TitleContainer>
-            <UserForm formInputs={formInputs}>
+            <UserForm
+              formInputs={formInputs}
+            >
             </UserForm>
           </SectionContainer>
         </Div>
