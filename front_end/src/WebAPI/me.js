@@ -1,10 +1,10 @@
-import { getToken } from "../utils";
-const apiUrl = "http://api.podcastify.tw/me";
+import { getAuthToken } from "../utils";
+import { BASE_URL } from "../constants/apiUrl";
 
 // 取得會員資料
 export const getMyInfo = () => {
-  const token = getToken();
-  return fetch(apiUrl, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me`, {
     method: "GET",
     headers: {
       authorization: `Bearer ${token}`,
@@ -14,8 +14,8 @@ export const getMyInfo = () => {
 
 // 取得會員所有播放清單
 export const getAllMyPlaylists = () => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist`, {
     method: "GET",
     headers: {
       authorization: `Bearer ${token}`,
@@ -25,8 +25,8 @@ export const getAllMyPlaylists = () => {
 
 // 取得會員指定播放清單
 export const getMyPlaylist = (id) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist/${id}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist/${id}`, {
     method: "GET",
     headers: {
       authorization: `Bearer ${token}`,
@@ -36,10 +36,11 @@ export const getMyPlaylist = (id) => {
 
 // 新增播放清單
 export const addPlaylist = (name) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist`, {
     method: "POST",
     headers: {
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
@@ -50,10 +51,11 @@ export const addPlaylist = (name) => {
 
 // 編輯播放清單名稱
 export const renamePlaylist = (id, name) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist/${id}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist/${id}`, {
     method: "PATCH",
     headers: {
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
@@ -64,8 +66,8 @@ export const renamePlaylist = (id, name) => {
 
 // 刪除播放清單
 export const deletePlaylist = (id) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist/${id}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist/${id}`, {
     method: "DELETE",
     headers: {
       authorization: `Bearer ${token}`,
@@ -75,8 +77,8 @@ export const deletePlaylist = (id) => {
 
 // 新增單元到播放清單
 export const addEpisodeToPlaylist = (playlistId, episodeId) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist/${playlistId}/${episodeId}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist/${playlistId}/${episodeId}`, {
     method: "POST",
     headers: {
       authorization: `Bearer ${token}`,
@@ -86,8 +88,8 @@ export const addEpisodeToPlaylist = (playlistId, episodeId) => {
 
 // 從播放清單刪除單元
 export const deleteEpisodeFromPlaylist = (playlistId, episodeId) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/playlist/${playlistId}/${episodeId}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/playlist/${playlistId}/${episodeId}`, {
     method: "DELETE",
     headers: {
       authorization: `Bearer ${token}`,
@@ -97,8 +99,8 @@ export const deleteEpisodeFromPlaylist = (playlistId, episodeId) => {
 
 // 取得會員已訂閱清單
 export const getMySubsciption = () => {
-  const token = getToken();
-  return fetch(`${apiUrl}/subscription`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/subscription`, {
     method: "GET",
     headers: {
       authorization: `Bearer ${token}`,
@@ -108,8 +110,8 @@ export const getMySubsciption = () => {
 
 // 訂閱頻道
 export const addSubsciption = (podcastId) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/subscription/${podcastId}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/subscription/${podcastId}`, {
     method: "POST",
     headers: {
       authorization: `Bearer ${token}`,
@@ -119,8 +121,8 @@ export const addSubsciption = (podcastId) => {
 
 // 取消訂閱頻道
 export const deleteSubsciption = (podcastId) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/subscription/${podcastId}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/subscription/${podcastId}`, {
     method: "DELETE",
     headers: {
       authorization: `Bearer ${token}`,
@@ -130,8 +132,8 @@ export const deleteSubsciption = (podcastId) => {
 
 // 取得所有播放紀錄
 export const getRecords = () => {
-  const token = getToken();
-  return fetch(`${apiUrl}/record`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/record`, {
     method: "GET",
     headers: {
       authorization: `Bearer ${token}`,
@@ -141,10 +143,11 @@ export const getRecords = () => {
 
 // 新增播放紀錄
 export const addRecords = (episodeId, progress = 0) => {
-  const token = getToken();
-  return fetch(`${apiUrl}/record/${episodeId}`, {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/me/record/${episodeId}`, {
     method: "POST",
     headers: {
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
