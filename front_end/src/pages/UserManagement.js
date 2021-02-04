@@ -192,9 +192,9 @@ export default function UserManagement() {
               >
                 管理我的帳戶
               </ManageButton>
-              <ManageButton>
+              {isEditing && <ManageButton>
                 確認變更資料
-            </ManageButton>
+            </ManageButton>}
             </TitleContainer>
             <UserForm
               formInputs={formInputs}
