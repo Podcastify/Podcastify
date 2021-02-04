@@ -2,13 +2,23 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Input from "./UserInput";
 import useInputs from "../hooks/useInputs";
+
 const StyledForm = styled.form`
   max-width: 522px;
   font-family: Helvetica;
+  overflow-y: scroll;
+  height: fill-available;
+  // 在 chrome, Safari 上隱藏 scrollbar
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // 在 IE, Edge 上隱藏 scrollbar
+  -ms-overflow-style: none;
 `;
 
 const StyledFormTitle = styled.h1`
-  height: 83px;
+  ${({ formTitle }) => formTitle && "height: 83px;"}
   font-size: 59px;
   line-height: 1.2;
   letter-spacing: 5px;

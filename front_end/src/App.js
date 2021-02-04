@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import Subscription from "./pages/Subscription";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContext, PageStatusContext } from "./context/context";
+import UserManagement from "./pages/UserManagement";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -96,7 +97,8 @@ function App() {
         {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <Home />
+          <UserManagement />
+          {/* <Home /> */}
           {/* <Router>
               <Switch>
                 <Route exact path="/">
