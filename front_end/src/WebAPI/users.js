@@ -1,7 +1,7 @@
-const apiUrl = "http://api.podcastify.tw";
+import { BASE_URL } from "../constants/apiUrl";
 
 export const register = (username, password) => {
-  return fetch(`${apiUrl}/users/register`, {
+  return fetch(`${BASE_URL}/users/register`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -14,7 +14,7 @@ export const register = (username, password) => {
 };
 
 export const login = (username, password) => {
-  return fetch(`${apiUrl}/users/login`, {
+  return fetch(`${BASE_URL}/users/login`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
