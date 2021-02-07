@@ -38,15 +38,15 @@ const PlaylistWrapper = styled.div`
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 95%;
+    width: 100%;
   }
 
   ${MEDIA_QUERY_SM} {
-    width: 90%;
+    width: 100%;
   }
 
   ${MEDIA_QUERY_XS} {
-    width: 86%;
+    width: 100%;
   }
 `;
 const PlaylistHeader = styled.div`
@@ -391,7 +391,7 @@ const Body = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    height: 60%;
+    height: 56%;
   }
 
   ${MEDIA_QUERY_XL} {
@@ -722,23 +722,6 @@ export default function Playlist() {
                     </DeleteBtnControl>
                   </Summary>
                 </Details>
-                {/* <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
                 <Details>
                   <Summary>
                     <PlayBtnControl>
@@ -806,7 +789,24 @@ export default function Playlist() {
                       <Images.DeleteBtn />
                     </DeleteBtnControl>
                   </Summary>
-                </Details> */}
+                </Details>
+                <Details>
+                  <Summary>
+                    <PlayBtnControl>
+                      <Images.PodcastPlayBtn />
+                    </PlayBtnControl>
+                    <Text>
+                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
+                      <EpisodeDescription>
+                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                      </EpisodeDescription>
+                      <ChannelName>社畜日記</ChannelName>
+                    </Text>
+                    <DeleteBtnControl>
+                      <Images.DeleteBtn />
+                    </DeleteBtnControl>
+                  </Summary>
+                </Details>
               </Body>
             </PlayList>
           </PlaylistWrapper>
