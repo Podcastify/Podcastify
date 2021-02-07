@@ -72,7 +72,7 @@ const FormInputErrorMessage = styled.div`
   text-align: left;
 `;
 
-export default function Input({ title, attributes, handlers }) {
+export default function Input({ className, title, attributes, handlers, errorMessage, onClick }) {
   const { handleChange, handleValidationCheck } = handlers;
 
   const handleInputChange = (e) => {
@@ -89,9 +89,10 @@ export default function Input({ title, attributes, handlers }) {
         {...attributes}
         onInvalid={handleValidation}
         onChange={handleInputChange}
-        onBlur={handleValidation}
+        // onBlur={handleValidation}
+        onClick={onClick ? onClick : () => {return}}
       />
-      <FormInputErrorMessage></FormInputErrorMessage>
+      <FormInputErrorMessage>{errorMessage}</FormInputErrorMessage>
     </StyledInputContainer>
   );
 }

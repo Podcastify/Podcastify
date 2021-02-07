@@ -1,8 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import {useHistory} from "react-router-dom"
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import coverImg from "../images/loginPageCover.jpg"
+import { login } from "../WebAPI/users";
+import { getMyInfo } from "../WebAPI/me";
+import { UserContext } from "../context/context";
+import useInputs from "../hooks/useInputs";
+import Input from "../components/UserInput";
+
+
 
 const LoginPageWrapper = styled.div`
   max-width: 1920px;
@@ -42,62 +50,118 @@ const FormArea = styled.div`
   align-items: center;
 `
 
+const RegisterBtn = styled(Input)`
+  width: fill-available;
+`
+
+const formInputs = [
+  {
+    attributes: {
+      type: "text",
+      name: "username",
+      id: "username",
+      placeholder: "帳號",
+      pattern: "[A-Za-z0-9_]*",
+      required: true,
+      value: "",
+    },
+    title: "",
+    errorMessage: "",
+  },
+  {
+    attributes: {
+      type: "password",
+      name: "password",
+      id: "password",
+      placeholder: "密碼",
+      required: true,
+      value: "",
+    },
+    title: "",
+    errorMessage: "",
+  },
+  {
+    attributes: {
+      type: "submit",
+      name: "login",
+      id: "login",
+      required: true,
+      value: "登入",
+    },
+    title: "",
+    errorMessage: "",
+  },
+];
+
+const registerBtnAttributes = {
+  attributes: {
+    type: "button",
+    name: "toRegister",
+    id: "toRegister",
+    required: true,
+    value: "註冊會員",
+  },
+  title: "還不是會員嗎？",
+  errorMessage: "",
+}
+
 export default function Login() {
-  const formInputs = [
-    {
-      attributes: {
-        type: "text",
-        name: "username",
-        id: "username",
-        placeholder: "帳號",
-        required: true,
-        value: "",
-      },
-      title: "",
-      errorMessage: "",
-    },
-    {
-      attributes: {
-        type: "password",
-        name: "password",
-        id: "password",
-        placeholder: "密碼",
-        required: true,
-        value: "",
-      },
-      title: "",
-      errorMessage: "",
-    },
-    {
-      attributes: {
-        type: "submit",
-        name: "login",
-        id: "login",
-        required: true,
-        value: "登入",
-      },
-      title: "",
-      errorMessage: "",
-    },
-    {
-      attributes: {
-        type: "button",
-        name: "toRegister",
-        id: "toRegister",
-        required: true,
-        value: "註冊會員",
-      },
-      title: "還不是會員嗎？",
-      errorMessage: "",
-    },
-  ];
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const history = useHistory()
+
+  const handleToRegisterBtn = e => {
+    e.preventDefault();
+    history.push('/register');
+  }
+
+  const handleLogin = async e => {
+    e.preventDefault();
+    const filters = ['username', 'password'];
+    const loginInformation = {};
+    inputs.forEach(input => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          loginInformation[filter] = input.attributes.value
+        }
+      }
+    })
+    let result
+    const {username, password} = loginInformation
+    try {
+      result = await login(username, password);
+    } catch (err) {
+      console.log(err)
+    }
+    if (result.ok) {
+      window.localStorage.removeItem('podcastifyToken');
+      window.localStorage.setItem('podcastifyToken', result.token)
+      const loggedInUser = await getMyInfo(result.token);
+      setUserInfo(loggedInUser.data);
+      history.push('/');
+    } else {
+      window.localStorage.removeItem('podcastifyToken');
+      alert(result.errorMessage);
+      return;
+    }
+  }
+
+  const { inputs, handlers } = useInputs(formInputs);
+
+  const { inputs:registerBtnInput, handlers:registerBtnHandlers } = useInputs(registerBtnAttributes);
+
   return (
     <LoginPageWrapper>
       <MainContainer>
         <CoverImage></CoverImage>
         <FormArea>
           <StyledLogo />
-          <LoginForm formTitle={"會員登入"} formInputs={formInputs} />
+          <LoginForm
+            formTitle={"會員登入"}
+            inputs={inputs}
+            handlers={handlers}
+            onSubmit={handleLogin}
+          />
+          <RegisterBtn {...registerBtnInput} handlers={registerBtnHandlers} onClick={handleToRegisterBtn}/>
         </FormArea>
       </MainContainer>
     </LoginPageWrapper>
