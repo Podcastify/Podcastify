@@ -33,7 +33,7 @@ const FormArea = styled.div`
 `
 
 const BtnContainer = styled.div`
-  max-width: 522px;
+  max-width: 32.7rem;
   margin: 0 auto;
 `
 

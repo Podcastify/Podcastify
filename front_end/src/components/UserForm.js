@@ -4,7 +4,7 @@ import Input from "./UserInput";
 import useInputs from "../hooks/useInputs";
 
 const StyledForm = styled.form`
-  max-width: 522px;
+  max-width: 32.7rem;
   font-family: Helvetica;
   overflow-y: scroll;
   height: fill-available;
@@ -18,8 +18,8 @@ const StyledForm = styled.form`
 `;
 
 const StyledFormTitle = styled.h1`
-  ${({ formTitle }) => formTitle && "height: 83px;"}
-  font-size: 59px;
+  ${({ formTitle }) => formTitle && "height: 5rem;"}
+  font-size: 3.75rem;
   line-height: 1.2;
   letter-spacing: 5px;
   color: #ffffff;

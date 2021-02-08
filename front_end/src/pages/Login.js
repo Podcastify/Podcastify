@@ -51,7 +51,7 @@ const FormArea = styled.div`
 `
 
 const RegisterBtn = styled(Input)`
-  width: 522px;
+  width: 32.7rem;
 `
 
 const formInputs = [
