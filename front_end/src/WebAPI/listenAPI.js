@@ -4,12 +4,9 @@ const apiUrl = "http://api.podcastify.tw/listenAPI";
 export const getSearchInfo = (keyword) => {
   // 將字串進行 UTF-8 編碼
   const encodeWord = encodeURIComponent(keyword);
-  return fetch(
-    `${apiUrl}/search/?q=${encodeWord}&type=episode%2C%20podcast&language=Chinese&region=tw&safe_mode=0`,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
+  return fetch(`${apiUrl}/search/?q=${encodeWord}&type=episode%2C%20podcast`, {
+    method: "GET",
+  }).then((res) => res.json());
 };
 
 // HOT Podcasts

@@ -1,6 +1,7 @@
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
-
+import { Main, Div } from "../components/Main";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import MusicPlayer from "../components/MusicPlayer";
@@ -8,16 +9,49 @@ import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import {
+  getSearchInfo,
+  getPodcastInfo,
+  getEpisodeInfo,
+} from "../WebAPI/listenAPI";
+import { UserContext } from "../context/context";
 
-const SearchPageContainer = styled.div`
-  width: 72%;
-  margin-left: 28%;
-  margin-bottom: 200px;
-  position: relative;
-  display: block;
-  top: 90px;
-  left: 30px;
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MainWrapper = styled(Main)`
+  ${MEDIA_QUERY_SM} {
+    left: unset;
+    width: 90%;
+    height: 74vh;
+    padding-left: 0px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    left: unset;
+    width: 95%;
+    height: 74vh;
+    padding-left: 0px;
+  }
+`;
+
+const SearchPageContainer = styled.section`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  height: fill-available;
+  margin: 10px 40px;
+
+  ${MEDIA_QUERY_XL} {
+    width: 73%;
+  }
 
   ${MEDIA_QUERY_MD} {
     width: 100%;
@@ -26,7 +60,7 @@ const SearchPageContainer = styled.div`
     align-items: center;
     flex-direction: column;
     left: 0px;
-    margin-left: 0;
+    margin: 0;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -36,7 +70,7 @@ const SearchPageContainer = styled.div`
     align-items: center;
     flex-direction: column;
     left: 0px;
-    margin-left: 0;
+    margin: 0;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -46,23 +80,31 @@ const SearchPageContainer = styled.div`
     align-items: center;
     flex-direction: column;
     left: 0px;
-    margin-left: 0;
+    margin: 0;
     padding: 0 10px;
     margin-bottom: 90px;
   }
 `;
 
+const SearchPageWrapper = styled.div`
+  overflow-y: scroll;
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+`;
+
 const SearchPageTitle = styled.div`
+  width: 100%;
   font-size: 40px;
-  padding: 5px 0;
+  padding: 10px;
   line-height: 1.2;
   letter-spacing: normal;
   font-weight: bold;
-  color: white;
-
-  ${MEDIA_QUERY_MD} {
-    font-size: 33px;
-  }
+  color: ${(props) => props.theme.white};
 
   ${MEDIA_QUERY_SM} {
     font-size: 30px;
@@ -91,6 +133,7 @@ const PodcastName = styled.span`
 `;
 
 const SearchItemWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -125,19 +168,33 @@ const SearchItem = styled.div`
   margin-bottom: 50px;
 
   ${MEDIA_QUERY_SM} {
-    margin-left: 30px;
+    margin-left: 5px;
+    margin-bottom: 0;
   }
 
   ${MEDIA_QUERY_XS} {
     margin-right: 5px;
+    margin-bottom: 0;
   }
 `;
 
 const InfoCardPhoto = styled.div`
-  width: 190px;
-  height: 190px;
-  background: url(${DemoImage}) center / cover;
+  width: 300px;
+  max-width: 100%;
+  height: 260px;
   text-decoration: none;
+
+  ${MEDIA_QUERY_XL} {
+    width: 200px;
+    max-width: 100%;
+    height: 200px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 180px;
+    max-width: 100%;
+    height: 180px;
+  }
 
   ${MEDIA_QUERY_SM} {
     width: 160px;
@@ -147,95 +204,82 @@ const InfoCardPhoto = styled.div`
   ${MEDIA_QUERY_XS} {
     width: 130px;
     height: 130px;
-    border-radius: 50%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    ${MEDIA_QUERY_XS} {
+      border-radius: 50%;
+    }
   }
 `;
 
 const InfoCardTitle = styled.h2`
-  color: white;
-  margin: 10px 0 15px 0;
+  width: 90%;
+  color: ${(props) => props.theme.white};
+  margin: 20px 0 15px 0;
   font-weight: bold;
-  line-height: 1.19;
   letter-spacing: 0.6px;
   text-decoration: none;
-  width: 180px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  ${MEDIA_QUERY_MD} {
-    font-size: 20px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
-  }
-
   ${MEDIA_QUERY_SM} {
-    font-size: 18px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+    font-size: 25px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 20px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+    font-size: 22px;
   }
 `;
 
-export default function Search() {
+function SearchList({ podcast }) {
   return (
-    <>
+    <SearchItem>
+      <InfoCardPhoto>
+        <img src={podcast.image} alt="" />
+      </InfoCardPhoto>
+      <InfoCardTitle>{podcast.title_original}</InfoCardTitle>
+    </SearchItem>
+  );
+}
+
+export default function Search() {
+  const { userInfo } = useContext(UserContext);
+  const [searchList, setSearchList] = useState([]);
+
+  useEffect(() => {
+    getSearchInfo().then((data) => {
+      setSearchList(data);
+      console.log("data", data);
+    });
+  }, []);
+
+  return (
+    <Container>
       <Navbar />
-      <Sidebar />
-      <SearchPageContainer>
-        <SearchPageTitle>
-          # 搜尋有關“<PodcastName>ＸＸＸＸＸ</PodcastName>”的頻道
-        </SearchPageTitle>
-        <SearchItemWrapper>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-        </SearchItemWrapper>
-      </SearchPageContainer>
+      <MainWrapper>
+        <Div>
+          <Sidebar />
+          <SearchPageContainer>
+            <SearchPageWrapper>
+              <SearchPageTitle>
+                # 搜尋有關“<PodcastName>XXXXX</PodcastName>”的頻道
+              </SearchPageTitle>
+              <SearchItemWrapper>
+                {searchList.map((data) => (
+                  <SearchList podcast={data} />
+                ))}
+              </SearchItemWrapper>
+            </SearchPageWrapper>
+          </SearchPageContainer>
+        </Div>
+      </MainWrapper>
       <MusicPlayer />
-    </>
+    </Container>
   );
 }

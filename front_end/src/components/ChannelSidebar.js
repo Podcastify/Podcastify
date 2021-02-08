@@ -91,7 +91,6 @@ const InfoCardPhoto = styled.div`
   max-width: 100%;
   height: 260px;
   text-decoration: none;
-  /* background: url(${DemoImage}) center / cover; */
 
   img {
     width: 100%;

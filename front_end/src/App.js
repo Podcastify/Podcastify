@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import Navbar from "./components/Navbar";
-import MusicPlayer from "./components/MusicPlayer";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
@@ -9,8 +7,11 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Subscription from "./pages/Subscription";
+// import UserManagement from "./pages/usermanagement";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContext, PageStatusContext } from "./context/context";
+import { getToken } from "./utils";
+import { getMyInfo } from "./WebAPI/me";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -65,6 +66,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (getToken()) {
+      getMyInfo().then((response) => {
+        if (response.ok) {
+          setUserInfo(response.data);
+        }
+      });
+    }
     /* 
       在這邊把會員的訂閱等資訊放入 state 中
       拿到的資料可以用 destructure 寫成下面這樣
@@ -96,32 +104,34 @@ function App() {
         {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <Home />
-          {/* <Router>
-              <Switch>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/register">
-                  <Register />
-                </Route>
-                <Route path="/search">
-                  <Search />
-                </Route>
-                <Route path="/mysubscription">
-                  <Subscription />
-                </Route>
-                <Route path="/myplaylist">
-                  <Playlist />
-                </Route>
-                 <Route path="/channel">
-                  <Channel />
-                </Route>
-              </Switch>
-            </Router> */}
+          <Router>
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/register">
+                <Register />
+              </Route>
+              <Route path="/search">
+                <Search />
+              </Route>
+              <Route path="/mysubscription">
+                <Subscription />
+              </Route>
+              <Route path="/myplaylist">
+                <Playlist />
+              </Route>
+              <Route path="/channel">
+                <Channel />
+              </Route>
+              {/* <Route path="/usermanagement">
+                <UserManagement />
+              </Route> */}
+            </Switch>
+          </Router>
         </ThemeProvider>
       </UserContext.Provider>
     </PageStatusContext.Provider>
