@@ -83,7 +83,7 @@ export default function Input({ className, title, attributes, handlers, errorMes
     handleValidationCheck(attributes.name, e.target.validationMessage);
   };
   return (
-    <StyledInputContainer id={attributes.id}>
+    <StyledInputContainer id={attributes.id} className={className}>
       <StyledInputTitle>{title}</StyledInputTitle>
       <StyledInput
         {...attributes}

@@ -6,8 +6,8 @@ import Images from "../components/Images";
 import coverImg from "../images/loginPageCover.jpg"
 import { login } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
-import { UserContext } from "../context/context";
 import useInputs from "../hooks/useInputs";
+import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
 
 
@@ -51,7 +51,7 @@ const FormArea = styled.div`
 `
 
 const RegisterBtn = styled(Input)`
-  width: fill-available;
+  width: 522px;
 `
 
 const formInputs = [
@@ -106,7 +106,7 @@ const registerBtnAttributes = {
 }
 
 export default function Login() {
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { setUserInfo } = useUser();
   const history = useHistory()
 
   const handleToRegisterBtn = e => {
