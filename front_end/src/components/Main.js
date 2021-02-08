@@ -22,12 +22,14 @@ export const Main = styled.main`
     left: unset;
     width: 82%;
     height: 74vh;
+    padding: 0;
   }
 
   ${MEDIA_QUERY_SM} {
     left: unset;
     width: 82%;
     height: 74vh;
+    padding: 0;
   }
 
   ${MEDIA_QUERY_MD} {
