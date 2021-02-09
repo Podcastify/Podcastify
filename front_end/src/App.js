@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import Navbar from "./components/Navbar";
-import MusicPlayer from "./components/MusicPlayer";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
@@ -9,6 +7,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Subscription from "./pages/Subscription";
+// import UserManagement from "./pages/usermanagement";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContext, PageStatusContext } from "./context/context";
 import GlobalStyle from "./constants/globalStyle";
@@ -22,6 +21,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (getToken()) {
+      getMyInfo().then((response) => {
+        if (response.ok) {
+          setUserInfo(response.data);
+        }
+      });
+    }
     /* 
       在這邊把會員的訂閱等資訊放入 state 中
       拿到的資料可以用 destructure 寫成下面這樣
@@ -65,7 +71,7 @@ function App() {
               <Route path="/register">
                 <Register />
               </Route>
-              <Route path="/search">
+              <Route path="/search/:keyword">
                 <Search />
               </Route>
               <Route path="/mysubscription">
@@ -74,9 +80,12 @@ function App() {
               <Route path="/myplaylist">
                 <Playlist />
               </Route>
-                <Route path="/channel">
+              <Route path="/channel/:podcastId">
                 <Channel />
               </Route>
+              {/* <Route path="/usermanagement">
+                <UserManagement />
+              </Route> */}
             </Switch>
           </Router>
         </ThemeProvider>

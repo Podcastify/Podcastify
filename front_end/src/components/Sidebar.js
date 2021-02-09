@@ -10,6 +10,62 @@ import {
 import { SidebarContainer } from "./ChannelSidebar";
 
 const SidebarWrapper = styled(SidebarContainer)`
+  position: relative;
+
+  &::after {
+    content: "";
+    border-radius: 20px;
+    background-image: linear-gradient(
+      180deg,
+      rgba(137, 255, 241, 0) 0%,
+      rgba(62, 58, 57, 1) 100%
+    );
+    display: block;
+    width: 91%;
+    height: 30%;
+    position: absolute;
+    bottom: 0;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    position: relative;
+
+    &::after {
+      content: "";
+      border-radius: 20px;
+      background-image: linear-gradient(
+        180deg,
+        rgba(137, 255, 241, 0) 0%,
+        rgba(62, 58, 57, 1) 100%
+      );
+      display: block;
+      width: 91%;
+      height: 30%;
+      position: absolute;
+      bottom: 0px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    position: relative;
+    width: 25vw;
+
+    &::after {
+      content: "";
+      border-radius: 20px;
+      background-image: linear-gradient(
+        180deg,
+        rgba(137, 255, 241, 0) 0%,
+        rgba(62, 58, 57, 1) 100%
+      );
+      display: block;
+      width: 91%;
+      height: 30%;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
   ${MEDIA_QUERY_MD} {
     display: none;
   }
@@ -30,21 +86,25 @@ const SidebarTitle = styled.h3`
   color: ${(props) => props.theme.white};
 
   ${MEDIA_QUERY_LG} {
-    font-size: 23px;
-    margin: 2px 10px 20px 25px;
+    font-size: 21px;
+    margin: 2px 10px 10px 25px;
   }
-
-  /* &:hover {
-    color: rgba(255, 255, 255, 0.4);
-  } */
 `;
 
 const SideListContainer = styled.div`
   overflow-y: scroll;
-  height: 93%;
+  height: 92%;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    height: 91%;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    height: 92%;
   }
 `;
 
@@ -68,7 +128,7 @@ const SidebarListWrapper = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    padding: 10px 12px;
+    padding: 10px 15px;
   }
 
   &:hover {
@@ -93,7 +153,7 @@ const SidebarListLeft = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 18px;
+    font-size: 13px;
   }
 `;
 
