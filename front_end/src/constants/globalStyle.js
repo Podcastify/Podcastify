@@ -13,10 +13,10 @@ const GlobalStyle = createGlobalStyle`
       font-size: 10px;
     }
     ${MEDIA_QUERY_SM} {
-      font-size: 10px;
+      font-size: 8px;
     }
     ${MEDIA_QUERY_XS} {
-      font-size: 10px;
+      font-size: 6px;
     }
   }
 

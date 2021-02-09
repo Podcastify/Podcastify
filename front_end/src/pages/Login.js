@@ -3,14 +3,13 @@ import {useHistory} from "react-router-dom"
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
-import coverImg from "../images/loginPageCover.jpg"
+import coverImg from "../images/loginPageCover.jpg";
+import {MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL, MEDIA_QUERY_XXL } from "../constants/breakpoints"
 import { login } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
-
-
 
 const LoginPageWrapper = styled.div`
   max-width: 1920px;
@@ -35,8 +34,25 @@ const MainContainer = styled.main`
 `
 
 const CoverImage = styled.div`
+  display: none;
+  ${MEDIA_QUERY_MD} {
+    display: block;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    display: block;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    display: block;
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    display: block;
+  }
+
   height: 100vh;
-  width: 57%;  
+  width: 100%;  
   background-image: url(${coverImg});
   background-position: center;
   background-repeat: no-repeat;
@@ -44,7 +60,8 @@ const CoverImage = styled.div`
 `
 
 const FormArea = styled.div`
-  width: 43%;
+  height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
