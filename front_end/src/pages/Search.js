@@ -299,6 +299,7 @@ export default function Search() {
       if (podcast.ok) {
         data = podcast.data.results;
         setSearchEpisode(data);
+        console.log(data);
       }
       return setErrorMessage(podcast.message);
     });
@@ -317,9 +318,13 @@ export default function Search() {
               </SearchPageTitle>
               <SearchItemWrapper>
                 {searchPodcast &&
-                  searchPodcast.map((data) => <SearchList data={data} />)}
+                  searchPodcast.map((data) => (
+                    <SearchList key={data.id} data={data} />
+                  ))}
                 {searchEpisode &&
-                  searchEpisode.map((data) => <SearchList data={data} />)}
+                  searchEpisode.map((data) => (
+                    <SearchList key={data.id} data={data} />
+                  ))}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>

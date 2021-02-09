@@ -7,11 +7,13 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Subscription from "./pages/Subscription";
-// import UserManagement from "./pages/usermanagement";
+import UserManagement from "./pages/UserManagement";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { UserContext, PageStatusContext } from "./context/context";
 import GlobalStyle from "./constants/globalStyle";
 import { theme } from "./constants/theme";
+import { getAuthToken } from "./utils";
+import { getMyInfo } from "./WebAPI/me";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -21,7 +23,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (getToken()) {
+    if (getAuthToken()) {
       getMyInfo().then((response) => {
         if (response.ok) {
           setUserInfo(response.data);
@@ -35,7 +37,7 @@ function App() {
       再分別填入 state 中。
       之後要修改把新的東西放進 setState() 中
     */
-    console.log(userInfo)
+    console.log(userInfo);
   }, [userInfo]);
 
   const pageStatusContextValue = {
@@ -83,9 +85,9 @@ function App() {
               <Route path="/channel/:podcastId">
                 <Channel />
               </Route>
-              {/* <Route path="/usermanagement">
+              <Route path="/usermanagement">
                 <UserManagement />
-              </Route> */}
+              </Route>
             </Switch>
           </Router>
         </ThemeProvider>
