@@ -52,6 +52,7 @@ const SearchInput = styled.input`
   outline: none;
   caret-color: ${(props) => props.theme.white};
   color: #333333;
+  letter-spacing: 1px;
 
   &::placeholder {
     color: ${(props) => props.theme.white};

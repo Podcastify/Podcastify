@@ -115,7 +115,7 @@ function App() {
               <Route path="/register">
                 <Register />
               </Route>
-              <Route path="/search">
+              <Route path="/search/:keyword">
                 <Search />
               </Route>
               <Route path="/mysubscription">
@@ -124,7 +124,7 @@ function App() {
               <Route path="/myplaylist">
                 <Playlist />
               </Route>
-              <Route path="/channel">
+              <Route path="/channel/:podcastId">
                 <Channel />
               </Route>
               {/* <Route path="/usermanagement">

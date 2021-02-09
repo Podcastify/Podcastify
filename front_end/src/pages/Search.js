@@ -12,12 +12,10 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
-import {
-  getSearchInfo,
-  getPodcastInfo,
-  getEpisodeInfo,
-} from "../WebAPI/listenAPI";
 import { UserContext } from "../context/context";
+import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
+import { getSearchPodcast, getSearchEpisode } from "../WebAPI/listenAPI";
 
 const Container = styled.div`
   width: 100%;
@@ -53,36 +51,24 @@ const SearchPageContainer = styled.section`
     width: 73%;
   }
 
+  ${MEDIA_QUERY_LG} {
+    width: 70%;
+  }
+
   ${MEDIA_QUERY_MD} {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: 0px;
     margin: 0;
   }
 
   ${MEDIA_QUERY_SM} {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: 0px;
     margin: 0;
   }
 
   ${MEDIA_QUERY_XS} {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: 0px;
     margin: 0;
     padding: 0 10px;
-    margin-bottom: 90px;
   }
 `;
 
@@ -141,31 +127,44 @@ const SearchItemWrapper = styled.div`
   margin: 40px 0;
 
   ${MEDIA_QUERY_MD} {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    margin: 40px 20px;
   }
 
   ${MEDIA_QUERY_SM} {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
   }
 
   ${MEDIA_QUERY_XS} {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
+    margin: 10px 0;
   }
 `;
 
 const SearchItem = styled.div`
+  width: 28vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-right: 50px;
   margin-bottom: 50px;
+
+  ${MEDIA_QUERY_XL} {
+    width: 26vh;
+    margin-left: 5px;
+    margin-bottom: 40px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 24vh;
+    margin-left: 5px;
+    margin-bottom: 30px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 22vh;
+    margin-left: 5px;
+    margin-bottom: 20px;
+  }
 
   ${MEDIA_QUERY_SM} {
     margin-left: 5px;
@@ -173,15 +172,18 @@ const SearchItem = styled.div`
   }
 
   ${MEDIA_QUERY_XS} {
-    margin-right: 5px;
+    width: 20vh;
+    height: 25vh;
+    margin-right: 0px;
     margin-bottom: 0;
+    padding: 0 10px;
   }
 `;
 
-const InfoCardPhoto = styled.div`
+const InfoCardPhoto = styled(Link)`
   width: 300px;
   max-width: 100%;
-  height: 260px;
+  height: 280px;
   text-decoration: none;
 
   ${MEDIA_QUERY_XL} {
@@ -190,10 +192,16 @@ const InfoCardPhoto = styled.div`
     height: 200px;
   }
 
-  ${MEDIA_QUERY_MD} {
+  ${MEDIA_QUERY_LG} {
     width: 180px;
     max-width: 100%;
     height: 180px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 160px;
+    max-width: 100%;
+    height: 160px;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -209,7 +217,7 @@ const InfoCardPhoto = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: fill;
 
     ${MEDIA_QUERY_XS} {
       border-radius: 50%;
@@ -217,7 +225,7 @@ const InfoCardPhoto = styled.div`
   }
 `;
 
-const InfoCardTitle = styled.h2`
+const InfoCardTitle = styled(Link)`
   width: 90%;
   color: ${(props) => props.theme.white};
   margin: 20px 0 15px 0;
@@ -227,6 +235,19 @@ const InfoCardTitle = styled.h2`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 1.5em;
+
+  ${MEDIA_QUERY_XL} {
+    width: 80%;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 80%;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 80%;
+  }
 
   ${MEDIA_QUERY_SM} {
     font-size: 25px;
@@ -237,27 +258,51 @@ const InfoCardTitle = styled.h2`
   }
 `;
 
-function SearchList({ podcast }) {
+function SearchList({ data }) {
   return (
     <SearchItem>
-      <InfoCardPhoto>
-        <img src={podcast.image} alt="" />
+      <InfoCardPhoto to={`/channel/${data.id}`}>
+        <img
+          src={data.image}
+          alt={`The Podcast titled: ${data.title_original}`}
+        />
       </InfoCardPhoto>
-      <InfoCardTitle>{podcast.title_original}</InfoCardTitle>
+      <InfoCardTitle to={`/channel/${data.id}`}>
+        {data.title_original}
+      </InfoCardTitle>
     </SearchItem>
   );
 }
 
+postMessage.propTypes = {
+  data: PropTypes.object,
+};
+
 export default function Search() {
   const { userInfo } = useContext(UserContext);
-  const [searchList, setSearchList] = useState([]);
+  const [searchPodcast, setSearchPodcast] = useState([]);
+  const [searchEpisode, setSearchEpisode] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const { keyword } = useParams();
 
   useEffect(() => {
-    getSearchInfo().then((data) => {
-      setSearchList(data);
-      console.log("data", data);
+    getSearchPodcast(keyword).then((podcast) => {
+      let data = [];
+      if (podcast.ok) {
+        data = podcast.data.results;
+        setSearchPodcast(data);
+      }
+      return setErrorMessage(podcast.message);
     });
-  }, []);
+    getSearchEpisode(keyword).then((podcast) => {
+      let data = [];
+      if (podcast.ok) {
+        data = podcast.data.results;
+        setSearchEpisode(data);
+      }
+      return setErrorMessage(podcast.message);
+    });
+  }, [keyword]);
 
   return (
     <Container>
@@ -268,12 +313,13 @@ export default function Search() {
           <SearchPageContainer>
             <SearchPageWrapper>
               <SearchPageTitle>
-                # 搜尋有關“<PodcastName>XXXXX</PodcastName>”的頻道
+                # 搜尋有關“<PodcastName>{keyword}</PodcastName>”的頻道
               </SearchPageTitle>
               <SearchItemWrapper>
-                {searchList.map((data) => (
-                  <SearchList podcast={data} />
-                ))}
+                {searchPodcast &&
+                  searchPodcast.map((data) => <SearchList data={data} />)}
+                {searchEpisode &&
+                  searchEpisode.map((data) => <SearchList data={data} />)}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>

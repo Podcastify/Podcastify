@@ -12,7 +12,6 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext } from "../context/context";
 import { useState, useContext } from "react";
 import SearchBar from "./SearchBar";
-// import { setToken } from "../utils";
 
 const NavigationBar = styled.div``;
 const Nav = styled.nav`
@@ -452,7 +451,7 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    // setToken("");
+    localStorage.removeItem("podcastifyToken");
     setUserInfo(null);
     if (location.pathname !== "/") {
       history.push("/");
