@@ -22,10 +22,6 @@ const StyledInput = styled.input`
   opacity: 0.5;
   background: rgba(0, 0, 0, 0);
   transition: all 0.5s;
-  &:hover {
-    opacity: 0.5;
-    background: rgb(65, 47, 42);
-  }
   ${({ type }) =>
     (type === "button" || type === "submit") &&
     `&:hover {
@@ -34,7 +30,8 @@ const StyledInput = styled.input`
       border-color: #0079F2;
       cursor: pointer;
     }`}
-  &:focus {
+
+  ${({ readOnly }) => !readOnly ? `  &:focus {
     background: #9d9d9d;
     opacity: 1;
     caret-color: white;
@@ -45,6 +42,17 @@ const StyledInput = styled.input`
   &::placeholder {
     color: #bbbbbb;
   }
+  &:hover {
+    opacity: 0.5;
+    background: rgb(65, 47, 42);
+  }`
+    :
+    `
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  `}
 `;
 
 const StyledInputTitle = styled.h3`
