@@ -35,7 +35,8 @@ function App() {
       再分別填入 state 中。
       之後要修改把新的東西放進 setState() 中
     */
-  }, []);
+    console.log(userInfo)
+  }, [userInfo]);
 
   const pageStatusContextValue = {
     isLoading,
