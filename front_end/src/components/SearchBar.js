@@ -144,17 +144,17 @@ export default function SearchBar() {
 
   return (
     <SearchBox>
-      {/* {userInfo ? ( */}
-      <SearchInput
-        type="text"
-        placeholder="Search"
-        onChange={handleInputChange}
-        onKeyPress={handleEnterKeyPressed}
-        value={searchText}
-      />
-      {/* ) : (
+      {userInfo ? (
+        <SearchInput
+          type="text"
+          placeholder="Search"
+          onChange={handleInputChange}
+          onKeyPress={handleEnterKeyPressed}
+          value={searchText}
+        />
+      ) : (
         <SearchInput placeholder="Search" readOnly />
-      )} */}
+      )}
       <MagnifierControl>
         <Images.Magnifier />
       </MagnifierControl>

@@ -117,9 +117,9 @@ const InfoCardPhoto = styled.div`
   }
 
   ${MEDIA_QUERY_SM} {
-    width: 280px;
+    width: 210px;
     max-width: 100%;
-    height: 250px;
+    height: 190px;
   }
 
   ${MEDIA_QUERY_XS} {
