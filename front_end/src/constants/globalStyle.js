@@ -1,24 +1,34 @@
 import { createGlobalStyle } from "styled-components";
-import {MEDIA_QUERY_LG, MEDIA_QUERY_XL, MEDIA_QUERY_MD, MEDIA_QUERY_SM, MEDIA_QUERY_XS} from "./breakpoints"
+import {
+  MEDIA_QUERY_XXL,
+  MEDIA_QUERY_XL,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_MD,
+  MEDIA_QUERY_SM,
+  MEDIA_QUERY_XS
+} from "./breakpoints"
 
 const GlobalStyle = createGlobalStyle`
-  html {
-    ${MEDIA_QUERY_XL} {
-      font-size: 12px;
-    }
-    ${MEDIA_QUERY_LG} {
-      font-size: 12px;
-    }
-    ${MEDIA_QUERY_MD} {
-      font-size: 10px;
-    }
-    ${MEDIA_QUERY_SM} {
-      font-size: 8px;
-    }
-    ${MEDIA_QUERY_XS} {
-      font-size: 6px;
-    }
-  }
+  // html {
+  //   ${MEDIA_QUERY_XXL} {
+  //     font-size: 25px;
+  //   }
+  //   ${MEDIA_QUERY_XL} {
+  //     font-size: 23px;
+  //   }
+  //   ${MEDIA_QUERY_LG} {
+  //     font-size: 21px;
+  //   }
+  //   ${MEDIA_QUERY_MD} {
+  //     font-size: 19px;
+  //   }
+  //   ${MEDIA_QUERY_SM} {
+  //     font-size: 17px;
+  //   }
+  //   ${MEDIA_QUERY_XS} {
+  //     font-size: 15px;
+  //   }
+  // }
 
   body {
   }
