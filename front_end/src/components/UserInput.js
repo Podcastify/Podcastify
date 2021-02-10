@@ -22,10 +22,6 @@ const StyledInput = styled.input`
   opacity: 0.5;
   background: rgba(0, 0, 0, 0);
   transition: all 0.5s;
-  &:hover {
-    opacity: 0.5;
-    background: rgb(65, 47, 42);
-  }
   ${({ type }) =>
     (type === "button" || type === "submit") &&
     `&:hover {
@@ -34,7 +30,8 @@ const StyledInput = styled.input`
       border-color: #0079F2;
       cursor: pointer;
     }`}
-  &:focus {
+
+  ${({ readOnly }) => !readOnly ? `  &:focus {
     background: #9d9d9d;
     opacity: 1;
     caret-color: white;
@@ -45,6 +42,17 @@ const StyledInput = styled.input`
   &::placeholder {
     color: #bbbbbb;
   }
+  &:hover {
+    opacity: 0.5;
+    background: rgb(65, 47, 42);
+  }`
+    :
+    `
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  `}
 `;
 
 const StyledInputTitle = styled.h3`
@@ -64,7 +72,7 @@ const FormInputErrorMessage = styled.div`
   text-align: left;
 `;
 
-export default function Input({ title, attributes, handlers }) {
+export default function Input({ className, title, attributes, handlers, errorMessage, onClick }) {
   const { handleChange, handleValidationCheck } = handlers;
 
   const handleInputChange = (e) => {
@@ -75,15 +83,16 @@ export default function Input({ title, attributes, handlers }) {
     handleValidationCheck(attributes.name, e.target.validationMessage);
   };
   return (
-    <StyledInputContainer id={attributes.id}>
+    <StyledInputContainer id={attributes.id} className={className}>
       <StyledInputTitle>{title}</StyledInputTitle>
       <StyledInput
         {...attributes}
         onInvalid={handleValidation}
         onChange={handleInputChange}
-        onBlur={handleValidation}
+        // onBlur={handleValidation}
+        onClick={onClick ? onClick : () => {return}}
       />
-      <FormInputErrorMessage></FormInputErrorMessage>
+      <FormInputErrorMessage>{errorMessage}</FormInputErrorMessage>
     </StyledInputContainer>
   );
 }

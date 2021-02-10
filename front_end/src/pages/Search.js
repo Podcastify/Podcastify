@@ -1,6 +1,7 @@
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
-
+import { Main, Div } from "../components/Main";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import MusicPlayer from "../components/MusicPlayer";
@@ -8,61 +9,88 @@ import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import { UserContext } from "../context/context";
+import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
+import { getSearchPodcast, getSearchEpisode } from "../WebAPI/listenAPI";
 
-const SearchPageContainer = styled.div`
-  width: 72%;
-  margin-left: 28%;
-  margin-bottom: 200px;
-  position: relative;
-  display: block;
-  top: 90px;
-  left: 30px;
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MainWrapper = styled(Main)`
+  ${MEDIA_QUERY_SM} {
+    left: unset;
+    width: 90%;
+    height: 74vh;
+    padding-left: 0px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    left: unset;
+    width: 95%;
+    height: 74vh;
+    padding-left: 0px;
+  }
+`;
+
+const SearchPageContainer = styled.section`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  height: fill-available;
+  margin: 10px 40px;
+
+  ${MEDIA_QUERY_XL} {
+    width: 73%;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 70%;
+  }
 
   ${MEDIA_QUERY_MD} {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: 0px;
-    margin-left: 0;
+    margin: 0;
   }
 
   ${MEDIA_QUERY_SM} {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: 0px;
-    margin-left: 0;
+    margin: 0;
   }
 
   ${MEDIA_QUERY_XS} {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: 0px;
-    margin-left: 0;
+    margin: 0;
     padding: 0 10px;
-    margin-bottom: 90px;
   }
 `;
 
+const SearchPageWrapper = styled.div`
+  overflow-y: scroll;
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+`;
+
 const SearchPageTitle = styled.div`
+  width: 100%;
   font-size: 40px;
-  padding: 5px 0;
+  padding: 10px;
   line-height: 1.2;
   letter-spacing: normal;
   font-weight: bold;
-  color: white;
-
-  ${MEDIA_QUERY_MD} {
-    font-size: 33px;
-  }
+  color: ${(props) => props.theme.white};
 
   ${MEDIA_QUERY_SM} {
     font-size: 30px;
@@ -91,6 +119,7 @@ const PodcastName = styled.span`
 `;
 
 const SearchItemWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -98,46 +127,82 @@ const SearchItemWrapper = styled.div`
   margin: 40px 0;
 
   ${MEDIA_QUERY_MD} {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    margin: 40px 20px;
   }
 
   ${MEDIA_QUERY_SM} {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
   }
 
   ${MEDIA_QUERY_XS} {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
+    margin: 10px 0;
   }
 `;
 
 const SearchItem = styled.div`
+  width: 28vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-right: 50px;
   margin-bottom: 50px;
 
+  ${MEDIA_QUERY_XL} {
+    width: 26vh;
+    margin-left: 5px;
+    margin-bottom: 40px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 24vh;
+    margin-left: 5px;
+    margin-bottom: 30px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 22vh;
+    margin-left: 5px;
+    margin-bottom: 20px;
+  }
+
   ${MEDIA_QUERY_SM} {
-    margin-left: 30px;
+    margin-left: 5px;
+    margin-bottom: 0;
   }
 
   ${MEDIA_QUERY_XS} {
-    margin-right: 5px;
+    width: 20vh;
+    height: 25vh;
+    margin-right: 0px;
+    margin-bottom: 0;
+    padding: 0 10px;
   }
 `;
 
-const InfoCardPhoto = styled.div`
-  width: 190px;
-  height: 190px;
-  background: url(${DemoImage}) center / cover;
+const InfoCardPhoto = styled(Link)`
+  width: 300px;
+  max-width: 100%;
+  height: 280px;
   text-decoration: none;
+
+  ${MEDIA_QUERY_XL} {
+    width: 200px;
+    max-width: 100%;
+    height: 200px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 180px;
+    max-width: 100%;
+    height: 180px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 160px;
+    max-width: 100%;
+    height: 160px;
+  }
 
   ${MEDIA_QUERY_SM} {
     width: 160px;
@@ -147,95 +212,125 @@ const InfoCardPhoto = styled.div`
   ${MEDIA_QUERY_XS} {
     width: 130px;
     height: 130px;
-    border-radius: 50%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+
+    ${MEDIA_QUERY_XS} {
+      border-radius: 50%;
+    }
   }
 `;
 
-const InfoCardTitle = styled.h2`
-  color: white;
-  margin: 10px 0 15px 0;
+const InfoCardTitle = styled(Link)`
+  width: 90%;
+  color: ${(props) => props.theme.white};
+  margin: 20px 0 15px 0;
   font-weight: bold;
-  line-height: 1.19;
   letter-spacing: 0.6px;
   text-decoration: none;
-  width: 180px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 1.5em;
+
+  ${MEDIA_QUERY_XL} {
+    width: 80%;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 80%;
+  }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 20px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+    width: 80%;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 18px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+    font-size: 25px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 20px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+    font-size: 22px;
   }
 `;
 
-export default function Search() {
+function SearchList({ data }) {
   return (
-    <>
+    <SearchItem>
+      <InfoCardPhoto to={`/channel/${data.id}`}>
+        <img
+          src={data.image}
+          alt={`The Podcast titled: ${data.title_original}`}
+        />
+      </InfoCardPhoto>
+      <InfoCardTitle to={`/channel/${data.id}`}>
+        {data.title_original}
+      </InfoCardTitle>
+    </SearchItem>
+  );
+}
+
+postMessage.propTypes = {
+  data: PropTypes.object,
+};
+
+export default function Search() {
+  const { userInfo } = useContext(UserContext);
+  const [searchPodcast, setSearchPodcast] = useState([]);
+  const [searchEpisode, setSearchEpisode] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const { keyword } = useParams();
+
+  useEffect(() => {
+    getSearchPodcast(keyword).then((podcast) => {
+      let data = [];
+      if (podcast.ok) {
+        data = podcast.data.results;
+        setSearchPodcast(data);
+      }
+      return setErrorMessage(podcast.message);
+    });
+    getSearchEpisode(keyword).then((podcast) => {
+      let data = [];
+      if (podcast.ok) {
+        data = podcast.data.results;
+        setSearchEpisode(data);
+        console.log(data);
+      }
+      return setErrorMessage(podcast.message);
+    });
+  }, [keyword]);
+
+  return (
+    <Container>
       <Navbar />
-      <Sidebar />
-      <SearchPageContainer>
-        <SearchPageTitle>
-          # 搜尋有關“<PodcastName>ＸＸＸＸＸ</PodcastName>”的頻道
-        </SearchPageTitle>
-        <SearchItemWrapper>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-          <SearchItem>
-            <InfoCardPhoto />
-            <InfoCardTitle>頻道名稱</InfoCardTitle>
-          </SearchItem>
-        </SearchItemWrapper>
-      </SearchPageContainer>
+      <MainWrapper>
+        <Div>
+          <Sidebar />
+          <SearchPageContainer>
+            <SearchPageWrapper>
+              <SearchPageTitle>
+                # 搜尋有關“<PodcastName>{keyword}</PodcastName>”的頻道
+              </SearchPageTitle>
+              <SearchItemWrapper>
+                {searchPodcast &&
+                  searchPodcast.map((data) => (
+                    <SearchList key={data.id} data={data} />
+                  ))}
+                {searchEpisode &&
+                  searchEpisode.map((data) => (
+                    <SearchList key={data.id} data={data} />
+                  ))}
+              </SearchItemWrapper>
+            </SearchPageWrapper>
+          </SearchPageContainer>
+        </Div>
+      </MainWrapper>
       <MusicPlayer />
-    </>
+    </Container>
   );
 }
