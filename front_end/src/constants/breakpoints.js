@@ -1,3 +1,10 @@
+/*
+        XXL   XL    LG    MD    SM   XS
+  <p>   25    23    21    19    17   15
+  <h1>  52    46    40    34    28   22
+  <h2>  32    30    28    36    30   25
+  <h3>
+*/
 export const MEDIA_QUERY_XXL = "@media screen and (min-width: 1600px)";
 export const MEDIA_QUERY_XL =
   "@media screen and (min-width: 1200px) and (max-width: 1599px)";
