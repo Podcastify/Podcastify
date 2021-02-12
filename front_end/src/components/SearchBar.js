@@ -7,7 +7,7 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
 import { UserContext } from "../context/context";
 
@@ -87,7 +87,8 @@ const SearchInput = styled.input`
   }
 `;
 
-const MagnifierControl = styled(Link)`
+const MagnifierControl = styled.div`
+  cursor: pointer;
   display: flex;
   position: absolute;
   top: 50%;
@@ -142,6 +143,12 @@ export default function SearchBar() {
     }
   };
 
+  const handleButtonSubmit = () => {
+    if (searchText !== "") {
+      handlePodcastSearch(searchText);
+    }
+  };
+
   return (
     <SearchBox>
       {userInfo ? (
@@ -155,7 +162,7 @@ export default function SearchBar() {
       ) : (
         <SearchInput placeholder="Search" readOnly />
       )}
-      <MagnifierControl>
+      <MagnifierControl onClick={handleButtonSubmit}>
         <Images.Magnifier />
       </MagnifierControl>
     </SearchBox>

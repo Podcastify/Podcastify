@@ -446,7 +446,7 @@ export default function Navbar() {
   const history = useHistory();
   const location = useLocation();
 
-  const toggleList = () => {
+  const handleToggleList = () => {
     setIsShowList(!isShowList);
   };
 
@@ -470,7 +470,7 @@ export default function Navbar() {
             <Images.ListenApiLogo />
           </ListenApiLogoControl>
         </LeftSection>
-        <AvatarControl onClick={toggleList}>
+        <AvatarControl onClick={handleToggleList}>
           <Images.Avatar />
           <ListControl $isShow={isShowList}>
             <Lists>
