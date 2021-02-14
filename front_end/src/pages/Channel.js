@@ -594,13 +594,52 @@ const CollapseControl = styled.div`
   }
 `;
 
-export default function Channel() {
+function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const [isOpen, setIsOpen] = useState(false);
   const onToggle = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
 
+  return (
+    <Details open={isOpen} onClick={onToggle}>
+    <Summary open={isOpen}>
+      <PlayBtnControl>
+        <Images.PodcastPlayBtn />
+      </PlayBtnControl>
+      <Text>
+          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+        <EpisodeDescription dangerouslySetInnerHTML={{__html:episodeInfo.description.replace(/<[^>]+>/g, '')}}>
+      </EpisodeDescription>
+        <ChannelName>{podcastInfo.title}</ChannelName>
+      </Text>
+      <AddToPlayListControl>
+        <Images.AddToPlayListBtn />
+      </AddToPlayListControl>
+    </Summary>
+    <DetailsBlock>
+      <DetailsHeader>
+          <DetailsEpisodeName>{episodeInfo.title}</DetailsEpisodeName>
+        <DetailsDurationTime>{`${Math.floor(episodeInfo.audio_length_sec / 60)}分鐘`}</DetailsDurationTime>
+      </DetailsHeader>
+      <EpisodeDetails dangerouslySetInnerHTML={{__html:episodeInfo.description.replace({__html:episodeInfo.description})}}>
+        
+    </EpisodeDetails>
+      <AddToPlayList>
+        <AddControl>
+          <Images.AddToPlayListBtn />
+        </AddControl>
+        <AddText>加入播放清單</AddText>
+      </AddToPlayList>
+      <CollapseControl onClick={onToggle}>
+        <Images.CollapseBtn />
+      </CollapseControl>
+    </DetailsBlock>
+    </Details>
+  )
+}
+
+export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
   useEffect(() => {
@@ -625,42 +664,8 @@ export default function Channel() {
             </TitleHeader>
             <Body>
               {
-                podcastInfo ?
-                podcastInfo.episodes.map(el => (
-                  <Details open={isOpen} onClick={onToggle}>
-                  <Summary open={isOpen}>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                        <EpisodeTitle>{el.title}</EpisodeTitle>
-                      <EpisodeDescription dangerouslySetInnerHTML={{__html:el.description.replace(/<[^>]+>/g, '')}}>
-                    </EpisodeDescription>
-                      <ChannelName>{podcastInfo.title}</ChannelName>
-                    </Text>
-                    <AddToPlayListControl>
-                      <Images.AddToPlayListBtn />
-                    </AddToPlayListControl>
-                  </Summary>
-                  <DetailsBlock>
-                    <DetailsHeader>
-                        <DetailsEpisodeName>{el.title}</DetailsEpisodeName>
-                      <DetailsDurationTime>{`${Math.floor(el.audio_length_sec / 60)}分鐘`}</DetailsDurationTime>
-                    </DetailsHeader>
-                    <EpisodeDetails dangerouslySetInnerHTML={{__html:el.description.replace({__html:el.description})}}>
-                      
-                  </EpisodeDetails>
-                    <AddToPlayList>
-                      <AddControl>
-                        <Images.AddToPlayListBtn />
-                      </AddControl>
-                      <AddText>加入播放清單</AddText>
-                    </AddToPlayList>
-                    <CollapseControl onClick={onToggle}>
-                      <Images.CollapseBtn />
-                    </CollapseControl>
-                  </DetailsBlock>
-                  </Details>))
+                podcastInfo
+                  ? podcastInfo.episodes.map(el => <EpisodeInfoDetails podcastInfo={podcastInfo} episodeInfo={el} />)
                   : ''
               }
             </Body>
