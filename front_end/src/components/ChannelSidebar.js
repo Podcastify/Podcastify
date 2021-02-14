@@ -306,7 +306,7 @@ const InfoCardText = styled.div`
   }
 `;
 
-export default function ChannelSidebar() {
+export default function ChannelSidebar({podcastInfo}) {
   return (
     <SidebarContainer>
       <InfoCardWrapper>
@@ -315,13 +315,16 @@ export default function ChannelSidebar() {
         </InfoCardPhoto>
         <InfoCardContent>
           <InfoCardBlock>
-            <InfoCardTitle>社畜日記</InfoCardTitle>
+            <InfoCardTitle>{podcastInfo ? podcastInfo.title : "社畜日記"}</InfoCardTitle>
             <InfoCardButton>訂閱</InfoCardButton>
           </InfoCardBlock>
           <InfoCardText>
-            用隨性的對話包裝知識， 用認真的口吻胡說八道。
-            我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-            用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
+            {
+              podcastInfo ? podcastInfo.description :
+              `用隨性的對話包裝知識， 用認真的口吻胡說八道。
+              我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
+              用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...`
+            }
           </InfoCardText>
         </InfoCardContent>
       </InfoCardWrapper>
