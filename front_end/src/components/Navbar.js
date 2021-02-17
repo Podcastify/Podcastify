@@ -453,9 +453,6 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("podcastifyToken");
     setUserInfo(null);
-    if (location.pathname !== "/") {
-      history.push("/");
-    }
   };
 
   return (
@@ -489,7 +486,11 @@ export default function Navbar() {
               ) : (
                 <ListItem to="/register">註冊</ListItem>
               )}
-              {userInfo && <ListItem onClick={handleLogout}>登出</ListItem>}
+              {userInfo && (
+                <ListItem to="/" onClick={handleLogout}>
+                  登出
+                </ListItem>
+              )}
             </Lists>
           </ListControl>
         </AvatarControl>

@@ -146,6 +146,7 @@ const SearchItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-right: 50px;
   margin-bottom: 50px;
 
@@ -190,7 +191,7 @@ const InfoCardPhoto = styled(Link)`
   ${MEDIA_QUERY_XL} {
     width: 200px;
     max-width: 100%;
-    height: 200px;
+    height: 180px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -283,33 +284,35 @@ export default function Search() {
   const { userInfo } = useContext(UserContext);
   const [searchPodcast, setSearchPodcast] = useState([]);
   const [searchEpisode, setSearchEpisode] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [error, setError] = useState(false);
   const { keyword } = useParams();
 
   useEffect(() => {
     getSearchPodcast(keyword).then((podcast) => {
-      let data = [];
-      if (podcast.ok) {
-        console.log(podcast);
-        data = podcast.data.results;
-        return setSearchPodcast(data);
+      let data = podcast.data.results;
+      if (data.length) {
+        // console.log(podcast);
+        setSearchPodcast(data);
+      } else {
+        setSearchPodcast("");
+        setError(true);
       }
-      setErrorMessage(podcast.message);
     });
     getSearchEpisode(keyword).then((podcast) => {
-      let data = [];
-      if (podcast.ok) {
-        data = podcast.data.results;
-        return setSearchEpisode(data);
+      let data = podcast.data.results;
+      if (data.length) {
+        setSearchEpisode(data);
+      } else {
+        setSearchEpisode("");
+        setError(true);
       }
-      setErrorMessage(podcast.message);
     });
   }, [keyword]);
 
   return (
     <Container>
       <Navbar />
-      {errorMessage && <ErrorMessage />}
+      {error ? <ErrorMessage /> : ""}
       <MainWrapper>
         <Div>
           <Sidebar />
