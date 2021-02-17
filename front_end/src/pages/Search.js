@@ -4,7 +4,7 @@ import DemoImage from "../images/avatar.jpg";
 import { Main, Div } from "../components/Main";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import MusicPlayer from "../components/MusicPlayer";
+import MusicPlayer from "../components/MusicPlayer/Player";
 import ErrorMessage from "../components/ErrorMessage";
 import {
   MEDIA_QUERY_XS,
