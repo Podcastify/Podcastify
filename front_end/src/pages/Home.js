@@ -4,12 +4,7 @@ import Sidebar from "../components/Sidebar";
 import MusicPlayer from "../components/MusicPlayer/Player";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
-import {
-  MEDIA_QUERY_XS,
-  MEDIA_QUERY_SM,
-  MEDIA_QUERY_MD,
-  MEDIA_QUERY_LG,
-} from "../constants/breakpoints";
+import { MEDIA_QUERY_XS } from "../constants/breakpoints";
 
 const Container = styled.div`
   width: 100%;
