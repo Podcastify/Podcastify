@@ -404,6 +404,42 @@ const Lists = styled.ul`
   }
 `;
 
+const ListTitle = styled.div`
+  list-style: none;
+  text-align: center;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: ${(props) => props.theme.white};
+
+  &:first-child {
+    margin-top: 8px;
+  }
+
+  &:last-child {
+    margin-bottom: 8px;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.click_color};
+    cursor: pointer;
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    padding: 15px;
+
+    &:first-child {
+      margin-top: 15px;
+    }
+
+    &:last-child {
+      margin-bottom: 15px;
+    }
+  }
+`;
+
 const ListItem = styled(Link)`
   list-style: none;
   text-align: center;
@@ -472,9 +508,9 @@ export default function Navbar() {
           <ListControl $isShow={isShowList}>
             <Lists>
               {userInfo ? (
-                <ListItem>會員您好</ListItem>
+                <ListTitle>會員您好</ListTitle>
               ) : (
-                <ListItem>訪客您好</ListItem>
+                <ListTitle>訪客您好</ListTitle>
               )}
               {userInfo ? (
                 <ListItem to="/usermanagement">會員資料管理</ListItem>
