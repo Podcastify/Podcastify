@@ -183,15 +183,15 @@ const ErrorBlock = styled.div`
 const FirstLine = styled.div``;
 const SecondLine = styled.div``;
 
-export default function ErrorMessage() {
-  const [showError, setShowError] = useState(true);
+export default function AlertMessage() {
+  const [showAlert, setShowAlert] = useState(true);
 
   const handleClosedButton = () => {
-    setShowError(false);
+    setShowAlert(false);
   };
 
   return (
-    showError && (
+    showAlert && (
       <ErrorContainer>
         <CloseBtnControl onClick={handleClosedButton}>
           <Images.Error />

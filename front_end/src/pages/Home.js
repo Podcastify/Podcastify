@@ -5,6 +5,7 @@ import MusicPlayer from "../components/MusicPlayer/Player";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
+import Loading from "../components/Loading";
 
 const Container = styled.div`
   width: 100%;
@@ -25,6 +26,7 @@ const MainWrapper = styled(Main)`
 export default function Home() {
   return (
     <Container>
+      {/* <Loading /> */}
       <Navbar />
       <MainWrapper>
         <Div>
