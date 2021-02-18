@@ -48,7 +48,7 @@ const Progress = styled.div`
   }
 `;
 
-const Slider = styled.div`
+export const Slider = styled.div`
   position: relative;
   margin: 5px 10px;
   &:hover {
@@ -93,9 +93,8 @@ export const ProgressCurrent = styled.div`
   background-color: ${(props) => props.theme.orange};
   position: absolute;
   height: 7.5px;
-  width: 0%;
-  left: 0%;
-  top: 0%;
+  top: 50%;
+  transform: translateY(-50%);
   border-radius: 50px;
   z-index: 1;
   user-select: none;
@@ -104,24 +103,6 @@ export const ProgressCurrent = styled.div`
   ${MEDIA_QUERY_XXL} {
     height: 9.5px;
   }
-`;
-
-export const ProgressBarCircle = styled.div`
-  /* position: absolute;
-  border: 3px solid ${(props) => props.theme.white};
-  border-radius: 50%;
-  padding: 2px;
-  top: 50%;
-  left: 0%;
-  transform: translate(-50%, -50%);
-  background-color: ${(props) => props.theme.orange};
-  z-index: 3;
-  user-select: none;
-  pointer-events: none;
-
-  ${MEDIA_QUERY_XXL} {
-    padding: 4px;
-  } */
 `;
 
 export const ProgressBar = styled.input`
@@ -134,6 +115,7 @@ export const ProgressBar = styled.input`
   transform: translateY(-50%);
   background: none;
   border-radius: 50px;
+  z-index: 3;
 
   // 控制圓桿
   &::-webkit-slider-thumb {
@@ -144,10 +126,7 @@ export const ProgressBar = styled.input`
     height: 15px;
     appearance: none;
     background-color: ${(props) => props.theme.orange};
-
-    ${MEDIA_QUERY_XXL} {
-      padding: 4px;
-    }
+    z-index: 3;
   }
 `;
 
@@ -189,20 +168,35 @@ export default function ProgressControl({
   duration,
   currentTime,
 }) {
+  const [position, setPosition] = useState(0);
+  const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const rangeRef = useRef();
+
+  useEffect(() => {
+    // 設定控制圓杆位置
+    setPosition(percentage);
+
+    // 設定進度條寬度
+    const rangeWidth = rangeRef.current.getBoundingClientRect().width;
+    const currentProgressBar = (rangeWidth / 100) * percentage;
+    setProgressBarWidth(currentProgressBar);
+  }, [percentage]);
+
+  // 轉換秒數
   const secondsToStandardTime = (seconds) => {
     if (!seconds) return "00:00";
 
     // 取得小時
     let duration = seconds;
-    let hours = duration / 3600;
+    let hours = parseInt(duration / 3600, 10);
 
     // 取得分鐘
     duration = duration % 3600;
-    let mins = parseInt(duration / 60);
+    let mins = parseInt(duration / 60, 10);
 
     // 取得秒數
     duration = duration % 60;
-    let secs = parseInt(duration);
+    let secs = parseInt(duration, 10);
 
     if (secs < 10) {
       secs = `0${secs}`;
@@ -212,8 +206,8 @@ export default function ProgressControl({
       mins = `0${mins}`;
     }
 
-    if (parseInt(hours, 10) > 0) {
-      return `${parseInt(hours, 10)}:${mins}:${secs}`;
+    if (hours > 0) {
+      return `${hours}:${mins}:${secs}`;
     } else if (mins === 0) {
       return `00:${secs}`;
     } else {
@@ -224,9 +218,18 @@ export default function ProgressControl({
   return (
     <Progress>
       <Slider>
-        <ProgressCurrent />
-        {/* <ProgressBarCircle /> */}
-        <ProgressBar type="range" onChange={onChange} />
+        <ProgressCurrent
+          style={{
+            width: `${progressBarWidth}px`,
+          }}
+        />
+        <ProgressBar
+          type="range"
+          onChange={onChange}
+          ref={rangeRef}
+          value={position}
+          step="0.01"
+        />
       </Slider>
       <Timing>
         <StartTime>{secondsToStandardTime(currentTime)}</StartTime>

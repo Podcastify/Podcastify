@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "../Images";
-import { ProgressBar, ProgressCurrent, ProgressBarCircle } from "./Progress";
+import { Slider, ProgressCurrent, ProgressBar } from "./Progress";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -37,11 +37,11 @@ const Sound = styled.div`
   }
 `;
 
-const SoundBar = styled(ProgressBar)`
+const SoundSlider = styled(Slider)`
   width: 100%;
 `;
 const SoundBarCurrent = styled(ProgressCurrent)``;
-const SoundBarCircle = styled(ProgressBarCircle)``;
+const SoundBar = styled(ProgressBar)``;
 const SoundIcon = styled.div`
   display: flex;
   justify-content: center;
@@ -77,19 +77,48 @@ const SoundOnControl = styled.div`
 
 const MuteControl = styled(SoundOnControl)``;
 
-export default function SoundControl() {
+export default function SoundControl({ audioEl }) {
   const [isMute, setIsMute] = useState(false);
-  const handleSoundIconChange = () => {
+  const [volume, setVolume] = useState(0.5);
+  const [SoundBarWidth, setSoundBarWidth] = useState(50);
+
+  const handleVolume = (e) => {
+    // 設定音量
+    const currentVolume = e.target.value / 100;
+    setVolume(currentVolume);
+    audioEl.current.volume = currentVolume;
+
+    // 設定進度條寬度
+    setSoundBarWidth(currentVolume * 100);
+  };
+
+  const handleSoundIcon = () => {
     setIsMute(!isMute);
   };
 
+  useEffect(() => {
+    audioEl.current.volume = volume;
+
+    if (isMute) {
+      audioEl.current.volume = 0;
+    }
+
+    if (!isMute) {
+      audioEl.current.volume = volume;
+    }
+  }, [isMute, audioEl, volume]);
+
   return (
     <Sound>
-      {/* <SoundBar>
-        <SoundBarCurrent />
-        <SoundBarCircle />
-      </SoundBar> */}
-      <SoundIcon onClick={handleSoundIconChange}>
+      <SoundSlider>
+        <SoundBarCurrent
+          style={{
+            width: `${SoundBarWidth}%`,
+          }}
+        />
+        <SoundBar type="range" onChange={handleVolume} />
+      </SoundSlider>
+      <SoundIcon onClick={handleSoundIcon}>
         {isMute ? (
           <MuteControl>
             <Icon.Mute />

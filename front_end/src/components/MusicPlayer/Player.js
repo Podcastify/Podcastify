@@ -222,9 +222,9 @@ export default function MusicPlayer() {
   };
 
   const getCurrentTime = (e) => {
-    const Target = e.target;
-    const time = Target.currentTime;
-    const percent = ((time / Target.duration) * 100).toFixed(2);
+    const target = e.target;
+    const time = target.currentTime;
+    const percent = ((time / target.duration) * 100).toFixed(2);
 
     setPercentage(+percent);
     setCurrentTime(time.toFixed(2));
@@ -242,10 +242,11 @@ export default function MusicPlayer() {
         </PlaylistControl>
         <Audio
           src={src}
-          type="audio/mp3"
+          type="audio/mpeg"
           ref={audioEl}
           onTimeUpdate={getCurrentTime}
           onLoadedData={onLoadData}
+          preload="auto"
         />
         <Progress
           percentage={percentage}
@@ -260,7 +261,7 @@ export default function MusicPlayer() {
           </ChannelName>
         </Context>
         <Control isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
-        <Sound />
+        <Sound audioEl={audioEl} />
       </Player>
     </Container>
   );

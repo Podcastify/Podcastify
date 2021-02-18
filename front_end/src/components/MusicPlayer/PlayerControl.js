@@ -5,7 +5,6 @@ import {
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
   MEDIA_QUERY_LG,
-  MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
 
