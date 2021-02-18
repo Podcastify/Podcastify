@@ -208,9 +208,9 @@ const InfoCardPhoto = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 170px;
+    width: 150px;
     max-width: 100%;
-    height: 150px;
+    height: 130px;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -257,7 +257,7 @@ const InfoCardTitle = styled.h2`
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 75%;
+    width: 60%;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -288,6 +288,11 @@ const DeleteIcon = styled.div`
     left: -12px;
   }
 
+  ${MEDIA_QUERY_SM} {
+    top: -10px;
+    left: -10px;
+  }
+
   svg {
     width: 50px;
     height: 50px;
@@ -302,11 +307,23 @@ const DeleteIcon = styled.div`
       height: 30px;
     }
 
+    ${MEDIA_QUERY_MD} {
+      width: 25px;
+      height: 25px;
+    }
+
+    ${MEDIA_QUERY_SM} {
+      width: 25px;
+      height: 25px;
+    }
+
     ${MEDIA_QUERY_XS} {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       position: absolute;
-      top: 15px;
-      left: 15px;
+      top: 25px;
+      left: 25px;
     }
   }
 `;
