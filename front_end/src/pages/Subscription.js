@@ -131,18 +131,13 @@ const ChannelButton = styled.div`
   }
 `;
 
-const SearchItemWrapper = styled.div`
-  width: 98%;
+const ChannelItemWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   margin: 40px 0;
-  flex-grow: 1;
-
-  ${MEDIA_QUERY_XL} {
-    width: 100%;
-  }
 
   ${MEDIA_QUERY_MD} {
     margin: 40px 20px;
@@ -159,17 +154,17 @@ const SearchItemWrapper = styled.div`
 `;
 
 const InfoCardItem = styled.div`
-  /* width: 25vh; */
+  width: 28vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: fl;
-  margin-right: 40px;
+  justify-content: center;
+  margin-right: 50px;
   margin-bottom: 50px;
 
   ${MEDIA_QUERY_XL} {
-    /* width: 25vh; */
-    margin-right: 40px;
+    width: 26vh;
+    margin-left: 5px;
     margin-bottom: 40px;
   }
 
@@ -200,21 +195,22 @@ const InfoCardItem = styled.div`
 `;
 
 const InfoCardPhoto = styled.div`
+  position: relative;
   width: 240px;
   max-width: 100%;
   height: 220px;
   text-decoration: none;
 
   ${MEDIA_QUERY_XL} {
-    width: 200px;
+    width: 170px;
     max-width: 100%;
-    height: 180px;
+    height: 150px;
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 180px;
+    width: 170px;
     max-width: 100%;
-    height: 180px;
+    height: 150px;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -261,11 +257,11 @@ const InfoCardTitle = styled.h2`
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 80%;
+    width: 75%;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 80%;
+    width: 75%;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -282,9 +278,29 @@ const DeleteIcon = styled.div`
   top: -25px;
   left: -25px;
 
+  ${MEDIA_QUERY_XL} {
+    top: -13px;
+    left: -13px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    top: -12px;
+    left: -12px;
+  }
+
   svg {
     width: 50px;
     height: 50px;
+
+    ${MEDIA_QUERY_XL} {
+      width: 38px;
+      height: 38px;
+    }
+
+    ${MEDIA_QUERY_LG} {
+      width: 30px;
+      height: 30px;
+    }
 
     ${MEDIA_QUERY_XS} {
       border-radius: 50%;
@@ -308,7 +324,7 @@ export default function Subcription() {
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
                 <ChannelButton>管理我的頻道</ChannelButton>
               </ChannelTitleBlock>
-              <SearchItemWrapper>
+              <ChannelItemWrapper>
                 <InfoCardItem>
                   <InfoCardPhoto>
                     <img src={DemoImage} alt="" />
@@ -381,7 +397,7 @@ export default function Subcription() {
                   </InfoCardPhoto>
                   <InfoCardTitle>頻道名稱</InfoCardTitle>
                 </InfoCardItem>
-              </SearchItemWrapper>
+              </ChannelItemWrapper>
             </ChannelWrapper>
           </ChannelContainer>
         </Div>
