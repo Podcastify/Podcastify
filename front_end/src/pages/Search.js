@@ -5,7 +5,6 @@ import { Main, Div } from "../components/Main";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import MusicPlayer from "../components/MusicPlayer";
-import ErrorMessage from "../components/ErrorMessage";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -293,26 +292,21 @@ export default function Search() {
       if (data.length) {
         // console.log(podcast);
         setSearchPodcast(data);
-      } else {
-        setSearchPodcast("");
-        setError(true);
       }
+      return;
     });
     getSearchEpisode(keyword).then((podcast) => {
       let data = podcast.data.results;
       if (data.length) {
         setSearchEpisode(data);
-      } else {
-        setSearchEpisode("");
-        setError(true);
       }
+      return;
     });
   }, [keyword]);
 
   return (
     <Container>
       <Navbar />
-      {error ? <ErrorMessage /> : ""}
       <MainWrapper>
         <Div>
           <Sidebar />

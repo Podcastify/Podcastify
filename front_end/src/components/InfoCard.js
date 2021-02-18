@@ -99,33 +99,33 @@ const InfoCardPhoto = styled.div`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 200px;
+    width: 180px;
     max-width: 100%;
-    height: 180px;
+    height: 160px;
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 190px;
+    width: 130px;
     max-width: 100%;
-    height: 170px;
+    height: 110px;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 170px;
+    width: 130px;
     max-width: 100%;
-    height: 150px;
+    height: 110px;
   }
 
   ${MEDIA_QUERY_SM} {
-    width: 210px;
+    width: 160px;
     max-width: 100%;
-    height: 190px;
+    height: 140px;
   }
 
   ${MEDIA_QUERY_XS} {
-    width: 210px;
+    width: 200px;
     max-width: 100%;
-    height: 190px;
+    height: 180px;
   }
 `;
 
@@ -140,8 +140,16 @@ const InfoCardTitle = styled.h2`
   white-space: nowrap;
   text-overflow: ellipsis;
 
+  ${MEDIA_QUERY_LG} {
+    font-size: 18px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 16px;
+  }
+
   ${MEDIA_QUERY_SM} {
-    font-size: 25px;
+    font-size: 18px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -169,7 +177,7 @@ const InfoCardContent = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -177,7 +185,7 @@ const InfoCardContent = styled.div`
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -187,9 +195,9 @@ const InfoCardContent = styled.div`
 
 const breakPoints = [
   { width: 1, itemsToShow: 1, pagination: false },
-  { width: 380, itemsToShow: 2, pagination: false },
-  { width: 570, itemsToShow: 3, pagination: false },
-  { width: 850, itemsToShow: 4, pagination: false },
+  { width: 400, itemsToShow: 2, pagination: false },
+  { width: 500, itemsToShow: 3, pagination: false },
+  { width: 560, itemsToShow: 4, pagination: false },
 ];
 
 export default function InfoCard() {
@@ -201,7 +209,7 @@ export default function InfoCard() {
           <Carousel
             itemsToScroll={1}
             breakPoints={breakPoints}
-            itemPadding={[0, 10]}
+            itemPadding={[0, 8]}
             className="InfoCard"
           >
             <InfoCardWrapper>

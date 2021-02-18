@@ -121,11 +121,11 @@ const MagnifierControl = styled.div`
 export default function SearchBar() {
   const location = useLocation();
   const history = useHistory();
-  const [searchText, setSearchText] = useState("");
+  const [value, setValue] = useState("");
   const { userInfo } = useContext(UserContext);
 
   const handleInputChange = (e) => {
-    setSearchText(e.target.value);
+    setValue(e.target.value);
   };
 
   const handlePodcastSearch = (keyword) => {
@@ -134,18 +134,18 @@ export default function SearchBar() {
       // window.location.reload();
     }
     history.push(`/search/${keyword}`);
-    setSearchText("");
+    setValue("");
   };
 
   const handleEnterKeyPressed = (e) => {
-    if (e.key === "Enter" && searchText !== "") {
-      handlePodcastSearch(searchText);
+    if (e.key === "Enter" && value !== "") {
+      handlePodcastSearch(value);
     }
   };
 
   const handleButtonSubmit = () => {
-    if (searchText !== "") {
-      handlePodcastSearch(searchText);
+    if (value !== "") {
+      handlePodcastSearch(value);
     }
   };
 
@@ -153,14 +153,14 @@ export default function SearchBar() {
     <SearchBox>
       {userInfo ? (
         <SearchInput
+          value={value}
           type="text"
           placeholder="Search"
           onChange={handleInputChange}
           onKeyPress={handleEnterKeyPressed}
-          value={searchText}
         />
       ) : (
-        <SearchInput placeholder="Search" readOnly />
+        <SearchInput placeholder="Search" value={value} readOnly />
       )}
       <MagnifierControl onClick={handleButtonSubmit}>
         <Images.Magnifier />
