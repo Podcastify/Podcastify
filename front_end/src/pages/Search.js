@@ -118,6 +118,50 @@ const PodcastName = styled.span`
   }
 `;
 
+const InvalidKeyword = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme.white};
+  font-size: 30px;
+  line-height: 2;
+  letter-spacing: 2px;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 28px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 25px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 23px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+`;
+
+const FirstLine = styled.div``;
+const SecondLine = styled.div``;
+
 const SearchItemWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -283,7 +327,7 @@ export default function Search() {
   const { userInfo } = useContext(UserContext);
   const [searchPodcast, setSearchPodcast] = useState([]);
   const [searchEpisode, setSearchEpisode] = useState([]);
-  const [error, setError] = useState(false);
+  const [keywordInvalid, setKeywordInvalid] = useState(false);
   const { keyword } = useParams();
 
   useEffect(() => {
@@ -291,17 +335,23 @@ export default function Search() {
       let data = podcast.data.results;
       if (data.length) {
         // console.log(podcast);
+        setKeywordInvalid(false);
         setSearchPodcast(data);
+      } else {
+        setSearchPodcast("");
+        setKeywordInvalid(true);
       }
-      return;
     });
-    getSearchEpisode(keyword).then((podcast) => {
-      let data = podcast.data.results;
-      if (data.length) {
-        setSearchEpisode(data);
-      }
-      return;
-    });
+    // getSearchEpisode(keyword).then((podcast) => {
+    //   let data = podcast.data.results;
+    //   if (data.length) {
+    //     setKeywordInvalid(false);
+    //     setSearchEpisode(data);
+    //   } else {
+    //     setSearchPodcast("");
+    //     setKeywordInvalid(true);
+    //   }
+    // });
   }, [keyword]);
 
   return (
@@ -316,14 +366,22 @@ export default function Search() {
                 # 搜尋有關“<PodcastName>{keyword}</PodcastName>”的頻道
               </SearchPageTitle>
               <SearchItemWrapper>
-                {searchPodcast &&
+                {userInfo &&
+                  searchPodcast &&
                   searchPodcast.map((data) => (
                     <SearchList key={data.id} data={data} />
                   ))}
-                {searchEpisode &&
+                {/* {userInfo &&
+                  searchEpisode &&
                   searchEpisode.map((data) => (
                     <SearchList key={data.id} data={data} />
-                  ))}
+                  ))} */}
+                {keywordInvalid && (
+                  <InvalidKeyword>
+                    <FirstLine>找不到您要的資料</FirstLine>
+                    <SecondLine>請再輸入一次關鍵字</SecondLine>
+                  </InvalidKeyword>
+                )}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>
