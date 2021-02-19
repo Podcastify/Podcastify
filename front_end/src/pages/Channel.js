@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer";
+import MusicPlayer from "../components/MusicPlayer/Player";
 import ChannelSidebar from "../components/ChannelSidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";

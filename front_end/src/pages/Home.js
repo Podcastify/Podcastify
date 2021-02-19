@@ -1,7 +1,7 @@
 import InfoCard from "../components/InfoCard";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import MusicPlayer from "../components/MusicPlayer";
+import MusicPlayer from "../components/MusicPlayer/Player";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
