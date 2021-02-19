@@ -137,9 +137,15 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({ isPlaying, setIsPlaying }) {
+export default function PlayerControl({
+  isPlaying,
+  setIsPlaying,
+  currentEpisode,
+}) {
   const handlePlayPauseBtn = () => {
-    setIsPlaying(!isPlaying);
+    if (currentEpisode.length > 0) {
+      setIsPlaying(!isPlaying);
+    }
   };
 
   return (
