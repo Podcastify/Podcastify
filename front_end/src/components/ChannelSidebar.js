@@ -130,8 +130,12 @@ const InfoCardContent = styled.div`
   width: 89%;
   height: 60%;
 
+  ${MEDIA_QUERY_LG} {
+    width: 100%;
+  }
+
   ${MEDIA_QUERY_MD} {
-    width: 98%;
+    width: 100%;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -178,7 +182,6 @@ const InfoCardTitle = styled.h2`
   letter-spacing: 0.6px;
   text-decoration: none;
   width: 100%;
-  /* 資訊需完整提供 */
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
@@ -187,19 +190,17 @@ const InfoCardTitle = styled.h2`
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 22px;
+    font-size: 20px;
     margin: 20px 0px 30px 0px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 20px;
+    font-size: 22px;
     margin: 20px 0px 40px 0px;
   }
 
   ${MEDIA_QUERY_SM} {
-    /* font-size: 22px;
-    margin-top: 6px; */
-    font-size: 25px;
+    font-size: 22px;
     width: 180px;
     margin: 10px 0 10px 0;
   }
@@ -215,7 +216,7 @@ const InfoCardButton = styled.button`
   cursor: pointer;
   width: 140px;
   height: 60px;
-  font-size: 26.5px;
+  font-size: 25px;
   border: 2px solid ${(props) => props.theme.grey_opacity};
   color: ${(props) => props.theme.white};
   text-decoration: none;
@@ -242,24 +243,22 @@ const InfoCardButton = styled.button`
   ${MEDIA_QUERY_XL} {
     width: 120px;
     height: 50px;
-    font-size: 22px;
+    font-size: 20px;
   }
 
   ${MEDIA_QUERY_LG} {
     width: 90px;
     height: 45px;
-    font-size: 18px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 90px;
     height: 50px;
-    font-size: 18px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_SM} {
-    /* width: 80px;
-    margin-top: 0px; */
     width: 80px;
     height: 34px;
     font-size: 15px;
@@ -286,23 +285,22 @@ const InfoCardText = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 18px;
+    font-size: 17px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_XS} {
     font-size: 15px;
     margin: 0;
-    color: ${(props) => props.theme.white};
   }
 `;
 

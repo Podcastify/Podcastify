@@ -253,7 +253,6 @@ const Lists = styled.ul`
   color: ${(props) => props.theme.white};
   background-color: #333333;
   width: 100px;
-  font-size: 15px;
   z-index: 3;
 
   :after {
@@ -296,7 +295,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_SM} {
     margin-right: 6px;
     width: 120px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -318,7 +317,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_MD} {
     margin-right: 8px;
     width: 130px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -340,7 +339,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_LG} {
     margin-right: 12px;
     width: 150px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -362,7 +361,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_XL} {
     margin-right: 12px;
     width: 150px;
-    font-size: 15px;
+    font-size: 20px;
     border-radius: 10px;
 
     :after {
@@ -384,7 +383,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_XXL} {
     margin-right: 15px;
     width: 210px;
-    font-size: 26px;
+    font-size: 25px;
     border-radius: 15px;
 
     :after {

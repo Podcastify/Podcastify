@@ -15,10 +15,12 @@ const Control = styled.div`
 
   ${MEDIA_QUERY_SM} {
     margin-top: 15px;
+    width: 40%;
   }
 
   ${MEDIA_QUERY_XS} {
     margin-top: 15px;
+    width: 40%;
   }
 `;
 
@@ -137,9 +139,15 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({ isPlaying, setIsPlaying }) {
+export default function PlayerControl({
+  isPlaying,
+  setIsPlaying,
+  currentEpisode,
+}) {
   const handlePlayPauseBtn = () => {
-    setIsPlaying(!isPlaying);
+    if (currentEpisode.length > 0) {
+      setIsPlaying(!isPlaying);
+    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import Icon from "../Images";
 import {
@@ -12,9 +12,10 @@ import {
 import Progress from "./Progress";
 import Control from "./PlayerControl";
 import Sound from "./Sound";
+import { getEpisodeInfo } from "../../WebAPI/listenAPI";
+import { UserContext } from "../../context/context";
 
 const Container = styled.div`
-  // 以下為新增，MusicPlayer 固定在下方，並加上背景
   position: absolute;
   bottom: 0;
   right: 0;
@@ -38,8 +39,6 @@ const Player = styled.div`
     align-items: center;
     height: 14vh;
     width: fill-available;
-    display: flex;
-    justify-content: flex-start;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -49,8 +48,6 @@ const Player = styled.div`
     align-items: center;
     height: 14vh;
     width: fill-available;
-    display: flex;
-    justify-content: flex-start;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -144,7 +141,7 @@ const PlaylistControl = styled.div`
 
 const Audio = styled.audio``;
 
-const Context = styled.div`
+const Content = styled.div`
   width: calc(100% / 12 * 1.5);
   display: flex;
   flex-direction: column;
@@ -157,21 +154,18 @@ const Context = styled.div`
 
   ${MEDIA_QUERY_MD} {
     width: calc(100% / 12 * 2.5);
-    font-size: 16px;
     line-height: 1.2;
   }
 
   ${MEDIA_QUERY_SM} {
     width: calc(100% / 12 * 5);
     margin: 18px 40px 0 0;
-    font-size: 15px;
     line-height: 1.2;
   }
 
   ${MEDIA_QUERY_XS} {
     width: calc(100% / 12 * 4.5);
     margin: 18px 40px 0 0;
-    font-size: 15px;
     line-height: 1.2;
   }
 `;
@@ -182,15 +176,27 @@ const EpisodeName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   color: ${(props) => props.theme.white};
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 5px;
 
-  ${MEDIA_QUERY_XS} {
-    font-size: 10px;
+  ${MEDIA_QUERY_SM} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 19px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 21px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 23px;
   }
 
   ${MEDIA_QUERY_XXL} {
-    font-size: 26px;
+    font-size: 25px;
   }
 `;
 
@@ -202,6 +208,8 @@ const ChannelName = styled(EpisodeName)`
 export default function MusicPlayer() {
   const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
   const audioEl = useRef(null);
+  const { userPlaylists } = useContext(UserContext);
+  const [currentEpisode, setCurrentEpisode] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -215,10 +223,28 @@ export default function MusicPlayer() {
     }
   }, [isPlaying]);
 
+  useEffect(() => {
+    // getEpisodeInfo("ca396b35b9ab45a694e184b98309d515").then((episode) => {
+    //   const data = episode.data;
+    //   if (data) {
+    //     setCurrentEpisode({
+    //       id: data.id,
+    //       src: data.audio,
+    //       title: data.title,
+    //       channelTitle: data.podcast.title,
+    //       channelId: data.podcast.id,
+    //     });
+    //   }
+    //   console.log(currentEpisode.length);
+    // });
+  }, []);
+
   const onChange = (e) => {
     const audio = audioEl.current;
-    audio.currentTime = (audio.duration / 100) * e.target.value;
-    setPercentage(e.target.value);
+    if (audio.duration) {
+      audio.currentTime = (audio.duration / 100) * e.target.value;
+      setPercentage(e.target.value);
+    }
   };
 
   const getCurrentTime = (e) => {
@@ -241,7 +267,7 @@ export default function MusicPlayer() {
           <Icon.PlaylistBtn />
         </PlaylistControl>
         <Audio
-          src={src}
+          src={currentEpisode.src}
           type="audio/mpeg"
           ref={audioEl}
           onTimeUpdate={getCurrentTime}
@@ -254,13 +280,17 @@ export default function MusicPlayer() {
           duration={duration}
           currentTime={currentTime}
         />
-        <Context>
-          <EpisodeName>S2 EP35//咖啡廳，你你你你你你你你</EpisodeName>
-          <ChannelName>
-            喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!喂！今天聊什麼？Hey!
-          </ChannelName>
-        </Context>
-        <Control isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+        {currentEpisode.src && (
+          <Content>
+            <EpisodeName>{currentEpisode.title}</EpisodeName>
+            <ChannelName>{currentEpisode.channelTitle}</ChannelName>
+          </Content>
+        )}
+        <Control
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          currentEpisode={currentEpisode}
+        />
         <Sound audioEl={audioEl} />
       </Player>
     </Container>
