@@ -145,7 +145,7 @@ export default function PlayerControl({
   currentEpisode,
 }) {
   const handlePlayPauseBtn = () => {
-    if (currentEpisode.length > 0) {
+    if (currentEpisode.id) {
       setIsPlaying(!isPlaying);
     }
   };

@@ -188,15 +188,15 @@ export default function ProgressControl({
 
     // 取得小時
     let duration = seconds;
-    let hours = parseInt(duration / 3600, 10);
+    let hours = Math.floor(duration / 3600);
 
     // 取得分鐘
     duration = duration % 3600;
-    let mins = parseInt(duration / 60, 10);
+    let mins = Math.floor(duration / 60);
 
     // 取得秒數
     duration = duration % 60;
-    let secs = parseInt(duration, 10);
+    let secs = Math.floor(duration);
 
     if (secs < 10) {
       secs = `0${secs}`;
