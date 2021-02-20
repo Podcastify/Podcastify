@@ -5,6 +5,7 @@ import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
+import useUser from "../hooks/useUser";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -18,7 +19,6 @@ import {
   deleteEpisodeFromPlaylist,
   addPlaylist,
   getMyPlaylist,
-  
 } from "../WebAPI/me"
 
 const Container = styled.div`
@@ -664,6 +664,7 @@ const DeleteBtnControl = styled.div`
 `;
 
 export default function Playlist() {
+  const {userPlaylists} = useUser()
   return (
     <Container>
       <Navbar />
@@ -676,7 +677,7 @@ export default function Playlist() {
               <TitleWrapper>
                 <TitleText>
                   <PlaylistName>我的播放清單</PlaylistName>
-                  <Subtitle>播放列表，共 22 部單元</Subtitle>
+                  <Subtitle>播放列表，共 {userPlaylists ? userPlaylists[0].Episodes.length : ''} 部單元</Subtitle>
                 </TitleText>
                 <Buttons>
                   <PlaylistPlayBtnControl>
@@ -695,125 +696,28 @@ export default function Playlist() {
                 <ChannelNameHeader>頻道名稱</ChannelNameHeader>
               </TitleHeader>
               <Body>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                { userPlaylists ?
+                  userPlaylists[0].Episodes.map(el => (
+                    <Details>
+                    <Summary>
+                      <PlayBtnControl>
+                        <Images.PodcastPlayBtn />
+                      </PlayBtnControl>
+                      <Text>
+                        <EpisodeTitle>{el.id}</EpisodeTitle>
+                        <EpisodeDescription>
+                          夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
                       </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
+                        <ChannelName>社畜日記</ChannelName>
+                      </Text>
+                      <DeleteBtnControl>
+                        <Images.DeleteBtn />
+                      </DeleteBtnControl>
+                    </Summary>
+                  </Details>
+                  )
+                  ) : ''
+                }
               </Body>
             </PlayList>
           </PlaylistWrapper>

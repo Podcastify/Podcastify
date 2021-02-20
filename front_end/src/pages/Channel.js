@@ -14,7 +14,9 @@ import {
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
 import { getPodcastInfo } from "../WebAPI/listenAPI";
-import { useEffect, useState } from "react";
+import { addEpisodeToPlaylist } from "../WebAPI/me";
+import { useCallback, useEffect, useState } from "react";
+import useUser from "../hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -600,6 +602,13 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
+  const { userPlaylists } = useUser();
+  // console.log(userPlaylists[0].id, episodeInfo.id)
+  
+  const handleAddIconClick = async e => {
+    e.preventDefault();
+    // await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id)
+  }
 
   return (
     <Details open={isOpen} onClick={onToggle}>
@@ -625,9 +634,9 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
       <EpisodeDetails dangerouslySetInnerHTML={{__html:episodeInfo.description.replace({__html:episodeInfo.description})}}>
         
     </EpisodeDetails>
-      <AddToPlayList>
-        <AddControl>
-          <Images.AddToPlayListBtn />
+        <AddToPlayList>
+        <AddControl  onClick={handleAddIconClick}>
+            <Images.AddToPlayListBtn />
         </AddControl>
         <AddText>加入播放清單</AddText>
       </AddToPlayList>
@@ -649,6 +658,7 @@ export default function Channel() {
       })
   }, [podcastId])
 
+  
 
   return (
     <Container>

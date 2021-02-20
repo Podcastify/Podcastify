@@ -475,7 +475,7 @@ export default function Navbar() {
           <ListControl $isShow={isShowList}>
             <Lists>
               {userInfo ? (
-                <ListItem>會員您好</ListItem>
+                <ListItem>{userInfo.username} 您好</ListItem>
               ) : (
                 <ListItem>訪客您好</ListItem>
               )}

@@ -28,7 +28,12 @@ function App() {
     if (getAuthToken()) {
       getMyInfo().then((response) => {
         if (response.ok) {
-          setUserInfo(response.data);
+          const { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
+          console.log({ playlists, subscriptions, playedRecords, userInfo });
+          setUserInfo(userInfo);
+          setUserPlaylists(playlists);
+          setUserPlayedRecord(playedRecords);
+          setUserSubscription(subscriptions);
         }
       });
     }

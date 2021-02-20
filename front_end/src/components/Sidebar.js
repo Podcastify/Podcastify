@@ -8,6 +8,7 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import { SidebarContainer } from "./ChannelSidebar";
+import { Link } from "react-router-dom";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -208,7 +209,7 @@ const SidebarListContent = styled.div`
 export default function Sidebar() {
   return (
     <SidebarWrapper>
-      <SidebarTitle>我的播放清單</SidebarTitle>
+      <Link to="/myplaylist"><SidebarTitle>我的播放清單</SidebarTitle></Link>
       <SideListContainer>
         <SidebarListWrapper>
           <SidebarListLeft>
