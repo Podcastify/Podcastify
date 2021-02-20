@@ -132,21 +132,18 @@ const PlaylistName = styled.div`
 
   ${MEDIA_QUERY_XL} {
     font-size: 36px;
-    font-size: 46px;
   }
 
   ${MEDIA_QUERY_LG} {
     font-size: 30px;
-    font-size: 40px;
   }
 
   ${MEDIA_QUERY_MD} {
     font-size: 30px;
-    font-size: 34px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 24px;
+    font-size: 25px;
   }
 
   ${MEDIA_QUERY_XS} {
