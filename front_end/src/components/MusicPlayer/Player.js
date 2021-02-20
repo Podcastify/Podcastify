@@ -39,8 +39,6 @@ const Player = styled.div`
     align-items: center;
     height: 14vh;
     width: fill-available;
-    display: flex;
-    justify-content: flex-start;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -50,8 +48,6 @@ const Player = styled.div`
     align-items: center;
     height: 14vh;
     width: fill-available;
-    display: flex;
-    justify-content: flex-start;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -145,7 +141,7 @@ const PlaylistControl = styled.div`
 
 const Audio = styled.audio``;
 
-const Context = styled.div`
+const Content = styled.div`
   width: calc(100% / 12 * 1.5);
   display: flex;
   flex-direction: column;
@@ -158,21 +154,18 @@ const Context = styled.div`
 
   ${MEDIA_QUERY_MD} {
     width: calc(100% / 12 * 2.5);
-    font-size: 16px;
     line-height: 1.2;
   }
 
   ${MEDIA_QUERY_SM} {
     width: calc(100% / 12 * 5);
     margin: 18px 40px 0 0;
-    font-size: 15px;
     line-height: 1.2;
   }
 
   ${MEDIA_QUERY_XS} {
     width: calc(100% / 12 * 4.5);
     margin: 18px 40px 0 0;
-    font-size: 15px;
     line-height: 1.2;
   }
 `;
@@ -183,15 +176,27 @@ const EpisodeName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   color: ${(props) => props.theme.white};
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 5px;
 
-  ${MEDIA_QUERY_XS} {
-    font-size: 10px;
+  ${MEDIA_QUERY_SM} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 19px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 21px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 23px;
   }
 
   ${MEDIA_QUERY_XXL} {
-    font-size: 26px;
+    font-size: 25px;
   }
 `;
 
@@ -276,10 +281,10 @@ export default function MusicPlayer() {
           currentTime={currentTime}
         />
         {currentEpisode.src && (
-          <Context>
+          <Content>
             <EpisodeName>{currentEpisode.title}</EpisodeName>
             <ChannelName>{currentEpisode.channelTitle}</ChannelName>
-          </Context>
+          </Content>
         )}
         <Control
           isPlaying={isPlaying}

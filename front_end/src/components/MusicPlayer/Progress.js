@@ -35,7 +35,7 @@ const Progress = styled.div`
     left: 50%;
     transform: translateX(-50%);
     padding: 0;
-    width: calc(100% / 12 * 11.3);
+    width: 100%;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -44,7 +44,7 @@ const Progress = styled.div`
     left: 50%;
     transform: translateX(-50%);
     padding: 0;
-    width: calc(100% / 12 * 11.3);
+    width: 100%;
   }
 `;
 

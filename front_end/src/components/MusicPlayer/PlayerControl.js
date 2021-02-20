@@ -15,10 +15,12 @@ const Control = styled.div`
 
   ${MEDIA_QUERY_SM} {
     margin-top: 15px;
+    width: 40%;
   }
 
   ${MEDIA_QUERY_XS} {
     margin-top: 15px;
+    width: 40%;
   }
 `;
 

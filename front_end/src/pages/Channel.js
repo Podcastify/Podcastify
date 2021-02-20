@@ -301,7 +301,7 @@ const Text = styled.div`
   align-items: center;
   position: absolute;
   left: 107.5px;
-  font-size: 26px;
+  font-size: 25px;
   letter-spacing: 0.5px;
   line-height: 1.2;
   /* margin-left: 13.5px; */
@@ -315,7 +315,7 @@ const Text = styled.div`
 
   ${MEDIA_QUERY_LG} {
     left: 68.5px;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
