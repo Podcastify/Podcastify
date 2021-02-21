@@ -655,9 +655,6 @@ const ChannelName = styled(EpisodeTitle)`
 `;
 
 const DeleteBtnControl = styled.div`
-  position: absolute;
-  right: 20px;
-
   svg {
     display: none;
     width: 25px;
@@ -735,23 +732,6 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 
 export default function Playlist() {
   const { userPlaylists, setUserPlaylists } = useUser()
-  const { inputs, handlers } = useInputs(formInputs);
-  const handleAddPlaylist = async e => {
-    e.preventDefault();
-    const filters = ['name'];
-    const playlistInformation = {}
-    inputs.forEach(input => {
-      for (const filter of filters) {
-        if (filter === input.attributes.name) {
-          playlistInformation[filter] = input.attributes.value
-        }
-      }
-    })
-    await addPlaylist(playlistInformation.name);
-    let myPlaylists = await getAllMyPlaylists();
-    myPlaylists = myPlaylists.map(playlist => ({ ...playlist, playmode: false }));
-    setUserPlaylists(myPlaylists);
-  }
   
   return (
     <Container>
@@ -789,14 +769,12 @@ export default function Playlist() {
               <Body>
                 { userPlaylists.length > 0 ?
                   userPlaylists[0].Episodes.map(episodeInfo => (
-                    <EpisodeInfoDetails episodeInfo={episodeInfo} userPlaylists={userPlaylists}/>
-                  )
-                  ) : 
-                  <UserForm
-                    inputs={inputs}
-                    handlers={handlers}
-                    onSubmit={handleAddPlaylist}
-                  />
+                    <EpisodeInfoDetails
+                      episodeInfo={episodeInfo}
+                      userPlaylists={userPlaylists}
+                    />
+                  ))
+                  : ''
                 }
               </Body>
             </PlayList>
