@@ -9,6 +9,7 @@ import {
 } from "../constants/breakpoints";
 import { SidebarContainer } from "./ChannelSidebar";
 import { Link } from "react-router-dom";
+import useUser from "../hooks/useUser";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -207,130 +208,28 @@ const SidebarListContent = styled.div`
 `;
 
 export default function Sidebar() {
+  const { userPlaylists } = useUser();
   return (
     <SidebarWrapper>
       <Link to="/myplaylist"><SidebarTitle>我的播放清單</SidebarTitle></Link>
       <SideListContainer>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
+        {userPlaylists.length > 0 ?
+          userPlaylists[0].Episodes.map(el => 
+            <SidebarListWrapper>
+            <SidebarListLeft>
+              <SidebarListTitle>{el.id}</SidebarListTitle>
+              <SidebarListContent></SidebarListContent>
+            </SidebarListLeft>
+            <SidebarListRight>
+              <PlaylistPlayBtnControl>
+                <Icon.PlaylistPlayButton />
+              </PlaylistPlayBtnControl>
+              {/* <Icon.PlaylistPauseButton /> */}
+            </SidebarListRight>
+          </SidebarListWrapper>
+          )
+          : '新增您的第一個播放清單'
+        }
       </SideListContainer>
     </SidebarWrapper>
   );

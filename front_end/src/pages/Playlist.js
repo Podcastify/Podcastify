@@ -677,7 +677,7 @@ export default function Playlist() {
               <TitleWrapper>
                 <TitleText>
                   <PlaylistName>我的播放清單</PlaylistName>
-                  <Subtitle>播放列表，共 {userPlaylists ? userPlaylists[0].Episodes.length : ''} 部單元</Subtitle>
+                  <Subtitle>播放列表，共 {userPlaylists.length > 0 ? userPlaylists[0].Episodes.length : ''} 部單元</Subtitle>
                 </TitleText>
                 <Buttons>
                   <PlaylistPlayBtnControl>
@@ -696,7 +696,7 @@ export default function Playlist() {
                 <ChannelNameHeader>頻道名稱</ChannelNameHeader>
               </TitleHeader>
               <Body>
-                { userPlaylists ?
+                { userPlaylists.length > 0 ?
                   userPlaylists[0].Episodes.map(el => (
                     <Details>
                     <Summary>

@@ -3,6 +3,7 @@ import MusicPlayer from "../components/MusicPlayer";
 import ChannelSidebar from "../components/ChannelSidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import {
@@ -597,6 +598,7 @@ const CollapseControl = styled.div`
 `;
 
 function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
+  const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const onToggle = (e) => {
     e.preventDefault();
@@ -605,9 +607,17 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const { userPlaylists } = useUser();
   // console.log(userPlaylists[0].id, episodeInfo.id)
   
+  const addEpisode = useCallback(async () => {
+    if (!userPlaylists[0]) {
+      alert('please add an playlist first');
+      history.push('/myplaylist');
+    }
+    await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
+  }, [userPlaylists, episodeInfo])
+  
   const handleAddIconClick = async e => {
     e.preventDefault();
-    // await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id)
+    addEpisode();
   }
 
   return (
@@ -623,7 +633,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
         <ChannelName>{podcastInfo.title}</ChannelName>
       </Text>
       <AddToPlayListControl>
-        <Images.AddToPlayListBtn />
+        <Images.AddToPlayListBtn onClick={handleAddIconClick}/>
       </AddToPlayListControl>
     </Summary>
     <DetailsBlock>
@@ -635,7 +645,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
         
     </EpisodeDetails>
         <AddToPlayList>
-        <AddControl  onClick={handleAddIconClick}>
+        <AddControl>
             <Images.AddToPlayListBtn />
         </AddControl>
         <AddText>加入播放清單</AddText>
