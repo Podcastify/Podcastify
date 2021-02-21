@@ -5,6 +5,7 @@ import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
+import { useCallback } from "react";
 import useUser from "../hooks/useUser";
 import {
   MEDIA_QUERY_XS,
@@ -663,6 +664,47 @@ const DeleteBtnControl = styled.div`
   }
 `;
 
+function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
+  const {setUserPlaylists} = useUser()
+  const deleteEpisode = useCallback(async () => {
+    await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id)
+    const newPlaylist = userPlaylists.map(playlist => {
+      let { Episodes, ...rest } = playlist;
+      Episodes = Episodes.filter(ep => ep.id !== episodeInfo.id);
+      return { Episodes, ...rest };
+    })
+    console.log(newPlaylist);
+    setUserPlaylists(newPlaylist);
+    
+  }, [userPlaylists, episodeInfo, setUserPlaylists])
+  
+  const handleDeleteIconClick = async e => {
+    e.preventDefault();
+    deleteEpisode();
+  }
+
+  return (
+    <Details>
+      <Summary>
+        <PlayBtnControl>
+          <Images.PodcastPlayBtn />
+        </PlayBtnControl>
+        <Text>
+          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+          <EpisodeDescription
+            dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
+          >
+        </EpisodeDescription>
+            <ChannelName>{episodeInfo.podcast.title}</ChannelName>
+        </Text>
+        <DeleteBtnControl onClick={handleDeleteIconClick}>
+          <Images.DeleteBtn />
+        </DeleteBtnControl>
+      </Summary>
+    </Details>
+  )
+}
+
 export default function Playlist() {
   const {userPlaylists} = useUser()
   return (
@@ -698,23 +740,7 @@ export default function Playlist() {
               <Body>
                 { userPlaylists.length > 0 ?
                   userPlaylists[0].Episodes.map(episodeInfo => (
-                    <Details>
-                    <Summary>
-                      <PlayBtnControl>
-                        <Images.PodcastPlayBtn />
-                      </PlayBtnControl>
-                      <Text>
-                        <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
-                        <EpisodeDescription dangerouslySetInnerHTML={{__html:episodeInfo.description.replace(/<[^>]+>/g, '')}}>
-                          {/* {episodeInfo.description} */}
-                      </EpisodeDescription>
-                          <ChannelName>{episodeInfo.podcast.title}</ChannelName>
-                      </Text>
-                      <DeleteBtnControl>
-                        <Images.DeleteBtn />
-                      </DeleteBtnControl>
-                    </Summary>
-                  </Details>
+                    <EpisodeInfoDetails episodeInfo={episodeInfo} userPlaylists={userPlaylists}/>
                   )
                   ) : ''
                 }

@@ -219,11 +219,11 @@ export default function Sidebar() {
         {userInfo ?
           userPlaylists.length > 0 ?
           userPlaylists[0].Episodes.map(episodeInfo => 
-            <SidebarListWrapper>
+            <SidebarListWrapper key={episodeInfo.id}>
             <SidebarListLeft>
               <SidebarListTitle>{episodeInfo.title}</SidebarListTitle>
                 <SidebarListContent
-                  dangerouslySetInnerHTML={{ __html: episodeInfo.description.replace(/<[^>]+>/g, '') }}
+                  dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
                 >
                   {/* {episodeInfo.description} */}
                 </SidebarListContent>

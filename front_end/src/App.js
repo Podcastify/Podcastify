@@ -30,7 +30,6 @@ function App() {
         const response = await getMyInfo()
         if (response.ok) {
           let { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
-          const test = [];
           for (let i = 0; i < playlists.length; i++) {
             let { Episodes, ...rest } = playlists[i];
             Episodes = await Promise.all(Episodes.map(async ep => {
@@ -39,7 +38,6 @@ function App() {
             }))
             playlists[i] = ({ Episodes, ...rest });
           }
-            console.log({ test });
             setUserInfo(userInfo);
             setUserPlaylists(playlists);
             setUserPlayedRecord(playedRecords);

@@ -14,7 +14,7 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { getPodcastInfo } from "../WebAPI/listenAPI";
+import { getPodcastInfo, getEpisodeInfo } from "../WebAPI/listenAPI";
 import { addEpisodeToPlaylist } from "../WebAPI/me";
 import { useCallback, useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
@@ -604,8 +604,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
-  const { userPlaylists } = useUser();
-  // console.log(userPlaylists[0].id, episodeInfo.id)
+  const { userPlaylists, setUserPlaylists } = useUser();
   
   const addEpisode = useCallback(async () => {
     if (!userPlaylists[0]) {
@@ -613,7 +612,21 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
       history.push('/myplaylist');
     }
     await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
-  }, [userPlaylists, episodeInfo])
+    console.log({userPlaylists})
+    const response = await getEpisodeInfo(episodeInfo.id);
+    const newEpisode = response.data;
+    console.log({ newEpisode });
+    const newPlaylist = userPlaylists.map(
+      playlist => {
+        if (playlist.id !== userPlaylists[0].id) return playlist;
+        let { Episodes, ...rest } = playlist;
+        Episodes = [...Episodes, newEpisode];
+        return { Episodes, ...rest };
+      }
+    )
+    console.log({ newPlaylist });
+    setUserPlaylists(newPlaylist);
+  }, [userPlaylists, episodeInfo, history])
   
   const handleAddIconClick = async e => {
     e.preventDefault();
