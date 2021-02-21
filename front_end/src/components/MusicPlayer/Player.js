@@ -1,4 +1,3 @@
-import { useRef, useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import Icon from "../Images";
 import {
@@ -12,8 +11,8 @@ import {
 import Progress from "./Progress";
 import Control from "./PlayerControl";
 import Sound from "./Sound";
-import { getEpisodeInfo } from "../../WebAPI/listenAPI";
-import { UserContext } from "../../context/context";
+import useBeforeUnload from "../../hooks/useBeforeUnload";
+import useMusicPlayer from "../../hooks/useMusicPlayer";
 
 const Container = styled.div`
   position: absolute;
@@ -184,15 +183,15 @@ const EpisodeName = styled.div`
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 19px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 21px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_XL} {
-    font-size: 23px;
+    font-size: 20px;
   }
 
   ${MEDIA_QUERY_XXL} {
@@ -207,58 +206,19 @@ const ChannelName = styled(EpisodeName)`
 
 export default function MusicPlayer() {
   const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-  const audioEl = useRef(null);
-  const { userPlaylists } = useContext(UserContext);
-  const [currentEpisode, setCurrentEpisode] = useState([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [percentage, setPercentage] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    if (isPlaying) {
-      audioEl.current.play();
-    } else {
-      audioEl.current.pause();
-    }
-  }, [isPlaying]);
-
-  useEffect(() => {
-    // getEpisodeInfo("ca396b35b9ab45a694e184b98309d515").then((episode) => {
-    //   const data = episode.data;
-    //   if (data) {
-    //     setCurrentEpisode({
-    //       id: data.id,
-    //       src: data.audio,
-    //       title: data.title,
-    //       channelTitle: data.podcast.title,
-    //       channelId: data.podcast.id,
-    //     });
-    //   }
-    //   console.log(currentEpisode.length);
-    // });
-  }, []);
-
-  const onChange = (e) => {
-    const audio = audioEl.current;
-    if (audio.duration) {
-      audio.currentTime = (audio.duration / 100) * e.target.value;
-      setPercentage(e.target.value);
-    }
-  };
-
-  const getCurrentTime = (e) => {
-    const target = e.target;
-    const time = target.currentTime;
-    const percent = ((time / target.duration) * 100).toFixed(2);
-
-    setPercentage(+percent);
-    setCurrentTime(time.toFixed(2));
-  };
-
-  const onLoadData = () => {
-    setDuration(audioEl.current.duration.toFixed(2));
-  };
+  const {
+    audioEl,
+    getCurrentTime,
+    onLoadData,
+    percentage,
+    onChange,
+    duration,
+    currentTime,
+    currentEpisode,
+    isPlaying,
+    setIsPlaying,
+  } = useMusicPlayer();
+  useBeforeUnload(audioEl, currentEpisode);
 
   return (
     <Container>
@@ -267,7 +227,7 @@ export default function MusicPlayer() {
           <Icon.PlaylistBtn />
         </PlaylistControl>
         <Audio
-          src={currentEpisode.src}
+          src={src}
           type="audio/mpeg"
           ref={audioEl}
           onTimeUpdate={getCurrentTime}
