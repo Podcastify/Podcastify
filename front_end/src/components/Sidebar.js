@@ -10,8 +10,10 @@ import {
 import { SidebarContainer } from "./ChannelSidebar";
 import { Link } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import useInputs from "../hooks/useInputs";
 import { addPlaylist } from "../WebAPI/me";
 import { useState } from "react";
+import UserForm from "../components/UserForm";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -209,11 +211,52 @@ const SidebarListContent = styled.div`
   line-height: 1.5;
 `;
 
+const formInputs = [
+  {
+    attributes: {
+      type: "text",
+      name: "name",
+      id: "name",
+      placeholder: "播放清單名稱",
+      value: "",
+      required: true,
+    },
+    title: "名稱",
+    errorMessage: "",
+  },
+  {
+    attributes: {
+      type: "submit",
+      name: "add",
+      id: "add",
+      value: "新增",
+      required: true,
+    },
+    title: "",
+    errorMessage: ""
+
+  }
+]
+
 export default function Sidebar() {
   const { userPlaylists, userInfo } = useUser();
   const [playlistName, setPlaylistName] = useState();
+  const { inputs, handlers } = useInputs(formInputs)
+  const handleAddPlaylist = async e => {
+    e.preventDefault();
+    const filters = ['name'];
+    const playlistInformation = {}
+    inputs.forEach(input => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          playlistInformation[filter] = input.attributes.value
+        }
+      }
+    })
+    console.log({ playlistInformation })
+  }
 
-  
+
   return (
     <SidebarWrapper>
       {userInfo
@@ -226,29 +269,34 @@ export default function Sidebar() {
       <SideListContainer>
         {userInfo ?
           userPlaylists.length > 0 ?
-          userPlaylists[0].Episodes.map(episodeInfo => 
-            <SidebarListWrapper key={episodeInfo.id}>
-            <SidebarListLeft>
-              <SidebarListTitle>{episodeInfo.title}</SidebarListTitle>
-                <SidebarListContent
-                  dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
-                >
-                </SidebarListContent>
-            </SidebarListLeft>
-            <SidebarListRight>
-              <PlaylistPlayBtnControl>
-                <Icon.PlaylistPlayButton />
-              </PlaylistPlayBtnControl>
-            </SidebarListRight>
-          </SidebarListWrapper>
-          )
+            userPlaylists[0].Episodes.map(episodeInfo =>
+              <SidebarListWrapper key={episodeInfo.id}>
+                <SidebarListLeft>
+                  <SidebarListTitle>{episodeInfo.title}</SidebarListTitle>
+                  <SidebarListContent
+                    dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
+                  >
+                  </SidebarListContent>
+                </SidebarListLeft>
+                <SidebarListRight>
+                  <PlaylistPlayBtnControl>
+                    <Icon.PlaylistPlayButton />
+                  </PlaylistPlayBtnControl>
+                </SidebarListRight>
+              </SidebarListWrapper>
+            )
             :
-              <div>
-                新增您的第一個播放清單
-              </div>
+            <div>
+              新增您的第一個播放清單
+                <UserForm
+                inputs={inputs}
+                handlers={handlers}
+                onSubmit={handleAddPlaylist}
+              />
+            </div>
 
-              : '請先登入'
-              }
+          : '請先登入'
+        }
       </SideListContainer>
     </SidebarWrapper>
   );
