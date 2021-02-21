@@ -10,6 +10,8 @@ import {
 import { SidebarContainer } from "./ChannelSidebar";
 import { Link } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import { addPlaylist } from "../WebAPI/me";
+import { useState } from "react";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -209,10 +211,16 @@ const SidebarListContent = styled.div`
 
 export default function Sidebar() {
   const { userPlaylists, userInfo } = useUser();
+  const [playlistName, setPlaylistName] = useState();
+
+  
   return (
     <SidebarWrapper>
       {userInfo
-        ? <Link to="/myplaylist"><SidebarTitle>我的播放清單</SidebarTitle></Link>
+        ? <Link to="/myplaylist">
+          <SidebarTitle>
+            {userPlaylists.length > 0 ? userPlaylists[0].name : "我的播放清單"}
+          </SidebarTitle></Link>
         : <SidebarTitle>我的播放清單</SidebarTitle>
       }
       <SideListContainer>
@@ -225,20 +233,22 @@ export default function Sidebar() {
                 <SidebarListContent
                   dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
                 >
-                  {/* {episodeInfo.description} */}
                 </SidebarListContent>
             </SidebarListLeft>
             <SidebarListRight>
               <PlaylistPlayBtnControl>
                 <Icon.PlaylistPlayButton />
               </PlaylistPlayBtnControl>
-              {/* <Icon.PlaylistPauseButton /> */}
             </SidebarListRight>
           </SidebarListWrapper>
           )
-            : '新增您的第一個播放清單'
-          : '請先登入'
-        }
+            :
+              <div>
+                新增您的第一個播放清單
+              </div>
+
+              : '請先登入'
+              }
       </SideListContainer>
     </SidebarWrapper>
   );
