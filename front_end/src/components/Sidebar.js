@@ -208,17 +208,25 @@ const SidebarListContent = styled.div`
 `;
 
 export default function Sidebar() {
-  const { userPlaylists } = useUser();
+  const { userPlaylists, userInfo } = useUser();
   return (
     <SidebarWrapper>
-      <Link to="/myplaylist"><SidebarTitle>我的播放清單</SidebarTitle></Link>
+      {userInfo
+        ? <Link to="/myplaylist"><SidebarTitle>我的播放清單</SidebarTitle></Link>
+        : <SidebarTitle>我的播放清單</SidebarTitle>
+      }
       <SideListContainer>
-        {userPlaylists.length > 0 ?
-          userPlaylists[0].Episodes.map(el => 
+        {userInfo ?
+          userPlaylists.length > 0 ?
+          userPlaylists[0].Episodes.map(episodeInfo => 
             <SidebarListWrapper>
             <SidebarListLeft>
-              <SidebarListTitle>{el.id}</SidebarListTitle>
-              <SidebarListContent></SidebarListContent>
+              <SidebarListTitle>{episodeInfo.title}</SidebarListTitle>
+                <SidebarListContent
+                  dangerouslySetInnerHTML={{ __html: episodeInfo.description.replace(/<[^>]+>/g, '') }}
+                >
+                  {/* {episodeInfo.description} */}
+                </SidebarListContent>
             </SidebarListLeft>
             <SidebarListRight>
               <PlaylistPlayBtnControl>
@@ -228,7 +236,8 @@ export default function Sidebar() {
             </SidebarListRight>
           </SidebarListWrapper>
           )
-          : '新增您的第一個播放清單'
+            : '新增您的第一個播放清單'
+          : '請先登入'
         }
       </SideListContainer>
     </SidebarWrapper>

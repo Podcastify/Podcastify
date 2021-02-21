@@ -697,18 +697,18 @@ export default function Playlist() {
               </TitleHeader>
               <Body>
                 { userPlaylists.length > 0 ?
-                  userPlaylists[0].Episodes.map(el => (
+                  userPlaylists[0].Episodes.map(episodeInfo => (
                     <Details>
                     <Summary>
                       <PlayBtnControl>
                         <Images.PodcastPlayBtn />
                       </PlayBtnControl>
                       <Text>
-                        <EpisodeTitle>{el.id}</EpisodeTitle>
-                        <EpisodeDescription>
-                          夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
+                        <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+                        <EpisodeDescription dangerouslySetInnerHTML={{__html:episodeInfo.description.replace(/<[^>]+>/g, '')}}>
+                          {/* {episodeInfo.description} */}
                       </EpisodeDescription>
-                        <ChannelName>社畜日記</ChannelName>
+                          <ChannelName>{episodeInfo.podcast.title}</ChannelName>
                       </Text>
                       <DeleteBtnControl>
                         <Images.DeleteBtn />

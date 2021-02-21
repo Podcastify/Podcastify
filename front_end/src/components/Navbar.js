@@ -442,7 +442,12 @@ const ListItem = styled(Link)`
 
 export default function Navbar() {
   const [isShowList, setIsShowList] = useState(false);
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const {
+    userInfo,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord,} = useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
 
@@ -453,6 +458,9 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("podcastifyToken");
     setUserInfo(null);
+    setUserSubscription([]);
+    setUserPlayedRecord([]);
+    setUserPlaylists([]);
     if (location.pathname !== "/") {
       history.push("/");
     }
