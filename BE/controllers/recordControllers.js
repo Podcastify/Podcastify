@@ -34,6 +34,15 @@ const writeRecord = async (req, res, next) => {
   const { progress } = req.body;
   let record;
   try {
+    await Episodes.create(
+      {
+        id: episodeId
+      }
+    )
+  } catch (err) {
+
+  }
+  try {
     record = await Records.findOne({
       where: {
         userId,
