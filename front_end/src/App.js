@@ -36,7 +36,7 @@ function App() {
               const episodeInfo = await getEpisodeInfo(ep.id);
               return episodeInfo.data;
             }))
-            playlists[i] = ({ Episodes, ...rest });
+            playlists[i] = ({ Episodes, ...rest, playmode: false });
           }
             setUserInfo(userInfo);
             setUserPlaylists(playlists);

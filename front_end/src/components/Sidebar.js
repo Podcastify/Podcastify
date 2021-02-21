@@ -11,7 +11,7 @@ import { SidebarContainer } from "./ChannelSidebar";
 import { Link } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import useInputs from "../hooks/useInputs";
-import { addPlaylist } from "../WebAPI/me";
+import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
 import { useState } from "react";
 import UserForm from "../components/UserForm";
 
@@ -221,7 +221,7 @@ const formInputs = [
       value: "",
       required: true,
     },
-    title: "名稱",
+    title: "",
     errorMessage: "",
   },
   {
@@ -239,8 +239,7 @@ const formInputs = [
 ]
 
 export default function Sidebar() {
-  const { userPlaylists, userInfo } = useUser();
-  const [playlistName, setPlaylistName] = useState();
+  const { userPlaylists, userInfo, setUserPlaylists } = useUser();
   const { inputs, handlers } = useInputs(formInputs)
   const handleAddPlaylist = async e => {
     e.preventDefault();
@@ -253,7 +252,10 @@ export default function Sidebar() {
         }
       }
     })
-    console.log({ playlistInformation })
+    await addPlaylist(playlistInformation.name);
+    let myPlaylists = await getAllMyPlaylists();
+    myPlaylists = myPlaylists.map(playlist => ({ ...playlist, playmode: false }));
+    setUserPlaylists(myPlaylists);
   }
 
 
@@ -262,9 +264,9 @@ export default function Sidebar() {
       {userInfo
         ? <Link to="/myplaylist">
           <SidebarTitle>
-            {userPlaylists.length > 0 ? userPlaylists[0].name : "我的播放清單"}
+            {userPlaylists.length > 0 ? userPlaylists[0].name : "新增播放清單"}
           </SidebarTitle></Link>
-        : <SidebarTitle>我的播放清單</SidebarTitle>
+        : <SidebarTitle>請先登入</SidebarTitle>
       }
       <SideListContainer>
         {userInfo ?
@@ -287,15 +289,13 @@ export default function Sidebar() {
             )
             :
             <div>
-              新增您的第一個播放清單
                 <UserForm
                 inputs={inputs}
                 handlers={handlers}
                 onSubmit={handleAddPlaylist}
               />
             </div>
-
-          : '請先登入'
+          : ""
         }
       </SideListContainer>
     </SidebarWrapper>

@@ -7,6 +7,7 @@ import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
 import { useCallback } from "react";
 import useUser from "../hooks/useUser";
+import useInputs from "../hooks/useInputs";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -15,11 +16,11 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
+import UserForm from "../components/UserForm";
 import {
-  addEpisodeToPlaylist,
   deleteEpisodeFromPlaylist,
   addPlaylist,
-  getMyPlaylist,
+  getAllMyPlaylists,
 } from "../WebAPI/me"
 
 const Container = styled.div`
@@ -664,6 +665,33 @@ const DeleteBtnControl = styled.div`
   }
 `;
 
+const formInputs = [
+  {
+    attributes: {
+      type: "text",
+      name: "name",
+      id: "name",
+      placeholder: "播放清單名稱",
+      value: "",
+      required: true,
+    },
+    title: "",
+    errorMessage: "",
+  },
+  {
+    attributes: {
+      type: "submit",
+      name: "add",
+      id: "add",
+      value: "新增",
+      required: true,
+    },
+    title: "",
+    errorMessage: ""
+
+  }
+]
+
 function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
   const {setUserPlaylists} = useUser()
   const deleteEpisode = useCallback(async () => {
@@ -706,7 +734,25 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 }
 
 export default function Playlist() {
-  const {userPlaylists} = useUser()
+  const { userPlaylists, setUserPlaylists } = useUser()
+  const { inputs, handlers } = useInputs(formInputs);
+  const handleAddPlaylist = async e => {
+    e.preventDefault();
+    const filters = ['name'];
+    const playlistInformation = {}
+    inputs.forEach(input => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          playlistInformation[filter] = input.attributes.value
+        }
+      }
+    })
+    await addPlaylist(playlistInformation.name);
+    let myPlaylists = await getAllMyPlaylists();
+    myPlaylists = myPlaylists.map(playlist => ({ ...playlist, playmode: false }));
+    setUserPlaylists(myPlaylists);
+  }
+  
   return (
     <Container>
       <Navbar />
@@ -719,7 +765,7 @@ export default function Playlist() {
               <TitleWrapper>
                 <TitleText>
                   <PlaylistName>我的播放清單</PlaylistName>
-                  <Subtitle>播放列表，共 {userPlaylists.length > 0 ? userPlaylists[0].Episodes.length : ''} 部單元</Subtitle>
+                  <Subtitle>{userPlaylists.length > 0 ? userPlaylists[0].name : "播放列表"}，共 {userPlaylists.length > 0 ? userPlaylists[0].Episodes.length : ''} 部單元</Subtitle>
                 </TitleText>
                 <Buttons>
                   <PlaylistPlayBtnControl>
@@ -732,17 +778,25 @@ export default function Playlist() {
               </TitleWrapper>
             </PlaylistHeader>
             <PlayList>
-              <TitleHeader>
-                <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-                <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
-                <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-              </TitleHeader>
+              {
+                userPlaylists.length > 0 &&
+                <TitleHeader>
+                  <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+                  <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
+                  <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+                </TitleHeader>
+              }
               <Body>
                 { userPlaylists.length > 0 ?
                   userPlaylists[0].Episodes.map(episodeInfo => (
                     <EpisodeInfoDetails episodeInfo={episodeInfo} userPlaylists={userPlaylists}/>
                   )
-                  ) : ''
+                  ) : 
+                  <UserForm
+                    inputs={inputs}
+                    handlers={handlers}
+                    onSubmit={handleAddPlaylist}
+                  />
                 }
               </Body>
             </PlayList>
