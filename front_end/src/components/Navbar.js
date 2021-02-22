@@ -477,7 +477,12 @@ const ListItem = styled(Link)`
 
 export default function Navbar() {
   const [isShowList, setIsShowList] = useState(false);
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const {
+    userInfo,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord,} = useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
 
@@ -488,6 +493,12 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("podcastifyToken");
     setUserInfo(null);
+    setUserSubscription([]);
+    setUserPlayedRecord([]);
+    setUserPlaylists([]);
+    if (location.pathname !== "/") {
+      history.push("/");
+    }
   };
 
   return (
@@ -507,7 +518,7 @@ export default function Navbar() {
           <ListControl $isShow={isShowList}>
             <Lists>
               {userInfo ? (
-                <ListTitle>會員您好</ListTitle>
+                <ListItem>{userInfo.username} 您好</ListItem>
               ) : (
                 <ListTitle>訪客您好</ListTitle>
               )}
