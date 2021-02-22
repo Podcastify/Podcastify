@@ -10,7 +10,7 @@ import GlobalStyle from "./constants/globalStyle";
 import { theme } from "./constants/theme";
 import { getAuthToken } from "./utils";
 import { getMyInfo } from "./WebAPI/me";
-
+import { getEpisodeInfo } from "./WebAPI/listenAPI";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
@@ -22,20 +22,34 @@ import UserManagement from "./pages/UserManagement";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
-  const [userSubscription, setUserSubscription] = useState(null);
-  const [userPlaylists, setUserPlaylists] = useState(null);
-  const [userPlayedRecord, setUserPlayedRecord] = useState(null);
+  const [userSubscription, setUserSubscription] = useState([]);
+  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [userPlayedRecord, setUserPlayedRecord] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [Alert, setAlert] = useState(false);
 
   useEffect(() => {
-    if (getAuthToken()) {
-      getMyInfo().then((response) => {
+    async function getUser() {
+      if (getAuthToken()) {
+        const response = await getMyInfo()
         if (response.ok) {
-          setUserInfo(response.data);
-        }
-      });
+          let { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
+          for (let i = 0; i < playlists.length; i++) {
+            let { Episodes, ...rest } = playlists[i];
+            Episodes = await Promise.all(Episodes.map(async ep => {
+              const episodeInfo = await getEpisodeInfo(ep.id);
+              return episodeInfo.data;
+            }))
+            playlists[i] = ({ Episodes, ...rest, playmode: false });
+          }
+            setUserInfo(userInfo);
+            setUserPlaylists(playlists);
+            setUserPlayedRecord(playedRecords);
+            setUserSubscription(subscriptions);
+          };
+      }
     }
+    getUser()
     /* 
       在這邊把會員的訂閱等資訊放入 state 中
       拿到的資料可以用 destructure 寫成下面這樣
