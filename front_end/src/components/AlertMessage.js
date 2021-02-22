@@ -10,31 +10,20 @@ import {
 } from "../constants/breakpoints";
 
 const ErrorContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(55, 55, 55, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-`;
-
-const ErrorWrapper = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 40vw;
   height: 35vh;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #333333;
   border-radius: 30px;
+  z-index: 10;
+  box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
 
   ${MEDIA_QUERY_XL} {
     height: 38vh;
@@ -59,8 +48,54 @@ const ErrorWrapper = styled.div`
   }
 `;
 
-const ErrorControl = styled.div`
+const CloseBtnControl = styled.div`
   cursor: pointer;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  svg {
+    width: 46px;
+    height: 46px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    svg {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  ${MEDIA_QUERY_MD} {
+    svg {
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  ${MEDIA_QUERY_SM} {
+    svg {
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  ${MEDIA_QUERY_XS} {
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+`;
+
+const ErrorControl = styled.div`
   svg {
     width: 84px;
     height: 84px;
@@ -110,7 +145,7 @@ const ErrorControl = styled.div`
   }
 `;
 
-const Text = styled.div`
+const ErrorBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,7 +153,6 @@ const Text = styled.div`
   font-size: 30px;
   line-height: 2;
   letter-spacing: 2px;
-  margin-top: 50px;
 
   ${MEDIA_QUERY_XL} {
     font-size: 28px;
@@ -149,18 +183,27 @@ const Text = styled.div`
 const FirstLine = styled.div``;
 const SecondLine = styled.div``;
 
-export default function ErrorMessage() {
+export default function AlertMessage() {
+  const [showAlert, setShowAlert] = useState(true);
+
+  const handleClosedButton = () => {
+    setShowAlert(false);
+  };
+
   return (
-    <ErrorContainer>
-      <ErrorWrapper>
-        <ErrorControl>
+    showAlert && (
+      <ErrorContainer>
+        <CloseBtnControl onClick={handleClosedButton}>
           <Images.Error />
-        </ErrorControl>
-        <Text>
-          <FirstLine>查無資料</FirstLine>
-          <SecondLine>請再輸入其他關鍵字</SecondLine>
-        </Text>
-      </ErrorWrapper>
-    </ErrorContainer>
+        </CloseBtnControl>
+        <ErrorBlock>
+          <ErrorControl>
+            <Images.Error />
+          </ErrorControl>
+          <FirstLine>連線錯誤</FirstLine>
+          <SecondLine>請稍後重新再試一次</SecondLine>
+        </ErrorBlock>
+      </ErrorContainer>
+    )
   );
 }

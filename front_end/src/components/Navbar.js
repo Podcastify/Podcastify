@@ -253,7 +253,6 @@ const Lists = styled.ul`
   color: ${(props) => props.theme.white};
   background-color: #333333;
   width: 100px;
-  font-size: 15px;
   z-index: 3;
 
   :after {
@@ -296,7 +295,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_SM} {
     margin-right: 6px;
     width: 120px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -318,7 +317,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_MD} {
     margin-right: 8px;
     width: 130px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -340,7 +339,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_LG} {
     margin-right: 12px;
     width: 150px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -362,7 +361,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_XL} {
     margin-right: 12px;
     width: 150px;
-    font-size: 15px;
+    font-size: 20px;
     border-radius: 10px;
 
     :after {
@@ -384,7 +383,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_XXL} {
     margin-right: 15px;
     width: 210px;
-    font-size: 26px;
+    font-size: 25px;
     border-radius: 15px;
 
     :after {
@@ -400,6 +399,42 @@ const Lists = styled.ul`
       border-right: 0;
       margin-left: 30px;
       margin-top: -28px;
+    }
+  }
+`;
+
+const ListTitle = styled.div`
+  list-style: none;
+  text-align: center;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: ${(props) => props.theme.white};
+
+  &:first-child {
+    margin-top: 8px;
+  }
+
+  &:last-child {
+    margin-bottom: 8px;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.click_color};
+    cursor: pointer;
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    padding: 15px;
+
+    &:first-child {
+      margin-top: 15px;
+    }
+
+    &:last-child {
+      margin-bottom: 15px;
     }
   }
 `;
@@ -485,7 +520,7 @@ export default function Navbar() {
               {userInfo ? (
                 <ListItem>{userInfo.username} 您好</ListItem>
               ) : (
-                <ListItem>訪客您好</ListItem>
+                <ListTitle>訪客您好</ListTitle>
               )}
               {userInfo ? (
                 <ListItem to="/usermanagement">會員資料管理</ListItem>
@@ -497,7 +532,11 @@ export default function Navbar() {
               ) : (
                 <ListItem to="/register">註冊</ListItem>
               )}
-              {userInfo && <ListItem onClick={handleLogout}>登出</ListItem>}
+              {userInfo && (
+                <ListItem to="/" onClick={handleLogout}>
+                  登出
+                </ListItem>
+              )}
             </Lists>
           </ListControl>
         </AvatarControl>

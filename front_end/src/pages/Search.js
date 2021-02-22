@@ -4,8 +4,7 @@ import DemoImage from "../images/avatar.jpg";
 import { Main, Div } from "../components/Main";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import MusicPlayer from "../components/MusicPlayer";
-import ErrorMessage from "../components/ErrorMessage";
+import MusicPlayer from "../components/MusicPlayer/Player";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -119,6 +118,50 @@ const PodcastName = styled.span`
   }
 `;
 
+const InvalidKeyword = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme.white};
+  font-size: 30px;
+  line-height: 2;
+  letter-spacing: 2px;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 28px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 25px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 23px;
+    margin-top: 10px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+`;
+
+const FirstLine = styled.div``;
+const SecondLine = styled.div``;
+
 const SearchItemWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -146,6 +189,7 @@ const SearchItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-right: 50px;
   margin-bottom: 50px;
 
@@ -190,7 +234,7 @@ const InfoCardPhoto = styled(Link)`
   ${MEDIA_QUERY_XL} {
     width: 200px;
     max-width: 100%;
-    height: 200px;
+    height: 180px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -283,33 +327,36 @@ export default function Search() {
   const { userInfo } = useContext(UserContext);
   const [searchPodcast, setSearchPodcast] = useState([]);
   const [searchEpisode, setSearchEpisode] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [keywordInvalid, setKeywordInvalid] = useState(false);
   const { keyword } = useParams();
 
   useEffect(() => {
     getSearchPodcast(keyword).then((podcast) => {
-      let data = [];
-      if (podcast.ok) {
-        console.log(podcast);
-        data = podcast.data.results;
-        return setSearchPodcast(data);
+      let data = podcast.data.results;
+      if (data.length) {
+        // console.log(podcast);
+        setKeywordInvalid(false);
+        setSearchPodcast(data);
+      } else {
+        setSearchPodcast("");
+        setKeywordInvalid(true);
       }
-      setErrorMessage(podcast.message);
     });
-    getSearchEpisode(keyword).then((podcast) => {
-      let data = [];
-      if (podcast.ok) {
-        data = podcast.data.results;
-        return setSearchEpisode(data);
-      }
-      setErrorMessage(podcast.message);
-    });
+    // getSearchEpisode(keyword).then((podcast) => {
+    //   let data = podcast.data.results;
+    //   if (data.length) {
+    //     setKeywordInvalid(false);
+    //     setSearchEpisode(data);
+    //   } else {
+    //     setSearchPodcast("");
+    //     setKeywordInvalid(true);
+    //   }
+    // });
   }, [keyword]);
 
   return (
     <Container>
       <Navbar />
-      {errorMessage && <ErrorMessage />}
       <MainWrapper>
         <Div>
           <Sidebar />
@@ -319,14 +366,22 @@ export default function Search() {
                 # 搜尋有關“<PodcastName>{keyword}</PodcastName>”的頻道
               </SearchPageTitle>
               <SearchItemWrapper>
-                {searchPodcast &&
+                {userInfo &&
+                  searchPodcast &&
                   searchPodcast.map((data) => (
                     <SearchList key={data.id} data={data} />
                   ))}
-                {searchEpisode &&
+                {/* {userInfo &&
+                  searchEpisode &&
                   searchEpisode.map((data) => (
                     <SearchList key={data.id} data={data} />
-                  ))}
+                  ))} */}
+                {keywordInvalid && (
+                  <InvalidKeyword>
+                    <FirstLine>找不到您要的資料</FirstLine>
+                    <SecondLine>請再輸入一次關鍵字</SecondLine>
+                  </InvalidKeyword>
+                )}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>

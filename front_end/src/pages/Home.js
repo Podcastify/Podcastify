@@ -1,15 +1,11 @@
 import InfoCard from "../components/InfoCard";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import MusicPlayer from "../components/MusicPlayer";
+import MusicPlayer from "../components/MusicPlayer/Player";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
-import {
-  MEDIA_QUERY_XS,
-  MEDIA_QUERY_SM,
-  MEDIA_QUERY_MD,
-  MEDIA_QUERY_LG,
-} from "../constants/breakpoints";
+import { MEDIA_QUERY_XS } from "../constants/breakpoints";
+import Loading from "../components/Loading";
 
 const Container = styled.div`
   width: 100%;
@@ -30,6 +26,7 @@ const MainWrapper = styled(Main)`
 export default function Home() {
   return (
     <Container>
+      {/* <Loading /> */}
       <Navbar />
       <MainWrapper>
         <Div>

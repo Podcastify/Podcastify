@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer";
+import MusicPlayer from "../components/MusicPlayer/Player";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
@@ -136,7 +136,7 @@ const TitleText = styled.div`
   }
 `;
 const PlaylistName = styled.div`
-  font-size: 52.5px;
+  font-size: 52px;
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
@@ -148,11 +148,11 @@ const PlaylistName = styled.div`
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 32px;
+    font-size: 30px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 24px;
+    font-size: 25px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -550,7 +550,7 @@ const Text = styled.div`
   align-items: center;
   position: absolute;
   left: 107.5px;
-  font-size: 26px;
+  font-size: 25px;
   letter-spacing: 0.5px;
   line-height: 1.2;
   /* margin-left: 13.5px; */
@@ -564,7 +564,7 @@ const Text = styled.div`
 
   ${MEDIA_QUERY_LG} {
     left: 68.5px;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
