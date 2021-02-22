@@ -63,6 +63,7 @@ const writeRecord = async (req, res, next) => {
           where: {
             userId,
             episodeId,
+            progress,
           },
         }
       );
