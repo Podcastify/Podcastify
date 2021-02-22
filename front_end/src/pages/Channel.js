@@ -4,6 +4,7 @@ import ChannelSidebar from "../components/ChannelSidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -12,6 +13,8 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
+import { getPodcastInfo } from "../WebAPI/listenAPI";
+import { getMySubsciption } from "../WebAPI/me";
 import { useEffect, useState } from "react";
 
 const Container = styled.div`
@@ -599,12 +602,22 @@ export default function Channel() {
     setIsOpen(!isOpen);
   };
 
+  const { podcastId } = useParams();
+  const [podcastInfo, setPodcastInfo] = useState([]);
+
+  useEffect(() => {
+    getPodcastInfo(podcastId).then((response) => {
+      console.log(response);
+      setPodcastInfo(response.data);
+    });
+  }, [podcastId]);
+
   return (
     <Container>
       <Navbar />
       <Main>
         <Div>
-          <ChannelSidebar />
+          <ChannelSidebar podcastInfo={podcastInfo} />
           <PlayList>
             <TitleHeader>
               <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>

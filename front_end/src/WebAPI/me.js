@@ -97,7 +97,7 @@ export const deleteEpisodeFromPlaylist = (playlistId, episodeId) => {
   }).then((res) => res.json());
 };
 
-// 取得會員已訂閱清單
+// 取得會員已訂閱頻道
 export const getMySubsciption = () => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/me/subscription`, {
