@@ -31,7 +31,7 @@ const getUserPlayedRecord = async (req, res, next) => {
 const writeRecord = async (req, res, next) => {
   const userId = req.jwtData.id;
   const { episodeId } = req.params;
-  const { progress } = req.body;
+  const progress = req.body.progerss || 0;
   let record;
   try {
     await Episodes.create(
