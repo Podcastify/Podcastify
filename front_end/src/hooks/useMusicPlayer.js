@@ -1,14 +1,15 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { getEpisodeInfo } from "../WebAPI/listenAPI";
-import { getRecords } from "../WebAPI/me";
+import { getRecords, getAllMyPlaylists } from "../WebAPI/me";
 import useUser from "./useUser";
 
 export default function useMusicPlayer() {
   const audioEl = useRef(null);
-  const { userPlaylists } = useUser();
+  const { userPlaylists, userPlayedRecord } = useUser();
   const [currentEpisode, setCurrentEpisode] = useState({
     id: "332fef",
   });
+  const [playlist, setPlaylist] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -33,8 +34,15 @@ export default function useMusicPlayer() {
           channelTitle: data.podcast.title,
           channelId: data.podcast.id,
         });
-      } else {
-        console.log(res);
+      }
+    });
+  }, []);
+
+  const getMyPlaylist = useCallback(() => {
+    getAllMyPlaylists().then((res) => {
+      if (res.ok) {
+        setPlaylist(res.data[0].Episodes);
+        console.log(playlist);
       }
     });
   }, []);
@@ -55,6 +63,8 @@ export default function useMusicPlayer() {
         const percent = ((lastTime / audio.duration) * 100).toFixed(2);
         setPercentage(percent);
         setCurrentTime(lastTime);
+
+        getMyPlaylist();
       }
     });
   }, [getEpisodeData]);
@@ -91,5 +101,6 @@ export default function useMusicPlayer() {
     currentEpisode,
     isPlaying,
     setIsPlaying,
+    playlist,
   };
 }

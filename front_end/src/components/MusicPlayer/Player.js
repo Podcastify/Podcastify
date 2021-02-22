@@ -217,6 +217,7 @@ export default function MusicPlayer() {
     currentEpisode,
     isPlaying,
     setIsPlaying,
+    playlist,
   } = useMusicPlayer();
   useBeforeUnload(audioEl, currentEpisode);
 
@@ -250,6 +251,7 @@ export default function MusicPlayer() {
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
           currentEpisode={currentEpisode}
+          playlist={playlist}
         />
         <Sound audioEl={audioEl} />
       </Player>

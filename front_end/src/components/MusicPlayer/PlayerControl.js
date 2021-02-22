@@ -143,12 +143,17 @@ export default function PlayerControl({
   isPlaying,
   setIsPlaying,
   currentEpisode,
+  playlist,
 }) {
   const handlePlayPauseBtn = () => {
     if (currentEpisode.id) {
       setIsPlaying(!isPlaying);
     }
   };
+
+  const handleNextSong = () => {
+    
+  }
 
   return (
     <Control>
