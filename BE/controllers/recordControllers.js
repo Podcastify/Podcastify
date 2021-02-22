@@ -63,7 +63,6 @@ const writeRecord = async (req, res, next) => {
           where: {
             userId,
             episodeId,
-            progress,
           },
         }
       );
@@ -76,6 +75,7 @@ const writeRecord = async (req, res, next) => {
       await Records.create({
         userId,
         episodeId,
+        progress,
       });
     } catch (err) {
       res.locals.error = err;
