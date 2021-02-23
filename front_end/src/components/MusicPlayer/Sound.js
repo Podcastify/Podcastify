@@ -9,6 +9,7 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
+import useUser from "../../hooks/useUser";
 
 const Sound = styled.div`
   display: flex;

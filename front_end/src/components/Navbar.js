@@ -18,34 +18,12 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* height: 60px; */
   height: 13vh;
-  // 以下為新增，Navbar 固定在最上方
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   z-index: 3;
-
-  /* ${MEDIA_QUERY_SM} {
-    height: 70px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    height: 80px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    height: 90px;
-  }
-
-  ${MEDIA_QUERY_XL} {
-    height: 100px;
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    height: 110px;
-  } */
 `;
 
 const LeftSection = styled.div`
@@ -482,7 +460,8 @@ export default function Navbar() {
     setUserInfo,
     setUserSubscription,
     setUserPlaylists,
-    setUserPlayedRecord,} = useContext(UserContext);
+    setUserPlayedRecord,
+  } = useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
 
@@ -518,7 +497,7 @@ export default function Navbar() {
           <ListControl $isShow={isShowList}>
             <Lists>
               {userInfo ? (
-                <ListItem>{userInfo.username} 您好</ListItem>
+                <ListTitle>{userInfo.username} 您好</ListTitle>
               ) : (
                 <ListTitle>訪客您好</ListTitle>
               )}

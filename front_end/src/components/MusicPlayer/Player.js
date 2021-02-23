@@ -13,6 +13,7 @@ import Control from "./PlayerControl";
 import Sound from "./Sound";
 import useBeforeUnload from "../../hooks/useBeforeUnload";
 import useMusicPlayer from "../../hooks/useMusicPlayer";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   position: absolute;
@@ -65,7 +66,7 @@ const Player = styled.div`
   }
 `;
 
-const PlaylistControl = styled.div`
+const PlaylistControl = styled(Link)`
   display: flex;
   align-items: center;
   margin: 18px 20px 0 0;
@@ -199,13 +200,37 @@ const EpisodeName = styled.div`
   }
 `;
 
-const ChannelName = styled(EpisodeName)`
+const ChannelName = styled(Link)`
   color: ${(props) => props.theme.white_opacity};
-  margin: 0;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 20px;
+  }
+
+  ${MEDIA_QUERY_XXL} {
+    font-size: 25px;
+  }
 `;
 
 export default function MusicPlayer() {
-  const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+  // const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
   const {
     audioEl,
     getCurrentTime,
@@ -215,25 +240,26 @@ export default function MusicPlayer() {
     duration,
     currentTime,
     currentEpisode,
-    isPlaying,
-    setIsPlaying,
-    playlist,
+    handleSong,
+    handleEnd,
   } = useMusicPlayer();
+
   useBeforeUnload(audioEl, currentEpisode);
 
   return (
     <Container>
       <Player>
-        <PlaylistControl>
+        <PlaylistControl to="/myplaylist">
           <Icon.PlaylistBtn />
         </PlaylistControl>
         <Audio
-          src={src}
+          src={currentEpisode.src}
           type="audio/mpeg"
           ref={audioEl}
           onTimeUpdate={getCurrentTime}
           onLoadedData={onLoadData}
           preload="auto"
+          onEnded={handleEnd}
         />
         <Progress
           percentage={percentage}
@@ -244,14 +270,15 @@ export default function MusicPlayer() {
         {currentEpisode.src && (
           <Content>
             <EpisodeName>{currentEpisode.title}</EpisodeName>
-            <ChannelName>{currentEpisode.channelTitle}</ChannelName>
+            <ChannelName to={`/channel/${currentEpisode.channelId}`}>
+              {currentEpisode.channelTitle}
+            </ChannelName>
           </Content>
         )}
         <Control
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
+          audioEl={audioEl}
           currentEpisode={currentEpisode}
-          playlist={playlist}
+          handleSong={handleSong}
         />
         <Sound audioEl={audioEl} />
       </Player>

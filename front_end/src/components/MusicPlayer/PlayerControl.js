@@ -7,6 +7,8 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
+import useUser from "../../hooks/useUser";
+import { useState, useEffect } from "react";
 
 const Control = styled.div`
   display: flex;
@@ -139,25 +141,26 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({
-  isPlaying,
-  setIsPlaying,
-  currentEpisode,
-  playlist,
-}) {
+export default function PlayerControl({ currentEpisode, handleSong, audioEl }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const { userInfo } = useUser();
+
   const handlePlayPauseBtn = () => {
-    if (currentEpisode.id) {
-      setIsPlaying(!isPlaying);
-    }
+    if (!userInfo || !currentEpisode.id) return;
+    setIsPlaying(!isPlaying);
   };
 
-  const handleNextSong = () => {
-    
-  }
+  useEffect(() => {
+    if (isPlaying) {
+      audioEl.current.play();
+    } else {
+      audioEl.current.pause();
+    }
+  }, [isPlaying, audioEl]);
 
   return (
     <Control>
-      <PrevControl>
+      <PrevControl onClick={() => handleSong("last")}>
         <Icon.PreviousBtn />
       </PrevControl>
       <PlayPauseControl onClick={handlePlayPauseBtn}>
@@ -171,7 +174,7 @@ export default function PlayerControl({
           </PlayControl>
         )}
       </PlayPauseControl>
-      <NextControl>
+      <NextControl onClick={() => handleSong("next")}>
         <Icon.NextBtn />
       </NextControl>
     </Control>

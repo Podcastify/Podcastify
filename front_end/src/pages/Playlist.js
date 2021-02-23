@@ -21,7 +21,7 @@ import {
   deleteEpisodeFromPlaylist,
   addPlaylist,
   getAllMyPlaylists,
-} from "../WebAPI/me"
+} from "../WebAPI/me";
 
 const Container = styled.div`
   width: 100%;
@@ -684,29 +684,27 @@ const formInputs = [
       required: true,
     },
     title: "",
-    errorMessage: ""
-
-  }
-]
+    errorMessage: "",
+  },
+];
 
 function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
-  const {setUserPlaylists} = useUser()
+  const { setUserPlaylists } = useUser();
   const deleteEpisode = useCallback(async () => {
-    await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id)
-    const newPlaylist = userPlaylists.map(playlist => {
+    await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
+    const newPlaylist = userPlaylists.map((playlist) => {
       let { Episodes, ...rest } = playlist;
-      Episodes = Episodes.filter(ep => ep.id !== episodeInfo.id);
+      Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
       return { Episodes, ...rest };
-    })
+    });
     console.log(newPlaylist);
     setUserPlaylists(newPlaylist);
-    
-  }, [userPlaylists, episodeInfo, setUserPlaylists])
-  
-  const handleDeleteIconClick = async e => {
+  }, [userPlaylists, episodeInfo, setUserPlaylists]);
+
+  const handleDeleteIconClick = async (e) => {
     e.preventDefault();
     deleteEpisode();
-  }
+  };
 
   return (
     <Details>
@@ -717,22 +715,25 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
         <Text>
           <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
           <EpisodeDescription
-            dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
-          >
-        </EpisodeDescription>
-            <ChannelName>{episodeInfo.podcast.title}</ChannelName>
+            dangerouslySetInnerHTML={
+              episodeInfo.description
+                ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
+                : ""
+            }
+          ></EpisodeDescription>
+          <ChannelName>{episodeInfo.podcast.title}</ChannelName>
         </Text>
         <DeleteBtnControl onClick={handleDeleteIconClick}>
           <Images.DeleteBtn />
         </DeleteBtnControl>
       </Summary>
     </Details>
-  )
+  );
 }
 
 export default function Playlist() {
-  const { userPlaylists, setUserPlaylists } = useUser()
-  
+  const { userPlaylists, setUserPlaylists } = useUser();
+
   return (
     <Container>
       <Navbar />
@@ -745,7 +746,16 @@ export default function Playlist() {
               <TitleWrapper>
                 <TitleText>
                   <PlaylistName>我的播放清單</PlaylistName>
-                  <Subtitle>{userPlaylists.length > 0 ? userPlaylists[0].name : "播放列表"}，共 {userPlaylists.length > 0 ? userPlaylists[0].Episodes.length : ''} 部單元</Subtitle>
+                  <Subtitle>
+                    {userPlaylists.length > 0
+                      ? userPlaylists[0].name
+                      : "播放列表"}
+                    ，共{" "}
+                    {userPlaylists.length > 0
+                      ? userPlaylists[0].Episodes.length
+                      : 0}{" "}
+                    部單元
+                  </Subtitle>
                 </TitleText>
                 <Buttons>
                   <PlaylistPlayBtnControl>
@@ -758,24 +768,22 @@ export default function Playlist() {
               </TitleWrapper>
             </PlaylistHeader>
             <PlayList>
-              {
-                userPlaylists.length > 0 &&
+              {userPlaylists.length > 0 && (
                 <TitleHeader>
                   <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
                   <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
                   <ChannelNameHeader>頻道名稱</ChannelNameHeader>
                 </TitleHeader>
-              }
+              )}
               <Body>
-                { userPlaylists.length > 0 ?
-                  userPlaylists[0].Episodes.map(episodeInfo => (
-                    <EpisodeInfoDetails
-                      episodeInfo={episodeInfo}
-                      userPlaylists={userPlaylists}
-                    />
-                  ))
-                  : ''
-                }
+                {userPlaylists.length > 0
+                  ? userPlaylists[0].Episodes.map((episodeInfo) => (
+                      <EpisodeInfoDetails
+                        episodeInfo={episodeInfo}
+                        userPlaylists={userPlaylists}
+                      />
+                    ))
+                  : ""}
               </Body>
             </PlayList>
           </PlaylistWrapper>
