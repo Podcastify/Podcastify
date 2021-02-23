@@ -22,9 +22,9 @@ import UserManagement from "./pages/UserManagement";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
-  const [userSubscription, setUserSubscription] = useState(null);
-  const [userPlaylists, setUserPlaylists] = useState(null);
-  const [userPlayedRecord, setUserPlayedRecord] = useState(null);
+  const [userSubscription, setUserSubscription] = useState([]);
+  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [userPlayedRecord, setUserPlayedRecord] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [Alert, setAlert] = useState(false);
 
@@ -32,7 +32,17 @@ function App() {
     if (getAuthToken()) {
       getMyInfo().then((response) => {
         if (response.ok) {
-          setUserInfo(response.data);
+          const {
+            playlists,
+            subscriptions,
+            playedRecords,
+            ...userInfo
+          } = response.data;
+          // console.log({ playlists, subscriptions, playedRecords, userInfo });
+          setUserInfo(userInfo);
+          setUserPlaylists(playlists);
+          setUserPlayedRecord(playedRecords);
+          setUserSubscription(subscriptions);
         }
       });
     }

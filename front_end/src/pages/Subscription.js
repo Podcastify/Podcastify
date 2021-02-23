@@ -13,6 +13,7 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import useUser from "../hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -329,6 +330,8 @@ const DeleteIcon = styled.div`
 `;
 
 export default function Subcription() {
+  const { userSubscription } = useUser();
+  console.log(userSubscription);
   return (
     <Container>
       <Navbar />

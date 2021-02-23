@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import { Main, Div } from "../components/Main";
@@ -12,10 +12,10 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
-import { UserContext } from "../context/context";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { getSearchPodcast, getSearchEpisode } from "../WebAPI/listenAPI";
+import useUser from "../hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -319,12 +319,8 @@ function SearchList({ data }) {
   );
 }
 
-postMessage.propTypes = {
-  data: PropTypes.object,
-};
-
 export default function Search() {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo } = useUser();
   const [searchPodcast, setSearchPodcast] = useState([]);
   const [searchEpisode, setSearchEpisode] = useState([]);
   const [keywordInvalid, setKeywordInvalid] = useState(false);

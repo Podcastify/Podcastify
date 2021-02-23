@@ -14,7 +14,6 @@ import {
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
 import { getPodcastInfo } from "../WebAPI/listenAPI";
-import { getMySubsciption } from "../WebAPI/me";
 import { useEffect, useState } from "react";
 
 const Container = styled.div`

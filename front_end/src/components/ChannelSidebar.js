@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import DemoImage from "../images/avatar.jpg";
 import {
   MEDIA_QUERY_XS,
@@ -335,18 +336,18 @@ export default function ChannelSidebar({ podcastInfo }) {
     }
   };
 
-  // useEffect(() => {
-  //   getMySubsciption().then((response) => {
-  //     let data = response.data;
-  //     const SubscribedID = data.find((item) => item.id === podcastId);
-  //     console.log(SubscribedID.id);
-  //     if (SubscribedID.id === podcastId) {
-  //       setSubscription(true);
-  //     } else {
-  //       return setSubscription(false);
-  //     }
-  //   });
-  // }, [podcastId]);
+  useEffect(() => {
+    getMySubsciption().then((response) => {
+      let data = response.data;
+      console.log(data);
+      const SubscribedID = data.find((item) => item.id === podcastId);
+      if (SubscribedID) {
+        setSubscription(true);
+      } else {
+        return setSubscription(false);
+      }
+    });
+  }, [podcastId]);
 
   return (
     <SidebarContainer>
@@ -374,7 +375,13 @@ export default function ChannelSidebar({ podcastInfo }) {
               )}
             </div>
           </InfoCardBlock>
-          <InfoCardText>{podcastInfo.description}</InfoCardText>
+          {podcastInfo.description && (
+            <InfoCardText
+              dangerouslySetInnerHTML={{
+                __html: podcastInfo.description.replace(/<[^>]+>/g, ""),
+              }}
+            ></InfoCardText>
+          )}
         </InfoCardContent>
       </InfoCardWrapper>
     </SidebarContainer>
