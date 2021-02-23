@@ -5,6 +5,7 @@ import {
   UserContext,
   PageStatusContext,
   AlertMessageContext,
+  CurrentEpisodeContext,
 } from "./context/context";
 import GlobalStyle from "./constants/globalStyle";
 import { theme } from "./constants/theme";
@@ -25,6 +26,7 @@ function App() {
   const [userSubscription, setUserSubscription] = useState([]);
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [userPlayedRecord, setUserPlayedRecord] = useState([]);
+  const [currentEpisode, setCurrentEpisode] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [Alert, setAlert] = useState(false);
 
@@ -48,7 +50,7 @@ function App() {
                 return episodeInfo.data;
               })
             );
-            playlists[i] = { Episodes, ...rest, playmode: false };
+            playlists[i] = { Episodes, ...rest };
           }
 
           // 取前三筆播放紀錄
@@ -108,6 +110,11 @@ function App() {
     setIsLoading,
   };
 
+  const currentEpisodeContextValue = {
+    currentEpisode,
+    setCurrentEpisode,
+  };
+
   const userContextValue = {
     userInfo,
     userSubscription,
@@ -123,38 +130,40 @@ function App() {
     <PageStatusContext.Provider value={pageStatusContextValue}>
       <UserContext.Provider value={userContextValue}>
         <AlertMessageContext.Provider value={AlertMessageContextValue}>
-          {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Router>
-              <Switch>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/register">
-                  <Register />
-                </Route>
-                <Route path="/search/:keyword">
-                  <Search />
-                </Route>
-                <Route path="/mysubscription">
-                  <Subscription />
-                </Route>
-                <Route path="/myplaylist">
-                  <Playlist />
-                </Route>
-                <Route path="/channel/:podcastId">
-                  <Channel />
-                </Route>
-                <Route path="/usermanagement">
-                  <UserManagement />
-                </Route>
-              </Switch>
-            </Router>
-          </ThemeProvider>
+          <CurrentEpisodeContext.Provider value={currentEpisodeContextValue}>
+            {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
+            <ThemeProvider theme={theme}>
+              <GlobalStyle />
+              <Router>
+                <Switch>
+                  <Route exact path="/">
+                    <Home />
+                  </Route>
+                  <Route path="/login">
+                    <Login />
+                  </Route>
+                  <Route path="/register">
+                    <Register />
+                  </Route>
+                  <Route path="/search/:keyword">
+                    <Search />
+                  </Route>
+                  <Route path="/mysubscription">
+                    <Subscription />
+                  </Route>
+                  <Route path="/myplaylist">
+                    <Playlist />
+                  </Route>
+                  <Route path="/channel/:podcastId">
+                    <Channel />
+                  </Route>
+                  <Route path="/usermanagement">
+                    <UserManagement />
+                  </Route>
+                </Switch>
+              </Router>
+            </ThemeProvider>
+          </CurrentEpisodeContext.Provider>
         </AlertMessageContext.Provider>
       </UserContext.Provider>
     </PageStatusContext.Provider>

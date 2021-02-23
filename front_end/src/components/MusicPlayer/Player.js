@@ -14,6 +14,7 @@ import Sound from "./Sound";
 import useBeforeUnload from "../../hooks/useBeforeUnload";
 import useMusicPlayer from "../../hooks/useMusicPlayer";
 import { Link } from "react-router-dom";
+import useUser from "../../hooks/useUser";
 
 const Container = styled.div`
   position: absolute;
@@ -243,9 +244,10 @@ export default function MusicPlayer() {
     handleSong,
     handleEnd,
   } = useMusicPlayer();
+  const { userCurrentEpisode } = useUser();
 
-  useBeforeUnload(audioEl, currentEpisode);
-
+  useBeforeUnload(audioEl, userCurrentEpisode);
+  //console.log(userCurrentEpisode);
   return (
     <Container>
       <Player>

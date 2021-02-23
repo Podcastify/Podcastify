@@ -8,7 +8,8 @@ import {
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
 import useUser from "../../hooks/useUser";
-import { useState, useEffect } from "react";
+import useCurrentEpisode from "../../hooks/useCurrentEpisode";
+import { useEffect } from "react";
 
 const Control = styled.div`
   display: flex;
@@ -141,22 +142,28 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({ currentEpisode, handleSong, audioEl }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function PlayerControl({ handleSong, audioEl }) {
   const { userInfo } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
 
   const handlePlayPauseBtn = () => {
+    // 如果非會員且沒有播放內容
     if (!userInfo || !currentEpisode.id) return;
-    setIsPlaying(!isPlaying);
+
+    const { playing, ...rest } = currentEpisode;
+    setCurrentEpisode({
+      playing: !playing,
+      ...rest,
+    });
   };
 
   useEffect(() => {
-    if (isPlaying) {
+    if (currentEpisode.playing) {
       audioEl.current.play();
     } else {
       audioEl.current.pause();
     }
-  }, [isPlaying, audioEl]);
+  }, [audioEl, currentEpisode]);
 
   return (
     <Control>
@@ -164,7 +171,7 @@ export default function PlayerControl({ currentEpisode, handleSong, audioEl }) {
         <Icon.PreviousBtn />
       </PrevControl>
       <PlayPauseControl onClick={handlePlayPauseBtn}>
-        {isPlaying ? (
+        {currentEpisode.playing ? (
           <PauseControl>
             <Icon.PauseBtn />
           </PauseControl>

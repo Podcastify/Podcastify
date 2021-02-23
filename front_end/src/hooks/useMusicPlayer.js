@@ -1,17 +1,18 @@
-import { useRef, useState, useCallback, useEffect } from "react";
-import { getEpisodeInfo } from "../WebAPI/listenAPI";
+import { useRef, useState, useEffect } from "react";
 import useUser from "./useUser";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 export default function useMusicPlayer() {
   const audioEl = useRef(null);
   const { userPlaylists, userPlayedRecord, userInfo } = useUser();
-  const [currentEpisode, setCurrentEpisode] = useState({});
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
     const audio = audioEl.current;
+    if (!audio) return;
 
     // 最後一筆播放紀錄資料
     let data = userPlayedRecord[0];
@@ -29,6 +30,8 @@ export default function useMusicPlayer() {
       channelTitle: data.podcast.title,
       channelId: data.podcast.id,
       order: null,
+      playmode: null,
+      playing: false,
     });
 
     // 設定進度條到上次紀錄位置
@@ -36,14 +39,14 @@ export default function useMusicPlayer() {
     const percent = ((lastTime / audio.duration) * 100).toFixed(2);
     setPercentage(percent);
     setCurrentTime(lastTime);
-  }, [userPlayedRecord]);
+  }, [userPlayedRecord, setCurrentEpisode]);
 
   // 上一首或下一首
   const handleSong = (keyword) => {
     const playlist = userPlaylists[0];
 
     // 如果非會員或不是播放播放清單
-    if (!userInfo || !playlist.playmode) return;
+    if (!userInfo || !currentEpisode.playmode) return;
 
     // 如果播放清單只有一首
     if (playlist.Episodes.length === 1) return;
@@ -62,6 +65,7 @@ export default function useMusicPlayer() {
       keyword === "next"
         ? playlist.Episodes[currentEpisode.order + 1]
         : playlist.Episodes[currentEpisode.order - 1];
+    console.log(currentEpisode);
     setCurrentEpisode({
       id: episode.id,
       src: episode.audio,
@@ -72,6 +76,8 @@ export default function useMusicPlayer() {
         keyword === "next"
           ? currentEpisode.order + 1
           : currentEpisode.order - 1,
+      playmode: "continued",
+      playing: true,
     });
   };
 

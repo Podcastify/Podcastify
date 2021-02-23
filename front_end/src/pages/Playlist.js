@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useCallback } from "react";
 import useUser from "../hooks/useUser";
 import useInputs from "../hooks/useInputs";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -733,6 +734,24 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 
 export default function Playlist() {
   const { userPlaylists, setUserPlaylists } = useUser();
+  const { setCurrentEpisode } = useCurrentEpisode();
+
+  const handlePlayPlaylist = () => {
+    // 如果播放清單是空的
+    if (userPlaylists.length === 0) return;
+
+    const episode = userPlaylists[0].Episodes[0];
+    setCurrentEpisode({
+      id: episode.id,
+      src: episode.audio,
+      title: episode.title,
+      channelTitle: episode.podcast.title,
+      channelId: episode.podcast.id,
+      order: 0,
+      playmode: "continued",
+      playing: true,
+    });
+  };
 
   return (
     <Container>
@@ -758,7 +777,7 @@ export default function Playlist() {
                   </Subtitle>
                 </TitleText>
                 <Buttons>
-                  <PlaylistPlayBtnControl>
+                  <PlaylistPlayBtnControl onClick={handlePlayPlaylist}>
                     <Images.PodcastPlayBtn />
                   </PlaylistPlayBtnControl>
                   <RenamePlaylistBtnControl>

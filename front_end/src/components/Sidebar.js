@@ -222,14 +222,14 @@ const CoverPage = styled.div`
   top: 0;
   left: 0;
   z-index: 99;
-  background: rgba(0,0,0, .7);
-`
+  background: rgba(0, 0, 0, 0.7);
+`;
 
 const AddPlaylistForm = styled(UserForm)`
   height: auto;
   margin: 0 auto;
   background: #333333;
-`
+`;
 
 const FormContainer = styled(SideListContainer)`
   height: auto;
@@ -241,7 +241,7 @@ const FormContainer = styled(SideListContainer)`
   border-radius: 15px;
   box-shadow: 0 20px 20px 0 rgba(33, 25, 24, 0.2);
   background-color: #333333;
-`
+`;
 
 const CloseBtnControl = styled.div`
   svg {
@@ -331,32 +331,30 @@ const formInputs = [
       required: true,
     },
     title: "",
-    errorMessage: ""
-
-  }
+    errorMessage: "",
+  },
 ];
 
-
-function CoverPageForm({showForm, setShowForm}) {
+function CoverPageForm({ showForm, setShowForm }) {
   const { setUserPlaylists } = useUser();
-  const { inputs, handlers } = useInputs(formInputs)
-  const handleAddPlaylist = async e => {
+  const { inputs, handlers } = useInputs(formInputs);
+  const handleAddPlaylist = async (e) => {
     e.preventDefault();
-    const filters = ['name'];
-    const playlistInformation = {}
-    inputs.forEach(input => {
+    const filters = ["name"];
+    const playlistInformation = {};
+    inputs.forEach((input) => {
       for (const filter of filters) {
         if (filter === input.attributes.name) {
-          playlistInformation[filter] = input.attributes.value
+          playlistInformation[filter] = input.attributes.value;
         }
       }
-    })
+    });
     await addPlaylist(playlistInformation.name);
     let myPlaylists = await getAllMyPlaylists();
-    myPlaylists = myPlaylists.data.map(playlist => ({ ...playlist, playmode: false }));
+    myPlaylists = myPlaylists.data.map((playlist) => ({ ...playlist }));
     setUserPlaylists(myPlaylists);
     setShowForm(false);
-  }
+  };
 
   return (
     <CoverPage>
@@ -371,7 +369,7 @@ function CoverPageForm({showForm, setShowForm}) {
         />
       </FormContainer>
     </CoverPage>
-  )
+  );
 }
 
 export default function Sidebar() {
@@ -380,31 +378,49 @@ export default function Sidebar() {
 
   return (
     <SidebarWrapper>
-      {userInfo
-        ? userPlaylists.length > 0
-          ? <Link to="/myplaylist">
-              <SidebarTitle>
-                {userPlaylists[0].name}
-              </SidebarTitle>
-            </Link>
-          : <Link to="/" onClick={e => {e.preventDefault()}}>
-              <SidebarTitle onClick={() => {setShowForm(true)}}>
-                新增播放清單
-              </SidebarTitle>
-            </Link>
-        : <SidebarTitle>請先登入</SidebarTitle>
-      }
+      {userInfo ? (
+        userPlaylists.length > 0 ? (
+          <Link to="/myplaylist">
+            <SidebarTitle>{userPlaylists[0].name}</SidebarTitle>
+          </Link>
+        ) : (
+          <Link
+            to="/"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <SidebarTitle
+              onClick={() => {
+                setShowForm(true);
+              }}
+            >
+              新增播放清單
+            </SidebarTitle>
+          </Link>
+        )
+      ) : (
+        <SidebarTitle>請先登入</SidebarTitle>
+      )}
       <SideListContainer>
-        {userInfo ?
-          userPlaylists.length > 0 ?
-            userPlaylists[0].Episodes.map(episodeInfo =>
+        {userInfo ? (
+          userPlaylists.length > 0 ? (
+            userPlaylists[0].Episodes.map((episodeInfo) => (
               <SidebarListWrapper key={episodeInfo.id}>
                 <SidebarListLeft>
                   <SidebarListTitle>{episodeInfo.title}</SidebarListTitle>
                   <SidebarListContent
-                    dangerouslySetInnerHTML={episodeInfo.description ? { __html: episodeInfo.description.replace(/<[^>]+>/g, '') } : ''}
-                  >
-                  </SidebarListContent>
+                    dangerouslySetInnerHTML={
+                      episodeInfo.description
+                        ? {
+                            __html: episodeInfo.description.replace(
+                              /<[^>]+>/g,
+                              ""
+                            ),
+                          }
+                        : ""
+                    }
+                  ></SidebarListContent>
                 </SidebarListLeft>
                 <SidebarListRight>
                   <PlaylistPlayBtnControl>
@@ -412,19 +428,17 @@ export default function Sidebar() {
                   </PlaylistPlayBtnControl>
                 </SidebarListRight>
               </SidebarListWrapper>
-            )
-            :
-            <div>
-            </div>
-          : ""
-        }
+            ))
+          ) : (
+            <div></div>
+          )
+        ) : (
+          ""
+        )}
       </SideListContainer>
-      {
-        showForm && <CoverPageForm
-          showForm={showForm}
-          setShowForm={setShowForm}
-        />
-      }
+      {showForm && (
+        <CoverPageForm showForm={showForm} setShowForm={setShowForm} />
+      )}
     </SidebarWrapper>
   );
 }
