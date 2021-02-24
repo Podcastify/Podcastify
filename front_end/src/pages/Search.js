@@ -2,9 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import { Main, Div } from "../components/Main";
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import MusicPlayer from "../components/MusicPlayer/Player";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -356,7 +354,6 @@ export default function Search() {
 
   return (
     <Container>
-      <Navbar />
       <MainWrapper>
         <Div>
           <Sidebar />
@@ -387,7 +384,6 @@ export default function Search() {
           </SearchPageContainer>
         </Div>
       </MainWrapper>
-      <MusicPlayer />
     </Container>
   );
 }

@@ -65,7 +65,7 @@ export default function useMusicPlayer() {
       keyword === "next"
         ? playlist.Episodes[currentEpisode.order + 1]
         : playlist.Episodes[currentEpisode.order - 1];
-    console.log(currentEpisode);
+
     setCurrentEpisode({
       id: episode.id,
       src: episode.audio,
@@ -102,7 +102,7 @@ export default function useMusicPlayer() {
     const time = target.currentTime;
     const percent = ((time / target.duration) * 100).toFixed(2);
 
-    setPercentage(+percent);
+    setPercentage(percent);
     setCurrentTime(time.toFixed(2));
   };
 

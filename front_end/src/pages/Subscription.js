@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import MusicPlayer from "../components/MusicPlayer/Player";
 import { Main, Div } from "../components/Main";
 import {
   MEDIA_QUERY_XS,
@@ -331,7 +329,6 @@ const DeleteIcon = styled.div`
 export default function Subcription() {
   return (
     <Container>
-      <Navbar />
       <MainWrapper>
         <Div>
           <Sidebar />
@@ -419,7 +416,6 @@ export default function Subcription() {
           </ChannelContainer>
         </Div>
       </MainWrapper>
-      <MusicPlayer />
     </Container>
   );
 }

@@ -480,6 +480,10 @@ export default function Navbar() {
     }
   };
 
+  if (location.pathname === "/register" || location.pathname === "/login") {
+    return null;
+  }
+
   return (
     <NavigationBar>
       <Nav>

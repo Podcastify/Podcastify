@@ -1,5 +1,3 @@
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer/Player";
 import ChannelSidebar from "../components/ChannelSidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
@@ -693,7 +691,6 @@ export default function Channel() {
 
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
           <ChannelSidebar podcastInfo={podcastInfo} />
@@ -716,7 +713,6 @@ export default function Channel() {
           </PlayList>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
   );
 }

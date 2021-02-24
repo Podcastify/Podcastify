@@ -13,7 +13,7 @@ import Control from "./PlayerControl";
 import Sound from "./Sound";
 import useBeforeUnload from "../../hooks/useBeforeUnload";
 import useMusicPlayer from "../../hooks/useMusicPlayer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 
 const Container = styled.div`
@@ -232,6 +232,7 @@ const ChannelName = styled(Link)`
 
 export default function MusicPlayer() {
   // const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+
   const {
     audioEl,
     getCurrentTime,
@@ -247,7 +248,12 @@ export default function MusicPlayer() {
   const { userCurrentEpisode } = useUser();
 
   useBeforeUnload(audioEl, userCurrentEpisode);
-  //console.log(userCurrentEpisode);
+
+  const location = useLocation();
+  if (location.pathname === "/register" || location.pathname === "/login") {
+    return null;
+  }
+
   return (
     <Container>
       <Player>

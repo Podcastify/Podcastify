@@ -1,5 +1,3 @@
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer/Player";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
@@ -755,7 +753,6 @@ export default function Playlist() {
 
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
           <Sidebar />
@@ -808,7 +805,6 @@ export default function Playlist() {
           </PlaylistWrapper>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
   );
 }

@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { Main, Div } from "../components/Main";
 import { UserContext } from "../context/context";
 import UserForm from "../components/UserForm";
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer/Player";
 import {
   BtnContainer,
   BtnLogInContainer,
@@ -185,7 +183,6 @@ export default function UserManagement() {
 
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
           <SectionContainer>
@@ -200,7 +197,6 @@ export default function UserManagement() {
           </SectionContainer>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
   );
 }

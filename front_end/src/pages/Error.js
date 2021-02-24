@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import Images from "../components/Images";
 import { Main } from "../components/Main";
 import styled from "styled-components";
@@ -115,7 +114,6 @@ const SecondLine = styled.div``;
 export default function Error() {
   return (
     <Container>
-      <Navbar />
       <Wrapper>
         <ErrorControl>
           <Images.Error />

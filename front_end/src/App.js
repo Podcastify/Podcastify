@@ -18,6 +18,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
+import Navbar from "./components/Navbar";
+import MusicPlayer from "./components/MusicPlayer/Player";
 import Subscription from "./pages/Subscription";
 import UserManagement from "./pages/UserManagement";
 
@@ -53,7 +55,7 @@ function App() {
             playlists[i] = { Episodes, ...rest };
           }
 
-          // 取前三筆播放紀錄
+          // 節省打 API 次數，只取最後三筆播放紀錄
           let lastThreePlayedRecords = [];
           if (playedRecords.length > 3) {
             for (let i = 0; i < 3; i++) {
@@ -90,7 +92,7 @@ function App() {
         }
       }
     }
-    //getUser();
+    getUser();
     /* 
       在這邊把會員的訂閱等資訊放入 state 中
       拿到的資料可以用 destructure 寫成下面這樣
@@ -135,6 +137,7 @@ function App() {
             <ThemeProvider theme={theme}>
               <GlobalStyle />
               <Router>
+                <Navbar />
                 <Switch>
                   <Route exact path="/">
                     <Home />
@@ -161,6 +164,7 @@ function App() {
                     <UserManagement />
                   </Route>
                 </Switch>
+                <MusicPlayer />
               </Router>
             </ThemeProvider>
           </CurrentEpisodeContext.Provider>
