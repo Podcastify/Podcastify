@@ -16,6 +16,7 @@ import { getPodcastInfo, getEpisodeInfo } from "../WebAPI/listenAPI";
 import { addEpisodeToPlaylist } from "../WebAPI/me";
 import { useCallback, useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 const Container = styled.div`
   width: 100%;
@@ -260,6 +261,8 @@ const Summary = styled.summary`
   }
 `;
 
+const PlayPauseBtnControl = styled.div``;
+
 const PlayBtnControl = styled.div`
   height: 55px;
   cursor: pointer;
@@ -297,6 +300,8 @@ const PlayBtnControl = styled.div`
     }
   }
 `;
+
+const PauseBtnControl = styled(PlayBtnControl)``;
 
 const Text = styled.div`
   display: flex;
@@ -598,11 +603,13 @@ const CollapseControl = styled.div`
 function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
+  const { userPlaylists, setUserPlaylists } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
   const onToggle = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
-  const { userPlaylists, setUserPlaylists } = useUser();
 
   const addEpisode = useCallback(async () => {
     if (!userPlaylists[0]) {
@@ -629,16 +636,52 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     addEpisode();
   };
 
-  const handlePlayBtn = () => {
-    console.log(episodeInfo);
+  const handlePlayPauseBtn = () => {
+    if (!episodeInfo || !podcastInfo) return;
+
+    // 如果現在播放內容就是該集內容，先確認播放狀況
+    if (currentEpisode.id === episodeInfo.id) {
+      const { playing, ...rest } = currentEpisode;
+      setCurrentEpisode({
+        playing: !playing,
+        ...rest,
+      });
+      return;
+    }
+
+    // 如果現在播放內容不是該集內容，直接播放
+    setCurrentEpisode({
+      id: episodeInfo.id,
+      src: episodeInfo.audio,
+      title: episodeInfo.title,
+      channelTitle: podcastInfo.title,
+      channelId: podcastInfo.id,
+      order: 0,
+      playmode: null,
+      playing: true,
+    });
   };
 
   return (
     <Details open={isOpen} onClick={onToggle}>
       <Summary open={isOpen}>
-        <PlayBtnControl onClick={handlePlayBtn}>
-          <Images.PodcastPlayBtn />
-        </PlayBtnControl>
+        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+          {currentEpisode.id === episodeInfo.id ? (
+            currentEpisode.playing ? (
+              <PauseBtnControl>
+                <Images.PodcastPauseBtn />
+              </PauseBtnControl>
+            ) : (
+              <PlayBtnControl>
+                <Images.PodcastPlayBtn />
+              </PlayBtnControl>
+            )
+          ) : (
+            <PlayBtnControl>
+              <Images.PodcastPlayBtn />
+            </PlayBtnControl>
+          )}
+        </PlayPauseBtnControl>
         <Text>
           <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
           <EpisodeDescription

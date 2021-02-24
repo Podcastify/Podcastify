@@ -480,6 +480,7 @@ export default function Navbar() {
     }
   };
 
+  // 如果在註冊頁面或是登入頁面不顯示 navbar
   if (location.pathname === "/register" || location.pathname === "/login") {
     return null;
   }

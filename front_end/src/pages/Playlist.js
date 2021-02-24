@@ -499,6 +499,8 @@ const Summary = styled.summary`
   }
 `;
 
+const PlayPauseBtnControl = styled.div``;
+
 const PlayBtnControl = styled.div`
   height: 55px;
   cursor: pointer;
@@ -542,6 +544,8 @@ const PlayBtnControl = styled.div`
     }
   }
 `;
+
+const PauseBtnControl = styled(PlayBtnControl)``;
 
 const Text = styled.div`
   display: flex;
@@ -689,6 +693,8 @@ const formInputs = [
 
 function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
   const { setUserPlaylists } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
   const deleteEpisode = useCallback(async () => {
     await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
     const newPlaylist = userPlaylists.map((playlist) => {
@@ -705,12 +711,63 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
     deleteEpisode();
   };
 
+  const handlePlayPauseBtn = () => {
+    if (!episodeInfo) return;
+
+    // 取得目前播放列表的順位
+    let playlistOrder;
+    const episodes = userPlaylists[0].Episodes;
+    for (let i = 0; i < episodes.length; i++) {
+      if (episodeInfo.id === episodes[i].id) {
+        playlistOrder = i;
+      }
+    }
+
+    // 如果現在播放內容就是該集內容，先確認播放狀況
+    if (currentEpisode.id === episodeInfo.id) {
+      const { playing, playmode, order, ...rest } = currentEpisode;
+      setCurrentEpisode({
+        playing: !playing,
+        playmode: "continued",
+        order: playlistOrder,
+        ...rest,
+      });
+      return;
+    }
+
+    // 如果現在播放內容不是該集內容，直接播放
+    setCurrentEpisode({
+      id: episodeInfo.id,
+      src: episodeInfo.audio,
+      title: episodeInfo.title,
+      channelTitle: episodeInfo.podcast.title,
+      channelId: episodeInfo.podcast.id,
+      order: playlistOrder,
+      playmode: "continued",
+      playing: true,
+    });
+  };
+
   return (
     <Details>
       <Summary>
-        <PlayBtnControl>
-          <Images.PodcastPlayBtn />
-        </PlayBtnControl>
+        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+          {currentEpisode.id === episodeInfo.id ? (
+            currentEpisode.playing ? (
+              <PauseBtnControl>
+                <Images.PodcastPauseBtn />
+              </PauseBtnControl>
+            ) : (
+              <PlayBtnControl>
+                <Images.PodcastPlayBtn />
+              </PlayBtnControl>
+            )
+          ) : (
+            <PlayBtnControl>
+              <Images.PodcastPlayBtn />
+            </PlayBtnControl>
+          )}
+        </PlayPauseBtnControl>
         <Text>
           <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
           <EpisodeDescription
@@ -734,7 +791,7 @@ export default function Playlist() {
   const { userPlaylists, setUserPlaylists } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
 
-  const handlePlayPlaylist = () => {
+  const handlePlayWholePlaylist = () => {
     // 如果播放清單是空的
     if (userPlaylists.length === 0) return;
 
@@ -774,7 +831,7 @@ export default function Playlist() {
                   </Subtitle>
                 </TitleText>
                 <Buttons>
-                  <PlaylistPlayBtnControl onClick={handlePlayPlaylist}>
+                  <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
                     <Images.PodcastPlayBtn />
                   </PlaylistPlayBtnControl>
                   <RenamePlaylistBtnControl>

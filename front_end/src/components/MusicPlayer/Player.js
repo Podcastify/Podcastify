@@ -249,6 +249,7 @@ export default function MusicPlayer() {
 
   useBeforeUnload(audioEl, userCurrentEpisode);
 
+  // 如果在註冊頁面或是登入頁面不顯示
   const location = useLocation();
   if (location.pathname === "/register" || location.pathname === "/login") {
     return null;
