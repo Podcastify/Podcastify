@@ -8,6 +8,8 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
+import Loading from "../../components/Loading";
+import usePageStatus from "../../hooks/usePageStatus";
 
 const Progress = styled.div`
   width: calc(100% / 12 * 5);
@@ -170,9 +172,12 @@ export default function ProgressControl({
 }) {
   const [position, setPosition] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const { isLoading, setIsLoading } = usePageStatus(null);
   const rangeRef = useRef();
 
   useEffect(() => {
+    setIsLoading(true);
+
     // 設定控制圓杆位置
     setPosition(percentage);
 
@@ -180,7 +185,12 @@ export default function ProgressControl({
     const rangeWidth = rangeRef.current.getBoundingClientRect().width;
     const currentProgressBar = (rangeWidth / 100) * percentage;
     setProgressBarWidth(currentProgressBar);
-  }, [percentage]);
+
+    // 如果進度條跑好，loading 畫面結束
+    if (currentProgressBar) {
+      setIsLoading(false);
+    }
+  }, [percentage, setIsLoading]);
 
   // 轉換秒數
   const secondsToStandardTime = (seconds) => {
@@ -217,6 +227,8 @@ export default function ProgressControl({
 
   return (
     <Progress>
+      {isLoading && <Loading />}
+      {/* <Loading /> */}
       <Slider>
         <ProgressCurrent
           style={{
