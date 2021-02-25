@@ -41,7 +41,7 @@ export default function useMusicPlayer() {
 
   useEffect(() => {
     getRecords().then((res) => {
-      if (res.ok) {
+      if (res.ok && res.data[0]) {
         const audio = audioEl.current;
         const data = res.data[0];
         const lastId = data.episodeId;
