@@ -7,6 +7,9 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
+import useUser from "../../hooks/useUser";
+import useCurrentEpisode from "../../hooks/useCurrentEpisode";
+import { useEffect } from "react";
 
 const Control = styled.div`
   display: flex;
@@ -139,24 +142,36 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({
-  isPlaying,
-  setIsPlaying,
-  currentEpisode,
-}) {
+export default function PlayerControl({ handleSong, audioEl }) {
+  const { userInfo } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
   const handlePlayPauseBtn = () => {
-    if (currentEpisode.id) {
-      setIsPlaying(!isPlaying);
-    }
+    // 如果非會員且沒有播放內容
+    if (!userInfo || !currentEpisode.id) return;
+
+    const { playing, ...rest } = currentEpisode;
+    setCurrentEpisode({
+      playing: !playing,
+      ...rest,
+    });
   };
+
+  useEffect(() => {
+    if (currentEpisode.playing) {
+      audioEl.current.play();
+    } else {
+      audioEl.current.pause();
+    }
+  }, [audioEl, currentEpisode]);
 
   return (
     <Control>
-      <PrevControl>
+      <PrevControl onClick={() => handleSong("last")}>
         <Icon.PreviousBtn />
       </PrevControl>
       <PlayPauseControl onClick={handlePlayPauseBtn}>
-        {isPlaying ? (
+        {currentEpisode.playing ? (
           <PauseControl>
             <Icon.PauseBtn />
           </PauseControl>
@@ -166,7 +181,7 @@ export default function PlayerControl({
           </PlayControl>
         )}
       </PlayPauseControl>
-      <NextControl>
+      <NextControl onClick={() => handleSong("next")}>
         <Icon.NextBtn />
       </NextControl>
     </Control>

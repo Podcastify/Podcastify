@@ -1,11 +1,8 @@
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer/Player";
 import ChannelSidebar from "../components/ChannelSidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -18,6 +15,7 @@ import { getPodcastInfo, getEpisodeInfo } from "../WebAPI/listenAPI";
 import { addEpisodeToPlaylist } from "../WebAPI/me";
 import { useCallback, useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 const Container = styled.div`
   width: 100%;
@@ -262,6 +260,8 @@ const Summary = styled.summary`
   }
 `;
 
+const PlayPauseBtnControl = styled.div``;
+
 const PlayBtnControl = styled.div`
   height: 55px;
   cursor: pointer;
@@ -299,6 +299,8 @@ const PlayBtnControl = styled.div`
     }
   }
 `;
+
+const PauseBtnControl = styled(PlayBtnControl)``;
 
 const Text = styled.div`
   display: flex;
@@ -600,95 +602,140 @@ const CollapseControl = styled.div`
 function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
+  const { userPlaylists, setUserPlaylists } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
   const onToggle = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
-  const { userPlaylists, setUserPlaylists } = useUser();
-  
+
   const addEpisode = useCallback(async () => {
     if (!userPlaylists[0]) {
-      alert('please add an playlist first');
-      history.push('/myplaylist');
+      alert("please add an playlist first");
+      history.push("/myplaylist");
     }
     await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
-    console.log({userPlaylists})
+    console.log({ userPlaylists });
     const response = await getEpisodeInfo(episodeInfo.id);
     const newEpisode = response.data;
     console.log({ newEpisode });
-    const newPlaylist = userPlaylists.map(
-      playlist => {
-        if (playlist.id !== userPlaylists[0].id) return playlist;
-        let { Episodes, ...rest } = playlist;
-        Episodes = [...Episodes, newEpisode];
-        return { Episodes, ...rest };
-      }
-    )
+    const newPlaylist = userPlaylists.map((playlist) => {
+      if (playlist.id !== userPlaylists[0].id) return playlist;
+      let { Episodes, ...rest } = playlist;
+      Episodes = [...Episodes, newEpisode];
+      return { Episodes, ...rest };
+    });
     console.log({ newPlaylist });
     setUserPlaylists(newPlaylist);
-  }, [userPlaylists, episodeInfo, history])
-  
-  const handleAddIconClick = async e => {
+  }, [userPlaylists, episodeInfo, history]);
+
+  const handleAddIconClick = async (e) => {
     e.preventDefault();
     addEpisode();
-  }
+  };
+
+  const handlePlayPauseBtn = () => {
+    if (!episodeInfo || !podcastInfo) return;
+
+    // 如果現在播放內容就是該集內容，先確認播放狀況
+    if (currentEpisode.id === episodeInfo.id) {
+      const { playing, ...rest } = currentEpisode;
+      setCurrentEpisode({
+        playing: !playing,
+        ...rest,
+      });
+      return;
+    }
+
+    // 如果現在播放內容不是該集內容，直接播放
+    setCurrentEpisode({
+      id: episodeInfo.id,
+      src: episodeInfo.audio,
+      title: episodeInfo.title,
+      channelTitle: podcastInfo.title,
+      channelId: podcastInfo.id,
+      order: 0,
+      playmode: null,
+      playing: true,
+    });
+  };
 
   return (
     <Details open={isOpen} onClick={onToggle}>
-    <Summary open={isOpen}>
-      <PlayBtnControl>
-        <Images.PodcastPlayBtn />
-      </PlayBtnControl>
-      <Text>
+      <Summary open={isOpen}>
+        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+          {currentEpisode.id === episodeInfo.id ? (
+            currentEpisode.playing ? (
+              <PauseBtnControl>
+                <Images.PodcastPauseBtn />
+              </PauseBtnControl>
+            ) : (
+              <PlayBtnControl>
+                <Images.PodcastPlayBtn />
+              </PlayBtnControl>
+            )
+          ) : (
+            <PlayBtnControl>
+              <Images.PodcastPlayBtn />
+            </PlayBtnControl>
+          )}
+        </PlayPauseBtnControl>
+        <Text>
           <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
-        <EpisodeDescription dangerouslySetInnerHTML={{__html:episodeInfo.description.replace(/<[^>]+>/g, '')}}>
-      </EpisodeDescription>
-        <ChannelName>{podcastInfo.title}</ChannelName>
-      </Text>
-      <AddToPlayListControl>
-        <Images.AddToPlayListBtn onClick={handleAddIconClick}/>
-      </AddToPlayListControl>
-    </Summary>
-    <DetailsBlock>
-      <DetailsHeader>
+          <EpisodeDescription
+            dangerouslySetInnerHTML={{
+              __html: episodeInfo.description.replace(/<[^>]+>/g, ""),
+            }}
+          ></EpisodeDescription>
+          <ChannelName>{podcastInfo.title}</ChannelName>
+        </Text>
+        <AddToPlayListControl>
+          <Images.AddToPlayListBtn onClick={handleAddIconClick} />
+        </AddToPlayListControl>
+      </Summary>
+      <DetailsBlock>
+        <DetailsHeader>
           <DetailsEpisodeName>{episodeInfo.title}</DetailsEpisodeName>
-        <DetailsDurationTime>{`${Math.floor(episodeInfo.audio_length_sec / 60)}分鐘`}</DetailsDurationTime>
-      </DetailsHeader>
-      <EpisodeDetails dangerouslySetInnerHTML={{__html:episodeInfo.description.replace({__html:episodeInfo.description})}}>
-        
-    </EpisodeDetails>
+          <DetailsDurationTime>{`${Math.floor(
+            episodeInfo.audio_length_sec / 60
+          )}分鐘`}</DetailsDurationTime>
+        </DetailsHeader>
+        <EpisodeDetails
+          dangerouslySetInnerHTML={{
+            __html: episodeInfo.description.replace({
+              __html: episodeInfo.description,
+            }),
+          }}
+        ></EpisodeDetails>
         <AddToPlayList>
-        <AddControl>
+          <AddControl>
             <Images.AddToPlayListBtn />
-        </AddControl>
-        <AddText>加入播放清單</AddText>
-      </AddToPlayList>
-      <CollapseControl onClick={onToggle}>
-        <Images.CollapseBtn />
-      </CollapseControl>
-    </DetailsBlock>
+          </AddControl>
+          <AddText>加入播放清單</AddText>
+        </AddToPlayList>
+        <CollapseControl onClick={onToggle}>
+          <Images.CollapseBtn />
+        </CollapseControl>
+      </DetailsBlock>
     </Details>
-  )
+  );
 }
 
 export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
   useEffect(() => {
-    getPodcastInfo(podcastId)
-      .then(response => {
-        setPodcastInfo(response.data)
-      })
-  }, [podcastId])
-
-  
+    getPodcastInfo(podcastId).then((response) => {
+      setPodcastInfo(response.data);
+    });
+  }, [podcastId]);
 
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
-          <ChannelSidebar podcastInfo={ podcastInfo }/>
+          <ChannelSidebar podcastInfo={podcastInfo} />
           <PlayList>
             <TitleHeader>
               <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
@@ -696,16 +743,18 @@ export default function Channel() {
               <ChannelNameHeader>頻道名稱</ChannelNameHeader>
             </TitleHeader>
             <Body>
-              {
-                podcastInfo
-                  ? podcastInfo.episodes.map(el => <EpisodeInfoDetails podcastInfo={podcastInfo} episodeInfo={el} />)
-                  : ''
-              }
+              {podcastInfo
+                ? podcastInfo.episodes.map((el) => (
+                    <EpisodeInfoDetails
+                      podcastInfo={podcastInfo}
+                      episodeInfo={el}
+                    />
+                  ))
+                : ""}
             </Body>
           </PlayList>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
   );
 }

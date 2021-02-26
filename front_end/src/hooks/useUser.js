@@ -10,7 +10,8 @@ export default function useUser() {
     setUserInfo,
     setUserSubscription,
     setUserPlaylists,
-    setUserPlayedRecord, } = useContext(UserContext);
+    setUserPlayedRecord,
+  } = useContext(UserContext);
   return {
     userInfo,
     userSubscription,
@@ -20,5 +21,5 @@ export default function useUser() {
     setUserSubscription,
     setUserPlaylists,
     setUserPlayedRecord,
-  }
+  };
 }
