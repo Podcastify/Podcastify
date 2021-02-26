@@ -42,6 +42,7 @@ export default function useInput(formInputs) {
 
   return {
     inputs,
+    setInputs,
     handlers,
   };
 }

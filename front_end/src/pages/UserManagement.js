@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import { Main, Div } from "../components/Main";
 import { UserContext } from "../context/context";
 import UserForm from "../components/UserForm";
+import useInputs from "../hooks/useInputs";
 import {
   BtnContainer,
   BtnLogInContainer,
@@ -73,7 +74,7 @@ export default function UserManagement() {
     setIsEditing(!isEditing);
   };
 
-  const inputs = [
+  const formInputs = [
     {
       attributes: {
         type: "text",
@@ -91,7 +92,7 @@ export default function UserManagement() {
         placeholder: "舊密碼",
         readOnly: !isEditing,
       },
-      title: "請輸入舊密碼",
+      title: isEditing ? "請輸入舊密碼" : "密碼",
     },
     {
       attributes: {
@@ -99,8 +100,11 @@ export default function UserManagement() {
         name: "newPassword",
         value: "",
         placeholder: "您的新密碼",
+        style: {
+          display: isEditing ? "" : "none"
+        },
       },
-      title: "請輸入新密碼",
+      title: !isEditing ? "" : "請輸入新密碼",
     },
     {
       attributes: {
@@ -108,16 +112,19 @@ export default function UserManagement() {
         name: "newPassword2",
         value: "",
         placeholder: "請再輸入一次新密碼",
+        style: {
+          display: isEditing ? "" : "none"
+        },
       },
-      title: "確認新密碼",
+      title: !isEditing ? "" : "確認新密碼",
     },
   ];
 
-  const [formInputs, setFormInputs] = useState(inputs);
+  const {inputs, setInputs, handlers } = useInputs(formInputs)
 
   useEffect(() => {
     if (isEditing) {
-      setFormInputs([
+      setInputs([
         {
           attributes: {
             type: "text",
@@ -144,7 +151,7 @@ export default function UserManagement() {
             value: "",
             placeholder: "您的新密碼",
           },
-          title: "請輸入新密碼",
+          title: isEditing ? "" : "請輸入新密碼",
         },
         {
           attributes: {
@@ -157,7 +164,7 @@ export default function UserManagement() {
         },
       ]);
     } else {
-      setFormInputs([
+      setInputs([
         {
           attributes: {
             type: "text",
@@ -179,7 +186,7 @@ export default function UserManagement() {
         },
       ]);
     }
-  }, [isEditing, setFormInputs]);
+  }, [isEditing, setInputs, userInfo]);
 
   return (
     <Container>
@@ -193,7 +200,10 @@ export default function UserManagement() {
               </ManageButton>
               {isEditing && <ManageButton>確認變更資料</ManageButton>}
             </TitleContainer>
-            <UserForm formInputs={formInputs}></UserForm>
+            <UserForm
+              inputs={inputs}
+              handlers={handlers}
+            />
           </SectionContainer>
         </Div>
       </Main>

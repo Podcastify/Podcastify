@@ -354,7 +354,7 @@ export default function ChannelSidebar({ podcastInfo }) {
   return (
     <SidebarContainer>
       <InfoCardWrapper>
-        {podcastInfo.image ? (
+        {podcastInfo ? (
           <InfoCardPhoto>
             <img
               src={podcastInfo.image}
@@ -368,7 +368,7 @@ export default function ChannelSidebar({ podcastInfo }) {
         )}
         <InfoCardContent>
           <InfoCardBlock>
-            <InfoCardTitle>{podcastInfo.title}</InfoCardTitle>
+            <InfoCardTitle>{podcastInfo ? podcastInfo.title : 'demo: 社畜日記'}</InfoCardTitle>
             <div onClick={handleSubscribeClick}>
               {subscription ? (
                 <SubscriptionBtn>訂閱中</SubscriptionBtn>
@@ -377,7 +377,7 @@ export default function ChannelSidebar({ podcastInfo }) {
               )}
             </div>
           </InfoCardBlock>
-          {podcastInfo.description && (
+          {podcastInfo && (
             <InfoCardText
               dangerouslySetInnerHTML={{
                 __html: podcastInfo.description.replace(/<[^>]+>/g, ""),
