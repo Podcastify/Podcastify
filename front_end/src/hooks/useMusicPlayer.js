@@ -23,16 +23,20 @@ export default function useMusicPlayer() {
     data = data.episode;
 
     // 設定為目前播放
-    setCurrentEpisode({
-      id: data.id,
-      src: data.audio,
-      title: data.title,
-      channelTitle: data.podcast.title,
-      channelId: data.podcast.id,
-      order: null,
-      playmode: null,
-      playing: false,
-    });
+    if (data) {
+      setCurrentEpisode(
+        {
+          id: data.id,
+          src: data.audio,
+          title: data.title,
+          channelTitle: data.podcast.title,
+          channelId: data.podcast.id,
+          order: null,
+          playmode: null,
+          playing: false,
+        }
+      )
+    };
 
     // 設定進度條到上次紀錄位置
     audio.currentTime = lastTime;

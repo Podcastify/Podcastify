@@ -227,7 +227,7 @@ export default function ProgressControl({
 
   return (
     <Progress>
-      {isLoading && <Loading />}
+      {/* {isLoading && <Loading />} */}
       <Slider>
         <ProgressCurrent
           style={{

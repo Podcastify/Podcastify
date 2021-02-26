@@ -408,7 +408,8 @@ export default function Sidebar() {
             userPlaylists[0].Episodes.map((episodeInfo) => (
               <SidebarListWrapper key={episodeInfo.id}>
                 <SidebarListLeft>
-                  <SidebarListTitle>{episodeInfo.title}</SidebarListTitle>
+                  {/* 是看看短路能不能讓 sidebar 正常顯示 */}
+                  <SidebarListTitle>{episodeInfo.title || episodeInfo.id}</SidebarListTitle>
                   <SidebarListContent
                     dangerouslySetInnerHTML={
                       episodeInfo.description
@@ -418,7 +419,7 @@ export default function Sidebar() {
                               ""
                             ),
                           }
-                        : ""
+                        : {__html: '沒東西'}
                     }
                   ></SidebarListContent>
                 </SidebarListLeft>
