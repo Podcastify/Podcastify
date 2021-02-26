@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
@@ -10,7 +11,7 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
-import { AlertMessageContext } from "../context/context";
+import useUser from "../hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -327,6 +328,8 @@ const DeleteIcon = styled.div`
 `;
 
 export default function Subcription() {
+  const { userSubscription } = useUser();
+  console.log(userSubscription);
   return (
     <Container>
       <MainWrapper>

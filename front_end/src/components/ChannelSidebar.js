@@ -1,4 +1,6 @@
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import DemoImage from "../images/avatar.jpg";
 import {
   MEDIA_QUERY_XS,
@@ -7,6 +9,8 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import { addSubsciption, getMySubsciption } from "../WebAPI/me";
+import { useParams } from "react-router-dom";
 
 export const SidebarContainer = styled.aside`
   width: 22vw;
@@ -174,6 +178,7 @@ const InfoCardBlock = styled.div`
 `;
 
 const InfoCardTitle = styled.h2`
+  width: 90%;
   color: ${(props) => props.theme.white};
   margin: 10px 0px 60px 0px;
   font-weight: bold;
@@ -185,17 +190,21 @@ const InfoCardTitle = styled.h2`
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
+    width: 80%;
     font-size: 24px;
     margin: 20px 0px 30px 0px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 20px;
+
+    width: 80%;
+    font-size: 22px;
     margin: 20px 0px 30px 0px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 22px;
+    width: 80%;
+    font-size: 20px;
     margin: 20px 0px 40px 0px;
   }
 
@@ -212,7 +221,7 @@ const InfoCardTitle = styled.h2`
   }
 `;
 
-const InfoCardButton = styled.button`
+const UnsubscriptionBtn = styled.button`
   cursor: pointer;
   width: 140px;
   height: 60px;
@@ -220,25 +229,18 @@ const InfoCardButton = styled.button`
   border: 2px solid ${(props) => props.theme.grey_opacity};
   color: ${(props) => props.theme.white};
   text-decoration: none;
-  background: rgba(255, 255, 255, 0);
+  background: transparent;
 
   &:focus {
     outline: none;
   }
 
-  &:hover {
+  /* &:hover {
     border: hidden;
     color: ${(props) => props.theme.white};
     background: ${(props) => props.theme.hover_color};
     border: 3px solid ${(props) => props.theme.hover_color};
-  }
-
-  &:active {
-    border: hidden;
-    color: ${(props) => props.theme.white};
-    background: ${(props) => props.theme.click_color};
-    border: 3px solid ${(props) => props.theme.click_color};
-  }
+  } */
 
   ${MEDIA_QUERY_XL} {
     width: 120px;
@@ -269,6 +271,22 @@ const InfoCardButton = styled.button`
     height: 34px;
     font-size: 15px;
   }
+`;
+
+const SubscriptionBtn = styled(UnsubscriptionBtn)`
+  outline: none;
+  border: hidden;
+  color: ${(props) => props.theme.white};
+  background: ${(props) => props.theme.click_color};
+  border: 3px solid ${(props) => props.theme.click_color};
+
+  /* &:hover {
+    outline: none;
+    border: hidden;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.click_color};
+    border: 3px solid ${(props) => props.theme.click_color};
+  } */
 `;
 
 const InfoCardText = styled.div`
@@ -304,26 +322,68 @@ const InfoCardText = styled.div`
   }
 `;
 
-export default function ChannelSidebar({podcastInfo}) {
+export default function ChannelSidebar({ podcastInfo }) {
+  const { podcastId } = useParams();
+  const [subscription, setSubscription] = useState(false);
+
+  const handleSubscribeClick = (e) => {
+    e.preventDefault();
+    if (!subscription) {
+      addSubsciption(podcastId).then((response) => {
+        if (response.ok) {
+          setSubscription(true);
+        }
+        return;
+      });
+    }
+  };
+
+  useEffect(() => {
+    getMySubsciption().then((response) => {
+      let data = response.data;
+      console.log(data);
+      const SubscribedID = data.find((item) => item.id === podcastId);
+      if (SubscribedID) {
+        setSubscription(true);
+      } else {
+        return setSubscription(false);
+      }
+    });
+  }, [podcastId]);
+
   return (
     <SidebarContainer>
       <InfoCardWrapper>
-        <InfoCardPhoto>
-          <img src={DemoImage} alt="" />
-        </InfoCardPhoto>
+        {podcastInfo.image ? (
+          <InfoCardPhoto>
+            <img
+              src={podcastInfo.image}
+              alt={`The Podcast titled: ${podcastInfo.title}`}
+            />
+          </InfoCardPhoto>
+        ) : (
+          <InfoCardPhoto>
+            <img src={DemoImage} alt="" />
+          </InfoCardPhoto>
+        )}
         <InfoCardContent>
           <InfoCardBlock>
-            <InfoCardTitle>{podcastInfo ? podcastInfo.title : "社畜日記"}</InfoCardTitle>
-            <InfoCardButton>訂閱</InfoCardButton>
+            <InfoCardTitle>{podcastInfo.title}</InfoCardTitle>
+            <div onClick={handleSubscribeClick}>
+              {subscription ? (
+                <SubscriptionBtn>訂閱中</SubscriptionBtn>
+              ) : (
+                <UnsubscriptionBtn>訂閱</UnsubscriptionBtn>
+              )}
+            </div>
           </InfoCardBlock>
-          <InfoCardText>
-            {
-              podcastInfo ? podcastInfo.description :
-              `用隨性的對話包裝知識， 用認真的口吻胡說八道。
-              我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-              用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...`
-            }
-          </InfoCardText>
+          {podcastInfo.description && (
+            <InfoCardText
+              dangerouslySetInnerHTML={{
+                __html: podcastInfo.description.replace(/<[^>]+>/g, ""),
+              }}
+            ></InfoCardText>
+          )}
         </InfoCardContent>
       </InfoCardWrapper>
     </SidebarContainer>

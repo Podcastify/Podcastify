@@ -3,6 +3,7 @@ import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
