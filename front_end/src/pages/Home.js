@@ -4,6 +4,7 @@ import { Main, Div } from "../components/Main";
 import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
 import Loading from "../components/Loading";
+import AlertMessage from "../components/AlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -27,7 +28,8 @@ export default function Home() {
       {/* <Loading /> */}
       <MainWrapper>
         <Div>
-          <Sidebar />
+          {/* <Sidebar /> */}
+          <AlertMessage />
           <InfoCard />
         </Div>
       </MainWrapper>

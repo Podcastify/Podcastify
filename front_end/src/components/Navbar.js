@@ -12,6 +12,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext } from "../context/context";
 import { useState, useContext } from "react";
 import SearchBar from "./SearchBar";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 const NavigationBar = styled.div``;
 const Nav = styled.nav`
@@ -462,6 +463,7 @@ export default function Navbar() {
     setUserPlaylists,
     setUserPlayedRecord,
   } = useContext(UserContext);
+  const { setCurrentEpisode } = useCurrentEpisode();
   const history = useHistory();
   const location = useLocation();
 
@@ -475,6 +477,7 @@ export default function Navbar() {
     setUserSubscription([]);
     setUserPlayedRecord([]);
     setUserPlaylists([]);
+    setCurrentEpisode({});
     if (location.pathname !== "/") {
       history.push("/");
     }

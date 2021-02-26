@@ -92,7 +92,7 @@ function App() {
         }
       }
     }
-    //getUser();
+    getUser();
     /* 
       在這邊把會員的訂閱等資訊放入 state 中
       拿到的資料可以用 destructure 寫成下面這樣
