@@ -1,11 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Main, Div } from "../components/Main"
+import { Main, Div } from "../components/Main";
 import { UserContext } from "../context/context";
-import UserForm from "../components/UserForm"
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer";
-import { BtnContainer, BtnLogInContainer, BtnLogIn, ButtonName } from "../components/ButtonGroup"
+import UserForm from "../components/UserForm";
+import {
+  BtnContainer,
+  BtnLogInContainer,
+  BtnLogIn,
+  ButtonName,
+} from "../components/ButtonGroup";
 
 const Container = styled.div`
   width: 100%;
@@ -21,21 +24,21 @@ const SectionContainer = styled(Container)`
   width: 100%;
   overflow-y: unset;
   align-items: stretch;
-`
+`;
 
 const PageTitle = styled.h1`
   color: #ffffff;
   font-size: 4rem;
   font-weight: normal;
-`
+`;
 
 const TitleContainer = styled(SectionContainer)`
   padding: 0;
-  height:auto;
+  height: auto;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
-`
+`;
 
 const ManageButton = styled.div`
   display: flex;
@@ -63,13 +66,12 @@ const ManageButton = styled.div`
 `;
 
 export default function UserManagement() {
-
   const { userInfo } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const handleManagementBtnClick = (e) => {
-    console.log(formInputs)
-    setIsEditing(!isEditing)
-  }
+    console.log(formInputs);
+    setIsEditing(!isEditing);
+  };
 
   const inputs = [
     {
@@ -79,7 +81,7 @@ export default function UserManagement() {
         name: "username",
         value: userInfo ? userInfo.username : "TEST",
       },
-      title: "帳號"
+      title: "帳號",
     },
     {
       attributes: {
@@ -87,9 +89,9 @@ export default function UserManagement() {
         name: "oldPassword",
         value: "",
         placeholder: "舊密碼",
-        readOnly: !isEditing
+        readOnly: !isEditing,
       },
-      title: "請輸入舊密碼"
+      title: "請輸入舊密碼",
     },
     {
       attributes: {
@@ -98,18 +100,18 @@ export default function UserManagement() {
         value: "",
         placeholder: "您的新密碼",
       },
-      title: "請輸入新密碼"
+      title: "請輸入新密碼",
     },
     {
       attributes: {
         type: "password",
         name: "newPassword2",
         value: "",
-        placeholder: "請再輸入一次新密碼"
+        placeholder: "請再輸入一次新密碼",
       },
-      title: "確認新密碼"
+      title: "確認新密碼",
     },
-  ]
+  ];
 
   const [formInputs, setFormInputs] = useState(inputs);
 
@@ -123,7 +125,7 @@ export default function UserManagement() {
             name: "username",
             value: userInfo ? userInfo.username : "TEST",
           },
-          title: "帳號"
+          title: "帳號",
         },
         {
           attributes: {
@@ -131,9 +133,9 @@ export default function UserManagement() {
             name: "oldPassword",
             value: "",
             placeholder: "舊密碼",
-            readOnly: false
+            readOnly: false,
           },
-          title: "請輸入舊密碼"
+          title: "請輸入舊密碼",
         },
         {
           attributes: {
@@ -142,18 +144,18 @@ export default function UserManagement() {
             value: "",
             placeholder: "您的新密碼",
           },
-          title: "請輸入新密碼"
+          title: "請輸入新密碼",
         },
         {
           attributes: {
             type: "password",
             name: "newPassword2",
             value: "",
-            placeholder: "請再輸入一次新密碼"
+            placeholder: "請再輸入一次新密碼",
           },
-          title: "確認新密碼"
+          title: "確認新密碼",
         },
-      ])
+      ]);
     } else {
       setFormInputs([
         {
@@ -163,7 +165,7 @@ export default function UserManagement() {
             name: "username",
             value: userInfo ? userInfo.username : "TEST",
           },
-          title: "帳號"
+          title: "帳號",
         },
         {
           attributes: {
@@ -171,39 +173,30 @@ export default function UserManagement() {
             name: "oldPassword",
             value: "**********",
             placeholder: "舊密碼",
-            readOnly: true
+            readOnly: true,
           },
-          title: "密碼"
+          title: "密碼",
         },
-      ])
+      ]);
     }
-  }, [isEditing, setFormInputs])
+  }, [isEditing, setFormInputs]);
 
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
           <SectionContainer>
             <TitleContainer>
               <PageTitle>會員資料</PageTitle>
-              <ManageButton
-                onClick={handleManagementBtnClick}
-              >
+              <ManageButton onClick={handleManagementBtnClick}>
                 管理我的帳戶
               </ManageButton>
-              {isEditing && <ManageButton>
-                確認變更資料
-            </ManageButton>}
+              {isEditing && <ManageButton>確認變更資料</ManageButton>}
             </TitleContainer>
-            <UserForm
-              formInputs={formInputs}
-            >
-            </UserForm>
+            <UserForm formInputs={formInputs}></UserForm>
           </SectionContainer>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
-  )
+  );
 }

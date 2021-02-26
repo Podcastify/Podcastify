@@ -18,34 +18,12 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* height: 60px; */
   height: 13vh;
-  // 以下為新增，Navbar 固定在最上方
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   z-index: 3;
-
-  /* ${MEDIA_QUERY_SM} {
-    height: 70px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    height: 80px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    height: 90px;
-  }
-
-  ${MEDIA_QUERY_XL} {
-    height: 100px;
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    height: 110px;
-  } */
 `;
 
 const LeftSection = styled.div`
@@ -253,7 +231,6 @@ const Lists = styled.ul`
   color: ${(props) => props.theme.white};
   background-color: #333333;
   width: 100px;
-  font-size: 15px;
   z-index: 3;
 
   :after {
@@ -296,7 +273,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_SM} {
     margin-right: 6px;
     width: 120px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -318,7 +295,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_MD} {
     margin-right: 8px;
     width: 130px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -340,7 +317,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_LG} {
     margin-right: 12px;
     width: 150px;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 10px;
 
     :after {
@@ -362,7 +339,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_XL} {
     margin-right: 12px;
     width: 150px;
-    font-size: 15px;
+    font-size: 20px;
     border-radius: 10px;
 
     :after {
@@ -384,7 +361,7 @@ const Lists = styled.ul`
   ${MEDIA_QUERY_XXL} {
     margin-right: 15px;
     width: 210px;
-    font-size: 26px;
+    font-size: 25px;
     border-radius: 15px;
 
     :after {
@@ -478,7 +455,13 @@ const ListItem = styled(Link)`
 
 export default function Navbar() {
   const [isShowList, setIsShowList] = useState(false);
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const {
+    userInfo,
+    setUserInfo,
+    setUserSubscription,
+    setUserPlaylists,
+    setUserPlayedRecord,
+  } = useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
 
@@ -489,7 +472,18 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("podcastifyToken");
     setUserInfo(null);
+    setUserSubscription([]);
+    setUserPlayedRecord([]);
+    setUserPlaylists([]);
+    if (location.pathname !== "/") {
+      history.push("/");
+    }
   };
+
+  // 如果在註冊頁面或是登入頁面不顯示 navbar
+  if (location.pathname === "/register" || location.pathname === "/login") {
+    return null;
+  }
 
   return (
     <NavigationBar>
@@ -508,7 +502,7 @@ export default function Navbar() {
           <ListControl $isShow={isShowList}>
             <Lists>
               {userInfo ? (
-                <ListTitle>會員您好</ListTitle>
+                <ListTitle>{userInfo.username} 您好</ListTitle>
               ) : (
                 <ListTitle>訪客您好</ListTitle>
               )}

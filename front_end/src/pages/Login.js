@@ -7,6 +7,7 @@ import coverImg from "../images/loginPageCover.jpg";
 import {MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL, MEDIA_QUERY_XXL } from "../constants/breakpoints"
 import { login } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
+import { getEpisodeInfo } from "../WebAPI/listenAPI";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
@@ -123,7 +124,12 @@ const registerBtnAttributes = {
 }
 
 export default function Login() {
-  const { setUserInfo } = useUser();
+  const {
+    setUserInfo,
+    setUserPlayedRecord,
+    setUserPlaylists,
+    setUserSubscription
+  } = useUser();
   const history = useHistory()
 
   const handleToRegisterBtn = e => {
@@ -152,8 +158,20 @@ export default function Login() {
     if (result.ok) {
       window.localStorage.removeItem('podcastifyToken');
       window.localStorage.setItem('podcastifyToken', result.token)
-      const loggedInUser = await getMyInfo(result.token);
-      setUserInfo(loggedInUser.data);
+      const response = await getMyInfo(result.token);
+      let { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
+      for (let i = 0; i < playlists.length; i++) {
+        let { Episodes, ...rest } = playlists[i];
+        Episodes = await Promise.all(Episodes.map(async ep => {
+          const episodeInfo = await getEpisodeInfo(ep.id);
+          return episodeInfo.data;
+        }))
+        playlists[i] = ({ Episodes, ...rest });
+      }
+      setUserInfo(userInfo);
+      setUserPlaylists(playlists);
+      setUserSubscription(subscriptions);
+      setUserPlayedRecord(playedRecords)
       history.push('/');
     } else {
       window.localStorage.removeItem('podcastifyToken');

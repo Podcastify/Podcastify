@@ -42,10 +42,19 @@ const subscribe = async (req, res, next) => {
   const userId = req.jwtData.id;
   const { podcastId } = req.params;
   try {
+    await Podcasts.create(
+      {
+        id: podcastId
+      }
+    )
+  } catch (err) {
+
+  }
+  try {
     const result = await Podcasts.create({
       id: podcastId,
     });
-  } catch (err) {}
+  } catch (err) { }
   try {
     const result = await Subscriptions.create({
       userId,

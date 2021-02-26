@@ -31,8 +31,17 @@ const getUserPlayedRecord = async (req, res, next) => {
 const writeRecord = async (req, res, next) => {
   const userId = req.jwtData.id;
   const { episodeId } = req.params;
-  const { progress } = req.body;
+  const progress = req.body.progress || 0;
   let record;
+  try {
+    await Episodes.create(
+      {
+        id: episodeId
+      }
+    )
+  } catch (err) {
+
+  }
   try {
     record = await Records.findOne({
       where: {
@@ -66,6 +75,7 @@ const writeRecord = async (req, res, next) => {
       await Records.create({
         userId,
         episodeId,
+        progress,
       });
     } catch (err) {
       res.locals.error = err;

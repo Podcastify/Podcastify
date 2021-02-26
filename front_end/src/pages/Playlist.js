@@ -1,10 +1,12 @@
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
+import { useCallback } from "react";
+import useUser from "../hooks/useUser";
+import useInputs from "../hooks/useInputs";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
@@ -13,6 +15,12 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
+import UserForm from "../components/UserForm";
+import {
+  deleteEpisodeFromPlaylist,
+  addPlaylist,
+  getAllMyPlaylists,
+} from "../WebAPI/me";
 
 const Container = styled.div`
   width: 100%;
@@ -127,7 +135,7 @@ const TitleText = styled.div`
   }
 `;
 const PlaylistName = styled.div`
-  font-size: 52.5px;
+  font-size: 52px;
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
@@ -139,11 +147,11 @@ const PlaylistName = styled.div`
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 32px;
+    font-size: 30px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 24px;
+    font-size: 25px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -491,6 +499,8 @@ const Summary = styled.summary`
   }
 `;
 
+const PlayPauseBtnControl = styled.div``;
+
 const PlayBtnControl = styled.div`
   height: 55px;
   cursor: pointer;
@@ -535,13 +545,15 @@ const PlayBtnControl = styled.div`
   }
 `;
 
+const PauseBtnControl = styled(PlayBtnControl)``;
+
 const Text = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   position: absolute;
   left: 107.5px;
-  font-size: 26px;
+  font-size: 25px;
   letter-spacing: 0.5px;
   line-height: 1.2;
   /* margin-left: 13.5px; */
@@ -555,7 +567,7 @@ const Text = styled.div`
 
   ${MEDIA_QUERY_LG} {
     left: 68.5px;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -646,9 +658,6 @@ const ChannelName = styled(EpisodeTitle)`
 `;
 
 const DeleteBtnControl = styled.div`
-  position: absolute;
-  right: 20px;
-
   svg {
     display: none;
     width: 25px;
@@ -656,10 +665,151 @@ const DeleteBtnControl = styled.div`
   }
 `;
 
+const formInputs = [
+  {
+    attributes: {
+      type: "text",
+      name: "name",
+      id: "name",
+      placeholder: "播放清單名稱",
+      value: "",
+      required: true,
+    },
+    title: "",
+    errorMessage: "",
+  },
+  {
+    attributes: {
+      type: "submit",
+      name: "add",
+      id: "add",
+      value: "新增",
+      required: true,
+    },
+    title: "",
+    errorMessage: "",
+  },
+];
+
+function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
+  const { setUserPlaylists } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
+  const deleteEpisode = useCallback(async () => {
+    await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
+    const newPlaylist = userPlaylists.map((playlist) => {
+      let { Episodes, ...rest } = playlist;
+      Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
+      return { Episodes, ...rest };
+    });
+    console.log(newPlaylist);
+    setUserPlaylists(newPlaylist);
+  }, [userPlaylists, episodeInfo, setUserPlaylists]);
+
+  const handleDeleteIconClick = async (e) => {
+    e.preventDefault();
+    deleteEpisode();
+  };
+
+  const handlePlayPauseBtn = () => {
+    if (!episodeInfo) return;
+
+    // 取得目前該集數在播放列表的順序
+    let playlistOrder;
+    const episodes = userPlaylists[0].Episodes;
+    for (let i = 0; i < episodes.length; i++) {
+      if (episodeInfo.id === episodes[i].id) {
+        playlistOrder = i;
+      }
+    }
+
+    // 如果現在播放內容就是該集內容，先確認播放狀況並設定播放順序
+    if (currentEpisode.id === episodeInfo.id) {
+      const { playing, playmode, order, ...rest } = currentEpisode;
+      setCurrentEpisode({
+        playing: !playing,
+        playmode: "continued",
+        order: playlistOrder,
+        ...rest,
+      });
+      return;
+    }
+
+    // 如果現在播放內容不是該集內容，直接播放並設定播放順序
+    setCurrentEpisode({
+      id: episodeInfo.id,
+      src: episodeInfo.audio,
+      title: episodeInfo.title,
+      channelTitle: episodeInfo.podcast.title,
+      channelId: episodeInfo.podcast.id,
+      order: playlistOrder,
+      playmode: "continued",
+      playing: true,
+    });
+  };
+
+  return (
+    <Details>
+      <Summary>
+        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+          {currentEpisode.id === episodeInfo.id ? (
+            currentEpisode.playing ? (
+              <PauseBtnControl>
+                <Images.PodcastPauseBtn />
+              </PauseBtnControl>
+            ) : (
+              <PlayBtnControl>
+                <Images.PodcastPlayBtn />
+              </PlayBtnControl>
+            )
+          ) : (
+            <PlayBtnControl>
+              <Images.PodcastPlayBtn />
+            </PlayBtnControl>
+          )}
+        </PlayPauseBtnControl>
+        <Text>
+          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+          <EpisodeDescription
+            dangerouslySetInnerHTML={
+              episodeInfo.description
+                ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
+                : ""
+            }
+          ></EpisodeDescription>
+          <ChannelName>{episodeInfo.podcast.title}</ChannelName>
+        </Text>
+        <DeleteBtnControl onClick={handleDeleteIconClick}>
+          <Images.DeleteBtn />
+        </DeleteBtnControl>
+      </Summary>
+    </Details>
+  );
+}
+
 export default function Playlist() {
+  const { userPlaylists, setUserPlaylists } = useUser();
+  const { setCurrentEpisode } = useCurrentEpisode();
+
+  const handlePlayWholePlaylist = () => {
+    // 如果播放清單是空的
+    if (userPlaylists.length === 0) return;
+
+    const episode = userPlaylists[0].Episodes[0];
+    setCurrentEpisode({
+      id: episode.id,
+      src: episode.audio,
+      title: episode.title,
+      channelTitle: episode.podcast.title,
+      channelId: episode.podcast.id,
+      order: 0,
+      playmode: "continued",
+      playing: true,
+    });
+  };
+
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
           <Sidebar />
@@ -669,10 +819,19 @@ export default function Playlist() {
               <TitleWrapper>
                 <TitleText>
                   <PlaylistName>我的播放清單</PlaylistName>
-                  <Subtitle>播放列表，共 22 部單元</Subtitle>
+                  <Subtitle>
+                    {userPlaylists.length > 0
+                      ? userPlaylists[0].name
+                      : "播放列表"}
+                    ，共{" "}
+                    {userPlaylists.length > 0
+                      ? userPlaylists[0].Episodes.length
+                      : 0}{" "}
+                    部單元
+                  </Subtitle>
                 </TitleText>
                 <Buttons>
-                  <PlaylistPlayBtnControl>
+                  <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
                     <Images.PodcastPlayBtn />
                   </PlaylistPlayBtnControl>
                   <RenamePlaylistBtnControl>
@@ -682,137 +841,27 @@ export default function Playlist() {
               </TitleWrapper>
             </PlaylistHeader>
             <PlayList>
-              <TitleHeader>
-                <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-                <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
-                <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-              </TitleHeader>
+              {userPlaylists.length > 0 && (
+                <TitleHeader>
+                  <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+                  <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
+                  <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+                </TitleHeader>
+              )}
               <Body>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
-                <Details>
-                  <Summary>
-                    <PlayBtnControl>
-                      <Images.PodcastPlayBtn />
-                    </PlayBtnControl>
-                    <Text>
-                      <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                      <EpisodeDescription>
-                        夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                      </EpisodeDescription>
-                      <ChannelName>社畜日記</ChannelName>
-                    </Text>
-                    <DeleteBtnControl>
-                      <Images.DeleteBtn />
-                    </DeleteBtnControl>
-                  </Summary>
-                </Details>
+                {userPlaylists.length > 0
+                  ? userPlaylists[0].Episodes.map((episodeInfo) => (
+                      <EpisodeInfoDetails
+                        episodeInfo={episodeInfo}
+                        userPlaylists={userPlaylists}
+                      />
+                    ))
+                  : ""}
               </Body>
             </PlayList>
           </PlaylistWrapper>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
   );
 }

@@ -149,6 +149,15 @@ const addEpisodeToPlaylist = async (req, res, next) => {
   const { episodeId } = req.params;
   let result;
   try {
+    await Episodes.create(
+      {
+        id: episodeId
+      }
+    )
+  } catch (err) {
+
+  }
+  try {
     result = await Playlists.count({
       where: {
         id: playlistId,
@@ -171,7 +180,7 @@ const addEpisodeToPlaylist = async (req, res, next) => {
         ...values,
       },
     });
-  } catch (err) {}
+  } catch (err) { }
   if (result > 0) {
     res.locals.errorMessage = "Duplicate episode in the playlist.";
     return res.status(400).json(res.locals);

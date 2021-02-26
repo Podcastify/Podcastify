@@ -31,7 +31,9 @@ const StyledInput = styled.input`
       cursor: pointer;
     }`}
 
-  ${({ readOnly }) => !readOnly ? `  &:focus {
+  ${({ readOnly }) =>
+    !readOnly
+      ? `  &:focus {
     background: #9d9d9d;
     opacity: 1;
     caret-color: white;
@@ -46,8 +48,7 @@ const StyledInput = styled.input`
     opacity: 0.5;
     background: rgb(65, 47, 42);
   }`
-    :
-    `
+      : `
     border: none;
     &:focus {
       outline: none;
@@ -72,7 +73,14 @@ const FormInputErrorMessage = styled.div`
   text-align: left;
 `;
 
-export default function Input({ className, title, attributes, handlers, errorMessage, onClick }) {
+export default function Input({
+  className,
+  title,
+  attributes,
+  handlers,
+  errorMessage,
+  onClick,
+}) {
   const { handleChange, handleValidationCheck } = handlers;
 
   const handleInputChange = (e) => {
@@ -90,7 +98,13 @@ export default function Input({ className, title, attributes, handlers, errorMes
         onInvalid={handleValidation}
         onChange={handleInputChange}
         // onBlur={handleValidation}
-        onClick={onClick ? onClick : () => {return}}
+        onClick={
+          onClick
+            ? onClick
+            : () => {
+                return;
+              }
+        }
       />
       <FormInputErrorMessage>{errorMessage}</FormInputErrorMessage>
     </StyledInputContainer>

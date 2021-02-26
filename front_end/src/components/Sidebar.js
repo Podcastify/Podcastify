@@ -8,6 +8,13 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import { SidebarContainer } from "./ChannelSidebar";
+import { Link } from "react-router-dom";
+import useUser from "../hooks/useUser";
+import useInputs from "../hooks/useInputs";
+import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
+import { useState } from "react";
+import UserForm from "../components/UserForm";
+import Images from "./Images";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -205,132 +212,234 @@ const SidebarListContent = styled.div`
   line-height: 1.5;
 `;
 
+const CoverPage = styled.div`
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.7);
+`;
+
+const AddPlaylistForm = styled(UserForm)`
+  height: auto;
+  margin: 0 auto;
+  background: #333333;
+`;
+
+const FormContainer = styled(SideListContainer)`
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 20px 20px 0 rgba(33, 25, 24, 0.2);
+  background-color: #333333;
+`;
+
+const CloseBtnControl = styled.div`
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+  margin-right: 20px;
+  cursor: pointer;
+
+  &:hover {
+    g {
+      opacity: 1;
+    }
+  }
+
+  ${MEDIA_QUERY_XL} {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  ${MEDIA_QUERY_LG} {
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  ${MEDIA_QUERY_MD} {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  ${MEDIA_QUERY_SM} {
+    svg {
+      width: 45px;
+      height: 45px;
+    }
+    margin-right: 16px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    svg {
+      width: 45px;
+      height: 45px;
+    }
+    margin-right: 16px;
+  }
+
+  &:hover {
+    circle {
+      opacity: 1;
+    }
+  }
+
+  ${MEDIA_QUERY_SM} {
+    margin-right: 0;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    margin-right: 0;
+  }
+`;
+
+const formInputs = [
+  {
+    attributes: {
+      type: "text",
+      name: "name",
+      id: "name",
+      placeholder: "播放清單名稱",
+      value: "",
+      required: true,
+    },
+    title: "",
+    errorMessage: "",
+  },
+  {
+    attributes: {
+      type: "submit",
+      name: "add",
+      id: "add",
+      value: "新增",
+      required: true,
+    },
+    title: "",
+    errorMessage: "",
+  },
+];
+
+function CoverPageForm({ showForm, setShowForm }) {
+  const { setUserPlaylists } = useUser();
+  const { inputs, handlers } = useInputs(formInputs);
+  const handleAddPlaylist = async (e) => {
+    e.preventDefault();
+    const filters = ["name"];
+    const playlistInformation = {};
+    inputs.forEach((input) => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          playlistInformation[filter] = input.attributes.value;
+        }
+      }
+    });
+    await addPlaylist(playlistInformation.name);
+    let myPlaylists = await getAllMyPlaylists();
+    myPlaylists = myPlaylists.data.map((playlist) => ({ ...playlist }));
+    setUserPlaylists(myPlaylists);
+    setShowForm(false);
+  };
+
+  return (
+    <CoverPage>
+      <FormContainer>
+        <CloseBtnControl onClick={() => setShowForm(false)}>
+          <Images.DeleteBtn />
+        </CloseBtnControl>
+        <AddPlaylistForm
+          inputs={inputs}
+          handlers={handlers}
+          onSubmit={handleAddPlaylist}
+        />
+      </FormContainer>
+    </CoverPage>
+  );
+}
+
 export default function Sidebar() {
+  const [showForm, setShowForm] = useState(false);
+  const { userPlaylists, userInfo } = useUser();
+
   return (
     <SidebarWrapper>
-      <SidebarTitle>我的播放清單</SidebarTitle>
+      {userInfo ? (
+        userPlaylists.length > 0 ? (
+          <Link to="/myplaylist">
+            <SidebarTitle>{userPlaylists[0].name}</SidebarTitle>
+          </Link>
+        ) : (
+          <Link
+            to="/"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <SidebarTitle
+              onClick={() => {
+                setShowForm(true);
+              }}
+            >
+              新增播放清單
+            </SidebarTitle>
+          </Link>
+        )
+      ) : (
+        <SidebarTitle>請先登入</SidebarTitle>
+      )}
       <SideListContainer>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
-        <SidebarListWrapper>
-          <SidebarListLeft>
-            <SidebarListTitle>EP1. 職場甘苦談</SidebarListTitle>
-            <SidebarListContent>社畜日記</SidebarListContent>
-          </SidebarListLeft>
-          <SidebarListRight>
-            <PlaylistPlayBtnControl>
-              <Icon.PlaylistPlayButton />
-            </PlaylistPlayBtnControl>
-            {/* <Icon.PlaylistPauseButton /> */}
-          </SidebarListRight>
-        </SidebarListWrapper>
+        {userInfo ? (
+          userPlaylists.length > 0 ? (
+            userPlaylists[0].Episodes.map((episodeInfo) => (
+              <SidebarListWrapper key={episodeInfo.id}>
+                <SidebarListLeft>
+                  {/* 是看看短路能不能讓 sidebar 正常顯示 */}
+                  <SidebarListTitle>{episodeInfo.title || episodeInfo.id}</SidebarListTitle>
+                  <SidebarListContent
+                    dangerouslySetInnerHTML={
+                      episodeInfo.description
+                        ? {
+                            __html: episodeInfo.description.replace(
+                              /<[^>]+>/g,
+                              ""
+                            ),
+                          }
+                        : {__html: '沒東西'}
+                    }
+                  ></SidebarListContent>
+                </SidebarListLeft>
+                <SidebarListRight>
+                  <PlaylistPlayBtnControl>
+                    <Icon.PlaylistPlayButton />
+                  </PlaylistPlayBtnControl>
+                </SidebarListRight>
+              </SidebarListWrapper>
+            ))
+          ) : (
+            <div></div>
+          )
+        ) : (
+          ""
+        )}
       </SideListContainer>
+      {showForm && (
+        <CoverPageForm showForm={showForm} setShowForm={setShowForm} />
+      )}
     </SidebarWrapper>
   );
 }

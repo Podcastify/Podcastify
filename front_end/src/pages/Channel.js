@@ -1,8 +1,7 @@
-import Navbar from "../components/Navbar";
-import MusicPlayer from "../components/MusicPlayer";
 import ChannelSidebar from "../components/ChannelSidebar";
 import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import {
@@ -13,8 +12,11 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { getPodcastInfo } from "../WebAPI/listenAPI";
-import { useEffect, useState } from "react";
+import { getPodcastInfo, getEpisodeInfo } from "../WebAPI/listenAPI";
+import { addEpisodeToPlaylist } from "../WebAPI/me";
+import { useCallback, useEffect, useState } from "react";
+import useUser from "../hooks/useUser";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 const Container = styled.div`
   width: 100%;
@@ -259,6 +261,8 @@ const Summary = styled.summary`
   }
 `;
 
+const PlayPauseBtnControl = styled.div``;
+
 const PlayBtnControl = styled.div`
   height: 55px;
   cursor: pointer;
@@ -297,13 +301,15 @@ const PlayBtnControl = styled.div`
   }
 `;
 
+const PauseBtnControl = styled(PlayBtnControl)``;
+
 const Text = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   position: absolute;
   left: 107.5px;
-  font-size: 26px;
+  font-size: 25px;
   letter-spacing: 0.5px;
   line-height: 1.2;
   /* margin-left: 13.5px; */
@@ -317,7 +323,7 @@ const Text = styled.div`
 
   ${MEDIA_QUERY_LG} {
     left: 68.5px;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -594,26 +600,140 @@ const CollapseControl = styled.div`
   }
 `;
 
-export default function Channel() {
+function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
+  const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
+  const { userPlaylists, setUserPlaylists } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
   const onToggle = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
 
-  const { podcastId } = useParams();
-  const [podcastInfo, setPodcastInfo] = useState([]);
+  const addEpisode = useCallback(async () => {
+    if (!userPlaylists[0]) {
+      alert("please add an playlist first");
+      history.push("/myplaylist");
+    }
+    await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
+    console.log({ userPlaylists });
+    const response = await getEpisodeInfo(episodeInfo.id);
+    const newEpisode = response.data;
+    console.log({ newEpisode });
+    const newPlaylist = userPlaylists.map((playlist) => {
+      if (playlist.id !== userPlaylists[0].id) return playlist;
+      let { Episodes, ...rest } = playlist;
+      Episodes = [...Episodes, newEpisode];
+      return { Episodes, ...rest };
+    });
+    console.log({ newPlaylist });
+    setUserPlaylists(newPlaylist);
+  }, [userPlaylists, episodeInfo, history]);
 
+  const handleAddIconClick = async (e) => {
+    e.preventDefault();
+    addEpisode();
+  };
+
+  const handlePlayPauseBtn = () => {
+    if (!episodeInfo || !podcastInfo) return;
+
+    // 如果現在播放內容就是該集內容，先確認播放狀況
+    if (currentEpisode.id === episodeInfo.id) {
+      const { playing, ...rest } = currentEpisode;
+      setCurrentEpisode({
+        playing: !playing,
+        ...rest,
+      });
+      return;
+    }
+
+    // 如果現在播放內容不是該集內容，直接播放
+    setCurrentEpisode({
+      id: episodeInfo.id,
+      src: episodeInfo.audio,
+      title: episodeInfo.title,
+      channelTitle: podcastInfo.title,
+      channelId: podcastInfo.id,
+      order: 0,
+      playmode: null,
+      playing: true,
+    });
+  };
+
+  return (
+    <Details open={isOpen} onClick={onToggle}>
+      <Summary open={isOpen}>
+        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+          {currentEpisode.id === episodeInfo.id ? (
+            currentEpisode.playing ? (
+              <PauseBtnControl>
+                <Images.PodcastPauseBtn />
+              </PauseBtnControl>
+            ) : (
+              <PlayBtnControl>
+                <Images.PodcastPlayBtn />
+              </PlayBtnControl>
+            )
+          ) : (
+            <PlayBtnControl>
+              <Images.PodcastPlayBtn />
+            </PlayBtnControl>
+          )}
+        </PlayPauseBtnControl>
+        <Text>
+          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+          <EpisodeDescription
+            dangerouslySetInnerHTML={{
+              __html: episodeInfo.description.replace(/<[^>]+>/g, ""),
+            }}
+          ></EpisodeDescription>
+          <ChannelName>{podcastInfo.title}</ChannelName>
+        </Text>
+        <AddToPlayListControl>
+          <Images.AddToPlayListBtn onClick={handleAddIconClick} />
+        </AddToPlayListControl>
+      </Summary>
+      <DetailsBlock>
+        <DetailsHeader>
+          <DetailsEpisodeName>{episodeInfo.title}</DetailsEpisodeName>
+          <DetailsDurationTime>{`${Math.floor(
+            episodeInfo.audio_length_sec / 60
+          )}分鐘`}</DetailsDurationTime>
+        </DetailsHeader>
+        <EpisodeDetails
+          dangerouslySetInnerHTML={{
+            __html: episodeInfo.description.replace({
+              __html: episodeInfo.description,
+            }),
+          }}
+        ></EpisodeDetails>
+        <AddToPlayList>
+          <AddControl>
+            <Images.AddToPlayListBtn />
+          </AddControl>
+          <AddText>加入播放清單</AddText>
+        </AddToPlayList>
+        <CollapseControl onClick={onToggle}>
+          <Images.CollapseBtn />
+        </CollapseControl>
+      </DetailsBlock>
+    </Details>
+  );
+}
+
+export default function Channel() {
+  const { podcastId } = useParams();
+  const [podcastInfo, setPodcastInfo] = useState();
   useEffect(() => {
     getPodcastInfo(podcastId).then((response) => {
-      console.log(response);
       setPodcastInfo(response.data);
     });
   }, [podcastId]);
 
   return (
     <Container>
-      <Navbar />
       <Main>
         <Div>
           <ChannelSidebar podcastInfo={podcastInfo} />
@@ -624,440 +744,18 @@ export default function Channel() {
               <ChannelNameHeader>頻道名稱</ChannelNameHeader>
             </TitleHeader>
             <Body>
-              <Details open={isOpen} onClick={onToggle}>
-                <Summary open={isOpen}>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談</EpisodeTitle>
-                    <EpisodeDescription>
-                      夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl onClick={onToggle}>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
-              <Details>
-                <Summary>
-                  <PlayBtnControl>
-                    <Images.PodcastPlayBtn />
-                  </PlayBtnControl>
-                  <Text>
-                    <EpisodeTitle>EP.1 職場甘苦談222222ssssssss</EpisodeTitle>
-                    <EpisodeDescription>
-                      30歲上班族的心底牢騷大噴發！
-                    </EpisodeDescription>
-                    <ChannelName>社畜日記sssssssssssssssssss</ChannelName>
-                  </Text>
-                  <AddToPlayListControl>
-                    <Images.AddToPlayListBtn />
-                  </AddToPlayListControl>
-                </Summary>
-                <DetailsBlock>
-                  <DetailsHeader>
-                    <DetailsEpisodeName>EP.1 職場甘苦談</DetailsEpisodeName>
-                    <DetailsDurationTime>26 分鐘</DetailsDurationTime>
-                  </DetailsHeader>
-                  <EpisodeDetails>
-                    夏子跟家權今天來百靈果跟我們聊聊神祕的樂團珂拉琪是怎麽開始的、爲什麽可以這麽厲害、還有未來的打算
-                    <br />
-                    ★☆【新東陽】強打新品-市面上唯一的【麻婆豆腐罐頭】
-                    <br />
-                    ☆★方便即食、微辣風味～同時吃的到豆腐及豬肉！
-                  </EpisodeDetails>
-                  <AddToPlayList>
-                    <AddControl>
-                      <Images.AddToPlayListBtn />
-                    </AddControl>
-                    <AddText>加入播放清單</AddText>
-                  </AddToPlayList>
-                  <CollapseControl>
-                    <Images.CollapseBtn />
-                  </CollapseControl>
-                </DetailsBlock>
-              </Details>
+              {podcastInfo
+                ? podcastInfo.episodes.map((el) => (
+                    <EpisodeInfoDetails
+                      podcastInfo={podcastInfo}
+                      episodeInfo={el}
+                    />
+                  ))
+                : ""}
             </Body>
           </PlayList>
         </Div>
       </Main>
-      <MusicPlayer />
     </Container>
   );
 }
