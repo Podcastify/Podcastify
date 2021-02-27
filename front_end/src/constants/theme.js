@@ -7,4 +7,5 @@ export const theme = {
   orange_opacity: "rgba(233, 80, 46, 0.5)",
   hover_color: "#8fe2ff",
   click_color: "#0079f2",
+  pop_up: "#333333",
 };

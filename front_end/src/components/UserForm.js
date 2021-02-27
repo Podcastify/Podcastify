@@ -5,7 +5,6 @@ import useInputs from "../hooks/useInputs";
 
 const StyledForm = styled.form`
   max-width: 32.7rem;
-  font-family: Helvetica;
   overflow-y: scroll;
   height: fill-available;
   // 在 chrome, Safari 上隱藏 scrollbar
@@ -22,7 +21,7 @@ const StyledFormTitle = styled.h1`
   font-size: 3.75rem;
   line-height: 1.2;
   letter-spacing: 5px;
-  color: #ffffff;
+  color: ${(props) => props.theme.white};
   font-weight: normal;
 `;
 
