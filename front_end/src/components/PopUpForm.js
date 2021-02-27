@@ -25,15 +25,41 @@ const CoverPage = styled.div`
 `;
 
 const FormContainer = styled(SideListContainer)`
-  height: auto;
+  width: 400px;
+  height: 420px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 20px 20px 0 rgba(33, 25, 24, 0.2);
   background-color: ${(props) => props.theme.pop_up};
+
+  ${MEDIA_QUERY_XL} {
+    width: 350px;
+    height: 360px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    width: 300px;
+    height: 310px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    width: 300px;
+    height: 310px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    width: 300px;
+    height: 310px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    width: 250px;
+    height: 260px;
+    padding: 20px;
+  }
 `;
 
 const Headline = styled.div`
@@ -56,15 +82,15 @@ const Title = styled.div`
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 25px;
+    font-size: 20px;
   }
 `;
 
