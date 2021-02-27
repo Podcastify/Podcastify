@@ -49,7 +49,7 @@ function App() {
             Episodes = await Promise.all(
               Episodes.map(async (ep) => {
                 const episodeInfo = await getEpisodeInfo(ep.id);
-                return episodeInfo.data;
+                return episodeInfo.ok ? episodeInfo.data : ep;
               })
             );
             playlists[i] = { Episodes, ...rest };
