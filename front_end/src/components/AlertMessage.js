@@ -118,8 +118,8 @@ const ErrorControl = styled.div`
 
   ${MEDIA_QUERY_LG} {
     svg {
-      width: 68px;
-      height: 68px;
+      width: 50px;
+      height: 50px;
     }
   }
 
@@ -155,17 +155,17 @@ const ErrorBlock = styled.div`
   letter-spacing: 2px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 28px;
+    font-size: 20px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 25px;
+    font-size: 18px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 23px;
+    font-size: 18px;
     margin-top: 10px;
   }
 

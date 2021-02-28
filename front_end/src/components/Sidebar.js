@@ -14,7 +14,6 @@ import useInputs from "../hooks/useInputs";
 import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
 import { useState } from "react";
 import UserForm from "../components/UserForm";
-import Images from "./Images";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -98,7 +97,7 @@ const SidebarTitle = styled.h3`
   }
 `;
 
-const SideListContainer = styled.div`
+export const SideListContainer = styled.div`
   overflow-y: scroll;
   height: 92%;
 
@@ -360,7 +359,7 @@ function CoverPageForm({ showForm, setShowForm }) {
     <CoverPage>
       <FormContainer>
         <CloseBtnControl onClick={() => setShowForm(false)}>
-          <Images.DeleteBtn />
+          <Icon.Error />
         </CloseBtnControl>
         <AddPlaylistForm
           inputs={inputs}

@@ -10,14 +10,17 @@ export default function useMusicPlayer() {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
+  console.log(userPlayedRecord);
+
   useEffect(() => {
     const audio = audioEl.current;
     if (!audio) return;
 
     // 最後一筆播放紀錄資料
     let data = userPlayedRecord[0];
+
     if (!data) return;
-    if (data && data.episode === "undefined") return;
+    if (data && data.episode === undefined) return;
 
     const lastTime = data.progress;
     data = data.episode;

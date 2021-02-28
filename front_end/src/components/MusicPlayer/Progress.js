@@ -10,6 +10,7 @@ import {
 } from "../../constants/breakpoints";
 import Loading from "../../components/Loading";
 import usePageStatus from "../../hooks/usePageStatus";
+import useUser from "../../hooks/useUser";
 
 const Progress = styled.div`
   width: calc(100% / 12 * 5);
@@ -172,11 +173,18 @@ export default function ProgressControl({
 }) {
   const [position, setPosition] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
-  const { isLoading, setIsLoading } = usePageStatus(null);
+  const { isLoading, setIsLoading } = usePageStatus();
+  const { userInfo } = useUser();
+
   const rangeRef = useRef();
 
   useEffect(() => {
     setIsLoading(true);
+
+    // 如果非會員不須有 loading 畫面
+    if (!userInfo) {
+      setIsLoading(false);
+    }
 
     // 設定控制圓杆位置
     setPosition(percentage);
@@ -190,7 +198,7 @@ export default function ProgressControl({
     if (currentProgressBar) {
       setIsLoading(false);
     }
-  }, [percentage, setIsLoading]);
+  }, [percentage, setIsLoading, userInfo]);
 
   // 轉換秒數
   const secondsToStandardTime = (seconds) => {
@@ -226,26 +234,28 @@ export default function ProgressControl({
   };
 
   return (
-    <Progress>
+    <>
       {/* {isLoading && <Loading />} */}
-      <Slider>
-        <ProgressCurrent
-          style={{
-            width: `${progressBarWidth}px`,
-          }}
-        />
-        <ProgressBar
-          type="range"
-          onChange={onChange}
-          ref={rangeRef}
-          value={position}
-          step="0.01"
-        />
-      </Slider>
-      <Timing>
-        <StartTime>{secondsToStandardTime(currentTime)}</StartTime>
-        <DurationTime>{secondsToStandardTime(duration)}</DurationTime>
-      </Timing>
-    </Progress>
+      <Progress>
+        <Slider>
+          <ProgressCurrent
+            style={{
+              width: `${progressBarWidth}px`,
+            }}
+          />
+          <ProgressBar
+            type="range"
+            onChange={onChange}
+            ref={rangeRef}
+            value={position}
+            step="0.01"
+          />
+        </Slider>
+        <Timing>
+          <StartTime>{secondsToStandardTime(currentTime)}</StartTime>
+          <DurationTime>{secondsToStandardTime(duration)}</DurationTime>
+        </Timing>
+      </Progress>
+    </>
   );
 }
