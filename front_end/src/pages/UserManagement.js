@@ -10,6 +10,7 @@ import {
   BtnLogIn,
   ButtonName,
 } from "../components/ButtonGroup";
+import {} from "../WebAPI/users"
 
 const Container = styled.div`
   width: 100%;
@@ -66,127 +67,72 @@ const ManageButton = styled.div`
   }
 `;
 
+const ChangeBtn = styled(ManageButton)`
+`
+
 export default function UserManagement() {
   const { userInfo } = useContext(UserContext);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false)
+  console.log(1);
   const handleManagementBtnClick = (e) => {
     console.log(formInputs);
     setIsEditing(!isEditing);
   };
 
-  const formInputs = [
-    {
-      attributes: {
-        type: "text",
-        readOnly: true,
-        name: "username",
-        value: userInfo ? userInfo.username : "TEST",
-      },
-      title: "帳號",
-    },
-    {
-      attributes: {
-        type: "password",
-        name: "oldPassword",
-        value: "",
-        placeholder: "舊密碼",
-        readOnly: !isEditing,
-      },
-      title: isEditing ? "請輸入舊密碼" : "密碼",
-    },
-    {
-      attributes: {
-        type: "password",
-        name: "newPassword",
-        value: "",
-        placeholder: "您的新密碼",
-        style: {
-          display: isEditing ? "" : "none"
+  const formInputs = useMemo(() => {
+    const preparedInputs = [
+      {
+        attributes: {
+          type: "text",
+          readOnly: true,
+          name: "username",
+          value: userInfo ? userInfo.username : "TEST",
         },
+        title: "帳號",
       },
-      title: !isEditing ? "" : "請輸入新密碼",
-    },
-    {
-      attributes: {
-        type: "password",
-        name: "newPassword2",
-        value: "",
-        placeholder: "請再輸入一次新密碼",
-        style: {
-          display: isEditing ? "" : "none"
+      {
+        attributes: {
+          type: "password",
+          name: "oldPassword",
+          value: "",
+          placeholder: isEditing ? "舊密碼" : "********",
+          readOnly: !isEditing,
         },
+        title: isEditing ? "請輸入舊密碼" : "密碼",
       },
-      title: !isEditing ? "" : "確認新密碼",
-    },
-  ];
+      {
+        attributes: {
+          type: "password",
+          name: "newPassword",
+          value: "",
+          placeholder: "您的新密碼",
+          style: {
+            display: isEditing ? "" : "none"
+          },
+        },
+        title: !isEditing ? "" : "請輸入新密碼",
+      },
+      {
+        attributes: {
+          type: "password",
+          name: "newPassword2",
+          value: "",
+          placeholder: "請再輸入一次新密碼",
+          style: {
+            display: isEditing ? "" : "none"
+          },
+        },
+        title: !isEditing ? "" : "確認新密碼",
+      },
+    ];
+    return preparedInputs
+  }, [isEditing, userInfo])
 
-  const {inputs, setInputs, handlers } = useInputs(formInputs)
-
-  useEffect(() => {
-    if (isEditing) {
-      setInputs([
-        {
-          attributes: {
-            type: "text",
-            readOnly: true,
-            name: "username",
-            value: userInfo ? userInfo.username : "TEST",
-          },
-          title: "帳號",
-        },
-        {
-          attributes: {
-            type: "password",
-            name: "oldPassword",
-            value: "",
-            placeholder: "舊密碼",
-            readOnly: false,
-          },
-          title: "請輸入舊密碼",
-        },
-        {
-          attributes: {
-            type: "password",
-            name: "newPassword",
-            value: "",
-            placeholder: "您的新密碼",
-          },
-          title: isEditing ? "" : "請輸入新密碼",
-        },
-        {
-          attributes: {
-            type: "password",
-            name: "newPassword2",
-            value: "",
-            placeholder: "請再輸入一次新密碼",
-          },
-          title: "確認新密碼",
-        },
-      ]);
-    } else {
-      setInputs([
-        {
-          attributes: {
-            type: "text",
-            readOnly: true,
-            name: "username",
-            value: userInfo ? userInfo.username : "TEST",
-          },
-          title: "帳號",
-        },
-        {
-          attributes: {
-            type: "password",
-            name: "oldPassword",
-            value: "**********",
-            placeholder: "舊密碼",
-            readOnly: true,
-          },
-          title: "密碼",
-        },
-      ]);
-    }
-  }, [isEditing, setInputs, userInfo]);
+  const { inputs, handlers } = useInputs(formInputs)
+  
+  const handleChangeBtnClick = e => {
+    
+  }
 
   return (
     <Container>
@@ -198,7 +144,7 @@ export default function UserManagement() {
               <ManageButton onClick={handleManagementBtnClick}>
                 管理我的帳戶
               </ManageButton>
-              {isEditing && <ManageButton>確認變更資料</ManageButton>}
+              <ChangeBtn onClick={handleChangeBtnClick}>確認變更資料</ChangeBtn>
             </TitleContainer>
             <UserForm
               inputs={inputs}
