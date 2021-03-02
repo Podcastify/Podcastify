@@ -10,7 +10,7 @@ import {
   BtnLogIn,
   ButtonName,
 } from "../components/ButtonGroup";
-import {} from "../WebAPI/users"
+import { changeUserProfile } from "../WebAPI/users";
 
 const Container = styled.div`
   width: 100%;
@@ -67,15 +67,10 @@ const ManageButton = styled.div`
   }
 `;
 
-const ChangeBtn = styled(ManageButton)`
-`
-
 export default function UserManagement() {
   const { userInfo } = useContext(UserContext);
-  const [isEditing, setIsEditing] = useState(false)
-  console.log(1);
+  const [isEditing, setIsEditing] = useState(false);
   const handleManagementBtnClick = (e) => {
-    console.log(formInputs);
     setIsEditing(!isEditing);
   };
 
@@ -97,6 +92,7 @@ export default function UserManagement() {
           value: "",
           placeholder: isEditing ? "舊密碼" : "********",
           readOnly: !isEditing,
+          required: true
         },
         title: isEditing ? "請輸入舊密碼" : "密碼",
       },
@@ -109,6 +105,7 @@ export default function UserManagement() {
           style: {
             display: isEditing ? "" : "none"
           },
+          required: true
         },
         title: !isEditing ? "" : "請輸入新密碼",
       },
@@ -121,6 +118,7 @@ export default function UserManagement() {
           style: {
             display: isEditing ? "" : "none"
           },
+          required: true
         },
         title: !isEditing ? "" : "確認新密碼",
       },
@@ -128,10 +126,42 @@ export default function UserManagement() {
     return preparedInputs
   }, [isEditing, userInfo])
 
-  const { inputs, handlers } = useInputs(formInputs)
+  const { inputs, setInputs, handlers } = useInputs(formInputs)
   
-  const handleChangeBtnClick = e => {
-    
+  const handleChangeBtnClick = async e => {
+    if (inputs[3].attributes.value !== inputs[2].attributes.value) {
+      const newInputs = [...inputs, { ...inputs[2], errorMessage: "兩次密碼不符" }, { ...inputs[3], errorMessage: "兩次密碼不符" }]
+      setInputs(newInputs);
+      return alert('密碼不符')
+    }
+    const filters = ['oldPassword', 'newPassword'];
+    const updateInformation = {}
+    inputs.forEach(input => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          updateInformation[filter] = input.attributes.value
+        }
+      }
+    })
+    const { oldPassword: password, newPassword } = updateInformation;
+    if (!password || !newPassword) return alert("請輸入所有欄位");
+    let result;
+    try {
+      result = await changeUserProfile(password, newPassword);
+    } catch (err) {
+
+    }
+    if (result.ok) {
+      alert('profile updated');
+      setIsEditing(false);
+    } else {
+      alert('something went wrong')
+    }
+  }
+
+  const handleUserProfileChange = e => {
+    e.preventDefault();
+
   }
 
   return (
@@ -141,12 +171,24 @@ export default function UserManagement() {
           <SectionContainer>
             <TitleContainer>
               <PageTitle>會員資料</PageTitle>
-              <ManageButton onClick={handleManagementBtnClick}>
+              <ManageButton
+                key="management"
+                onClick={handleManagementBtnClick}
+              >
                 管理我的帳戶
               </ManageButton>
-              <ChangeBtn onClick={handleChangeBtnClick}>確認變更資料</ChangeBtn>
+              {
+                isEditing &&
+               <ManageButton
+                  key="change"
+                  onClick={handleChangeBtnClick}
+                >
+                  確認變更資料
+                </ManageButton>
+              }
             </TitleContainer>
             <UserForm
+              id="profileForm"
               inputs={inputs}
               handlers={handlers}
             />

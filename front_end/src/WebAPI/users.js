@@ -1,4 +1,5 @@
 import { BASE_URL } from "../constants/apiUrl";
+import { getAuthToken } from "../utils";
 
 export const register = (username, password) => {
   return fetch(`${BASE_URL}/users/register`, {
@@ -25,3 +26,18 @@ export const login = (username, password) => {
     }),
   }).then((res) => res.json());
 };
+
+export const changeUserProfile = (password, newPassword) => {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      password,
+      newPassword
+    }),
+  }).then((res) => res.json());
+}
