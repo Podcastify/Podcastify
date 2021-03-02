@@ -10,6 +10,8 @@ import {
 import UserForm from "../components/UserForm";
 import useInputs from "../hooks/useInputs";
 import { SideListContainer } from "./Sidebar";
+import { renamePlaylist } from "../WebAPI/me";
+import useUser from "../hooks/useUser";
 
 const CoverPage = styled.div`
   position: fixed;
@@ -150,19 +152,59 @@ const Form = styled(UserForm)`
   background: ${(props) => props.theme.pop_up};
 `;
 
-export default function CoverPageForm({ title, formInputs }) {
+export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
   const { inputs, handlers } = useInputs(formInputs);
+  const { setUserPlaylists, userPlaylists } = useUser();
+
+  const handleCloseBtnClick = e => {
+    setShowEditForm(false);
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    console.log(inputs);
+    const filters = ['name'];
+    const editInformation = {};
+    inputs.forEach(input => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          editInformation[filter] = input.attributes.value
+        }
+      }
+    })
+    let result;
+    const { name } = editInformation;
+    try {
+      result = await renamePlaylist(userPlaylists[0].id, name);
+    } catch (err) {
+      console.log(err)
+    }
+    if (result.ok) {
+      const [playlist, ...rest] = userPlaylists;
+      setUserPlaylists([
+        {
+          ...playlist,
+          name
+        }
+      ])
+      setShowEditForm(false);
+    }
+  }
 
   return (
     <CoverPage>
       <FormContainer>
         <Headline>
           <Title>{title}</Title>
-          <CloseBtnControl>
+          <CloseBtnControl onClick={handleCloseBtnClick}>
             <Icon.Error />
           </CloseBtnControl>
         </Headline>
-        <Form inputs={inputs} handlers={handlers} />
+        <Form
+          inputs={inputs}
+          handlers={handlers}
+          onSubmit={handleSubmit}
+        />
       </FormContainer>
     </CoverPage>
   );

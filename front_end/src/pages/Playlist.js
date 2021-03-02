@@ -3,7 +3,7 @@ import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useUser from "../hooks/useUser";
 import useInputs from "../hooks/useInputs";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
@@ -21,6 +21,7 @@ import {
   addPlaylist,
   getAllMyPlaylists,
 } from "../WebAPI/me";
+import PopUpForm from "../components/PopUpForm";
 
 const Container = styled.div`
   width: 100%;
@@ -683,7 +684,7 @@ const formInputs = [
       type: "submit",
       name: "add",
       id: "add",
-      value: "新增",
+      value: "編輯",
       required: true,
     },
     title: "",
@@ -790,6 +791,7 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 export default function Playlist() {
   const { userPlaylists, setUserPlaylists } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
+  const [showEditForm, setShowEditForm] = useState(false);
 
   const handlePlayWholePlaylist = () => {
     // 如果播放清單是空的
@@ -807,6 +809,10 @@ export default function Playlist() {
       playing: true,
     });
   };
+
+  const handleRenameBtnClick = () => {
+    setShowEditForm(true);
+  }
 
   return (
     <Container>
@@ -834,7 +840,7 @@ export default function Playlist() {
                   <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
                     <Images.PodcastPlayBtn />
                   </PlaylistPlayBtnControl>
-                  <RenamePlaylistBtnControl>
+                  <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
                     <Images.RenamePlaylistBtn />
                   </RenamePlaylistBtnControl>
                 </Buttons>
@@ -862,6 +868,12 @@ export default function Playlist() {
           </PlaylistWrapper>
         </Div>
       </Main>
+      {showEditForm &&
+        <PopUpForm
+          title="編輯播放清單名稱"
+          formInputs={formInputs}
+          setShowEditForm={setShowEditForm}
+        />}
     </Container>
   );
 }

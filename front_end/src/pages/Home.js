@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
 import Loading from "../components/Loading";
 import AlertMessage from "../components/AlertMessage";
-import PopUpForm from "../components/PopUpForm";
 
 const Container = styled.div`
   width: 100%;
@@ -23,40 +22,13 @@ const MainWrapper = styled(Main)`
   }
 `;
 
-const formInputs = [
-  {
-    attributes: {
-      type: "text",
-      name: "name",
-      id: "name",
-      placeholder: "播放清單名稱",
-      value: "",
-      required: true,
-    },
-    title: "",
-    errorMessage: "",
-  },
-  {
-    attributes: {
-      type: "submit",
-      name: "add",
-      id: "add",
-      value: "編輯",
-      required: true,
-    },
-    title: "",
-    errorMessage: "",
-  },
-];
-
 export default function Home() {
   return (
     <Container>
       {/* <Loading /> */}
       <MainWrapper>
         <Div>
-          {/* <Sidebar /> */}
-          <PopUpForm title="編輯播放清單名稱" formInputs={formInputs} />
+          <Sidebar />
           <InfoCard />
         </Div>
       </MainWrapper>
