@@ -4,8 +4,8 @@ import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
-  MEDIA_QUERY_XL,
   MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import Carousel from "react-elastic-carousel";
 import "../constants/InfoCard.css";
@@ -55,17 +55,26 @@ const PodcastInfoWrapper = styled.div`
   }
 `;
 
-const PodcastInfoTitle = styled.div`
+const PodcastInfoTitle = styled.h1`
   width: 100%;
-  font-size: 40px;
+  font-size: 42px;
   padding: 10px;
   line-height: 1.2;
   letter-spacing: normal;
   font-weight: bold;
+  margin: 0;
   color: ${(props) => props.theme.white};
 
+  ${MEDIA_QUERY_XL} {
+    font-size: 36px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 30px;
+  }
+
   ${MEDIA_QUERY_SM} {
-    font-size: 35px;
+    font-size: 28px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -74,23 +83,20 @@ const PodcastInfoTitle = styled.div`
 `;
 
 const InfoCardWrapper = styled.div`
-  width: 90%;
+  width: 100%;
+  /* width: 90%; */
   display: flex;
   flex-direction: column;
   justify-items: center;
   align-items: center;
   margin: 30px 0 15px 0;
-
-  ${MEDIA_QUERY_XS} {
-    font-size: 25px;
-  }
 `;
 
 const InfoCardPhoto = styled.div`
-  width: 260px;
+  /* width: 260px;
   max-width: 100%;
   height: 220px;
-  text-decoration: none;
+  text-decoration: none; */
 
   img {
     width: 100%;
@@ -98,7 +104,7 @@ const InfoCardPhoto = styled.div`
     object-fit: cover;
   }
 
-  ${MEDIA_QUERY_XL} {
+  /* ${MEDIA_QUERY_XL} {
     width: 180px;
     max-width: 100%;
     height: 160px;
@@ -126,11 +132,13 @@ const InfoCardPhoto = styled.div`
     width: 200px;
     max-width: 100%;
     height: 180px;
-  }
+  } */
 `;
 
 const InfoCardTitle = styled.h2`
-  width: 90%;
+  width: 100%;
+  /* width: 90%; */
+  font-size: 32px;
   color: ${(props) => props.theme.white};
   margin: 20px 0 15px 0;
   font-weight: bold;
@@ -140,56 +148,61 @@ const InfoCardTitle = styled.h2`
   white-space: nowrap;
   text-overflow: ellipsis;
 
+  ${MEDIA_QUERY_XL} {
+    font-size: 24px;
+  }
+
   ${MEDIA_QUERY_LG} {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 16px;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 22px;
+    font-size: 25px;
     margin: 10px 0 15px 0;
   }
 `;
 
-const InfoCardContent = styled.div`
+const InfoCardContent = styled.p`
   margin-top: 15px;
-  width: 95%;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 20px;
+  width: 100%;
+  /* width: 95%; */
+  color: ${(props) => props.theme.white_opacity};
+  font-size: 25px;
   letter-spacing: 0.3px;
   line-height: 1.6;
-  text-overflow: ellipsis;
   overflow: hidden;
   overflow-wrap: break-word;
+  text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 14px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 16px;
+    font-size: 15px;
   }
 `;
 
@@ -209,7 +222,7 @@ export default function InfoCard() {
           <Carousel
             itemsToScroll={1}
             breakPoints={breakPoints}
-            itemPadding={[0, 8]}
+            itemPadding={[0, 10]}
             className="InfoCard"
           >
             <InfoCardWrapper>

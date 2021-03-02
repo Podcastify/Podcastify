@@ -48,7 +48,7 @@ export const SidebarContainer = styled.aside`
 `;
 
 const InfoCardWrapper = styled.div`
-  padding: 20px 0px;
+  padding: 20px 10px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -56,12 +56,10 @@ const InfoCardWrapper = styled.div`
   flex-direction: column;
   overflow-y: scroll;
 
-  // 在 chrome, Safari 上隱藏 scrollbar
   &::-webkit-scrollbar {
     display: none;
   }
 
-  // 在 IE, Edge 上隱藏 scrollbar
   -ms-overflow-style: none;
 
   ${MEDIA_QUERY_XL} {
@@ -91,17 +89,19 @@ const InfoCardWrapper = styled.div`
 `;
 
 const InfoCardPhoto = styled.div`
-  width: 300px;
+  /* width: 300px;
   max-width: 100%;
   height: 260px;
-  text-decoration: none;
+  text-decoration: none; */
+  margin: 20px 20px 10px 20px;
 
   img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
-  ${MEDIA_QUERY_XL} {
+  /* ${MEDIA_QUERY_XL} {
     width: 200px;
     max-width: 100%;
     height: 200px;
@@ -127,14 +127,17 @@ const InfoCardPhoto = styled.div`
   ${MEDIA_QUERY_XS} {
     width: 235px;
     height: 200px;
-  }
+  } */
 `;
 
 const InfoCardContent = styled.div`
-  width: 89%;
-  height: 60%;
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
+  /* width: 89%;
+  height: 60%; */
 
-  ${MEDIA_QUERY_LG} {
+  /* ${MEDIA_QUERY_LG} {
     width: 100%;
   }
 
@@ -146,10 +149,10 @@ const InfoCardContent = styled.div`
     width: 100%;
     height: 100%;
   }
+  */
 
   ${MEDIA_QUERY_XS} {
-    width: 100%;
-    height: 100%;
+    padding-left: 0;
   }
 `;
 
@@ -178,9 +181,9 @@ const InfoCardBlock = styled.div`
 `;
 
 const InfoCardTitle = styled.h2`
-  width: 90%;
+  width: 100%;
   color: ${(props) => props.theme.white};
-  margin: 10px 0px 60px 0px;
+  margin: 20px 0px 40px 0px;
   font-weight: bold;
   font-size: 32px;
   line-height: 1.19;
@@ -196,15 +199,14 @@ const InfoCardTitle = styled.h2`
   }
 
   ${MEDIA_QUERY_LG} {
-
     width: 80%;
-    font-size: 22px;
+    font-size: 20px;
     margin: 20px 0px 30px 0px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 80%;
-    font-size: 20px;
+    font-size: 22px;
     margin: 20px 0px 40px 0px;
   }
 
@@ -218,12 +220,15 @@ const InfoCardTitle = styled.h2`
     font-size: 25px;
     width: 180px;
     margin: 10px 0 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 
 const UnsubscriptionBtn = styled.button`
   cursor: pointer;
-  width: 140px;
+  width: 130px;
   height: 60px;
   font-size: 25px;
   border: 2px solid ${(props) => props.theme.grey_opacity};
@@ -338,18 +343,18 @@ export default function ChannelSidebar({ podcastInfo }) {
     }
   };
 
-  useEffect(() => {
-    getMySubsciption().then((response) => {
-      let data = response.data;
-      console.log(data);
-      const SubscribedID = data.find((item) => item.id === podcastId);
-      if (SubscribedID) {
-        setSubscription(true);
-      } else {
-        return setSubscription(false);
-      }
-    });
-  }, [podcastId]);
+  // useEffect(() => {
+  //   getMySubsciption().then((response) => {
+  //     let data = response.data;
+  //     console.log(data);
+  //     const SubscribedID = data.find((item) => item.id === podcastId);
+  //     if (SubscribedID) {
+  //       setSubscription(true);
+  //     } else {
+  //       return setSubscription(false);
+  //     }
+  //   });
+  // }, [podcastId]);
 
   return (
     <SidebarContainer>
@@ -368,7 +373,9 @@ export default function ChannelSidebar({ podcastInfo }) {
         )}
         <InfoCardContent>
           <InfoCardBlock>
-            <InfoCardTitle>{podcastInfo ? podcastInfo.title : 'demo: 社畜日記'}</InfoCardTitle>
+            <InfoCardTitle>
+              {podcastInfo ? podcastInfo.title : "demo: 社畜日記"}
+            </InfoCardTitle>
             <div onClick={handleSubscribeClick}>
               {subscription ? (
                 <SubscriptionBtn>訂閱中</SubscriptionBtn>

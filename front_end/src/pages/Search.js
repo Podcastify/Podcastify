@@ -11,7 +11,6 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import { Link, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import { getSearchPodcast, getSearchEpisode } from "../WebAPI/listenAPI";
 import useUser from "../hooks/useUser";
 
@@ -81,17 +80,26 @@ const SearchPageWrapper = styled.div`
   -ms-overflow-style: none;
 `;
 
-const SearchPageTitle = styled.div`
+const SearchPageTitle = styled.h1`
   width: 100%;
-  font-size: 40px;
+  font-size: 42px;
   padding: 10px;
   line-height: 1.2;
   letter-spacing: normal;
   font-weight: bold;
+  margin: 0;
   color: ${(props) => props.theme.white};
 
-  ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_XL} {
+    font-size: 36px;
+  }
+
+  ${MEDIA_QUERY_LG} {
     font-size: 30px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 28px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -99,22 +107,7 @@ const SearchPageTitle = styled.div`
   }
 `;
 
-const PodcastName = styled.span`
-  font-size: 40px;
-  padding: 10px;
-  line-height: 1.2;
-  letter-spacing: normal;
-  font-weight: bold;
-  color: white;
-
-  ${MEDIA_QUERY_SM} {
-    font-size: 30px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    font-size: 22px;
-  }
-`;
+const PodcastName = styled(SearchPageTitle)``;
 
 const InvalidKeyword = styled.div`
   position: absolute;
@@ -278,26 +271,29 @@ const InfoCardTitle = styled(Link)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 1.5em;
+  font-size: 32px;
 
   ${MEDIA_QUERY_XL} {
     width: 80%;
+    font-size: 24px;
   }
 
   ${MEDIA_QUERY_LG} {
     width: 80%;
+    font-size: 20px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 80%;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 25px;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 22px;
+    font-size: 25px;
   }
 `;
 

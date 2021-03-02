@@ -89,6 +89,9 @@ const SidebarTitle = styled.h3`
   font-size: 26px;
   margin: 2px 10px 20px 30px;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: ${(props) => props.theme.white};
 
   ${MEDIA_QUERY_LG} {
@@ -408,7 +411,9 @@ export default function Sidebar() {
               <SidebarListWrapper key={episodeInfo.id}>
                 <SidebarListLeft>
                   {/* 是看看短路能不能讓 sidebar 正常顯示 */}
-                  <SidebarListTitle>{episodeInfo.title || episodeInfo.id}</SidebarListTitle>
+                  <SidebarListTitle>
+                    {episodeInfo.title || episodeInfo.id}
+                  </SidebarListTitle>
                   <SidebarListContent
                     dangerouslySetInnerHTML={
                       episodeInfo.description
@@ -418,7 +423,7 @@ export default function Sidebar() {
                               ""
                             ),
                           }
-                        : {__html: '沒東西'}
+                        : { __html: "沒東西" }
                     }
                   ></SidebarListContent>
                 </SidebarListLeft>
