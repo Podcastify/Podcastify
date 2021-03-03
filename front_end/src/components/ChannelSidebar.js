@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import DemoImage from "../images/avatar.jpg";
 import {
   MEDIA_QUERY_XS,
@@ -89,10 +88,6 @@ const InfoCardWrapper = styled.div`
 `;
 
 const InfoCardPhoto = styled.div`
-  /* width: 300px;
-  max-width: 100%;
-  height: 260px;
-  text-decoration: none; */
   margin: 20px 20px 10px 20px;
 
   img {
@@ -100,56 +95,12 @@ const InfoCardPhoto = styled.div`
     height: 100%;
     object-fit: cover;
   }
-
-  /* ${MEDIA_QUERY_XL} {
-    width: 200px;
-    max-width: 100%;
-    height: 200px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    width: 190px;
-    max-width: 100%;
-    height: 190px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: 150px;
-    max-width: 100%;
-    height: 150px;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    width: 200px;
-    height: 180px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    width: 235px;
-    height: 200px;
-  } */
 `;
 
 const InfoCardContent = styled.div`
   width: 100%;
   height: 100%;
   padding-left: 20px;
-  /* width: 89%;
-  height: 60%; */
-
-  /* ${MEDIA_QUERY_LG} {
-    width: 100%;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: 100%;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    width: 100%;
-    height: 100%;
-  }
-  */
 
   ${MEDIA_QUERY_XS} {
     padding-left: 0;
@@ -240,13 +191,6 @@ const UnsubscriptionBtn = styled.button`
     outline: none;
   }
 
-  /* &:hover {
-    border: hidden;
-    color: ${(props) => props.theme.white};
-    background: ${(props) => props.theme.hover_color};
-    border: 3px solid ${(props) => props.theme.hover_color};
-  } */
-
   ${MEDIA_QUERY_XL} {
     width: 120px;
     height: 50px;
@@ -284,14 +228,6 @@ const SubscriptionBtn = styled(UnsubscriptionBtn)`
   color: ${(props) => props.theme.white};
   background: ${(props) => props.theme.click_color};
   border: 3px solid ${(props) => props.theme.click_color};
-
-  /* &:hover {
-    outline: none;
-    border: hidden;
-    color: ${(props) => props.theme.white};
-    background: ${(props) => props.theme.click_color};
-    border: 3px solid ${(props) => props.theme.click_color};
-  } */
 `;
 
 const InfoCardText = styled.div`
@@ -343,18 +279,18 @@ export default function ChannelSidebar({ podcastInfo }) {
     }
   };
 
-  // useEffect(() => {
-  //   getMySubsciption().then((response) => {
-  //     let data = response.data;
-  //     console.log(data);
-  //     const SubscribedID = data.find((item) => item.id === podcastId);
-  //     if (SubscribedID) {
-  //       setSubscription(true);
-  //     } else {
-  //       return setSubscription(false);
-  //     }
-  //   });
-  // }, [podcastId]);
+  useEffect(() => {
+    getMySubsciption().then((response) => {
+      let data = response.data;
+      console.log(data);
+      const SubscribedID = data.find((item) => item.id === podcastId);
+      if (SubscribedID) {
+        setSubscription(true);
+      } else {
+        return setSubscription(false);
+      }
+    });
+  }, [podcastId]);
 
   return (
     <SidebarContainer>

@@ -47,12 +47,6 @@ const PodcastInfoWrapper = styled.div`
   & + & {
     margin-top: 50px;
   }
-
-  ${MEDIA_QUERY_XS} {
-    & + & {
-      margin: 10px;
-    }
-  }
 `;
 
 const PodcastInfoTitle = styled.h1`
@@ -84,7 +78,6 @@ const PodcastInfoTitle = styled.h1`
 
 const InfoCardWrapper = styled.div`
   width: 100%;
-  /* width: 90%; */
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -93,51 +86,15 @@ const InfoCardWrapper = styled.div`
 `;
 
 const InfoCardPhoto = styled.div`
-  /* width: 260px;
-  max-width: 100%;
-  height: 220px;
-  text-decoration: none; */
-
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-
-  /* ${MEDIA_QUERY_XL} {
-    width: 180px;
-    max-width: 100%;
-    height: 160px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    width: 130px;
-    max-width: 100%;
-    height: 110px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: 130px;
-    max-width: 100%;
-    height: 110px;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    width: 160px;
-    max-width: 100%;
-    height: 140px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    width: 200px;
-    max-width: 100%;
-    height: 180px;
-  } */
 `;
 
 const InfoCardTitle = styled.h2`
   width: 100%;
-  /* width: 90%; */
   font-size: 32px;
   color: ${(props) => props.theme.white};
   margin: 20px 0 15px 0;
@@ -173,7 +130,6 @@ const InfoCardTitle = styled.h2`
 const InfoCardContent = styled.p`
   margin-top: 15px;
   width: 100%;
-  /* width: 95%; */
   color: ${(props) => props.theme.white_opacity};
   font-size: 25px;
   letter-spacing: 0.3px;

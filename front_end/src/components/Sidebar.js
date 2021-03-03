@@ -33,43 +33,9 @@ const SidebarWrapper = styled(SidebarContainer)`
     bottom: 0;
   }
 
-  ${MEDIA_QUERY_XL} {
-    position: relative;
-
-    &::after {
-      content: "";
-      border-radius: 20px;
-      background-image: linear-gradient(
-        180deg,
-        rgba(137, 255, 241, 0) 0%,
-        rgba(62, 58, 57, 1) 100%
-      );
-      display: block;
-      width: 91%;
-      height: 30%;
-      position: absolute;
-      bottom: 0px;
-    }
-  }
-
   ${MEDIA_QUERY_LG} {
     position: relative;
     width: 25vw;
-
-    &::after {
-      content: "";
-      border-radius: 20px;
-      background-image: linear-gradient(
-        180deg,
-        rgba(137, 255, 241, 0) 0%,
-        rgba(62, 58, 57, 1) 100%
-      );
-      display: block;
-      width: 91%;
-      height: 30%;
-      position: absolute;
-      bottom: 0;
-    }
   }
 
   ${MEDIA_QUERY_MD} {
@@ -86,7 +52,7 @@ const SidebarWrapper = styled(SidebarContainer)`
 `;
 
 const SidebarTitle = styled.h3`
-  font-size: 26px;
+  font-size: 25px;
   margin: 2px 10px 20px 30px;
   font-weight: 500;
   overflow: hidden;
@@ -94,8 +60,17 @@ const SidebarTitle = styled.h3`
   white-space: nowrap;
   color: ${(props) => props.theme.white};
 
+  ${MEDIA_QUERY_XL} {
+    font-size: 23px;
+  }
+
   ${MEDIA_QUERY_LG} {
-    font-size: 21px;
+    font-size: 20px;
+    margin: 2px 10px 10px 25px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 18px;
     margin: 2px 10px 10px 25px;
   }
 `;
@@ -128,9 +103,6 @@ const SidebarListWrapper = styled.div`
   background-color: ${(props) => props.theme.white_opacity_10};
   color: white;
   margin: 5px 2px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 
   ${MEDIA_QUERY_XL} {
     padding: 10px 15px;
@@ -154,11 +126,12 @@ const SidebarListWrapper = styled.div`
 `;
 
 const SidebarListLeft = styled.div`
+  width: 85%;
   display: block;
-  font-size: 25px;
+  font-size: 23px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -200,8 +173,10 @@ const PlaylistPlayBtnControl = styled.div`
 
 const SidebarListTitle = styled.div`
   text-decoration: none;
-  overflow: hidden;
   line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   ${MEDIA_QUERY_LG} {
     font-size: 16px;
@@ -210,8 +185,10 @@ const SidebarListTitle = styled.div`
 
 const SidebarListContent = styled.div`
   text-decoration: none;
-  overflow: hidden;
   line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const CoverPage = styled.div`

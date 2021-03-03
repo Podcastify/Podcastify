@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import DemoImage from "../images/avatar.jpg";
 import { Main, Div } from "../components/Main";
 import Sidebar from "../components/Sidebar";
 import {
@@ -57,14 +56,7 @@ const SearchPageContainer = styled.section`
     margin: 0;
   }
 
-  ${MEDIA_QUERY_SM} {
-    width: 100%;
-    margin: 0;
-  }
-
   ${MEDIA_QUERY_XS} {
-    width: 100%;
-    margin: 0;
     padding: 0 10px;
   }
 `;
@@ -107,7 +99,31 @@ const SearchPageTitle = styled.h1`
   }
 `;
 
-const PodcastName = styled(SearchPageTitle)``;
+const PodcastName = styled.span`
+  font-size: 42px;
+  padding: 10px;
+  line-height: 1.2;
+  letter-spacing: normal;
+  font-weight: bold;
+  margin: 0;
+  color: ${(props) => props.theme.white};
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 36px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 30px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 28px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 22px;
+  }
+`;
 
 const InvalidKeyword = styled.div`
   position: absolute;
@@ -150,9 +166,6 @@ const InvalidKeyword = styled.div`
   }
 `;
 
-const FirstLine = styled.div``;
-const SecondLine = styled.div``;
-
 const SearchItemWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -176,7 +189,7 @@ const SearchItemWrapper = styled.div`
 `;
 
 const SearchItem = styled.div`
-  width: 28vh;
+  width: 24vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -186,74 +199,38 @@ const SearchItem = styled.div`
 
   ${MEDIA_QUERY_XL} {
     width: 26vh;
-    margin-left: 5px;
     margin-bottom: 40px;
   }
 
   ${MEDIA_QUERY_LG} {
     width: 24vh;
-    margin-left: 5px;
     margin-bottom: 30px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 22vh;
-    margin-left: 5px;
     margin-bottom: 20px;
   }
 
   ${MEDIA_QUERY_SM} {
-    margin-left: 5px;
     margin-bottom: 0;
   }
 
   ${MEDIA_QUERY_XS} {
     width: 20vh;
-    height: 25vh;
-    margin-right: 0px;
-    margin-bottom: 0;
+    height: 28vh;
+    margin: 0;
     padding: 0 10px;
   }
 `;
 
 const InfoCardPhoto = styled(Link)`
-  width: 300px;
-  max-width: 100%;
-  height: 280px;
   text-decoration: none;
-
-  ${MEDIA_QUERY_XL} {
-    width: 200px;
-    max-width: 100%;
-    height: 180px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    width: 180px;
-    max-width: 100%;
-    height: 180px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: 160px;
-    max-width: 100%;
-    height: 160px;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    width: 160px;
-    height: 160px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    width: 130px;
-    height: 130px;
-  }
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
 
     ${MEDIA_QUERY_XS} {
       border-radius: 50%;
@@ -262,7 +239,8 @@ const InfoCardPhoto = styled(Link)`
 `;
 
 const InfoCardTitle = styled(Link)`
-  width: 90%;
+  font-size: 32px;
+  width: 100%;
   color: ${(props) => props.theme.white};
   margin: 20px 0 15px 0;
   font-weight: bold;
@@ -271,20 +249,16 @@ const InfoCardTitle = styled(Link)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 32px;
 
   ${MEDIA_QUERY_XL} {
-    width: 80%;
     font-size: 24px;
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 80%;
     font-size: 20px;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 80%;
     font-size: 22px;
   }
 
@@ -293,7 +267,7 @@ const InfoCardTitle = styled(Link)`
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 25px;
+    font-size: 22px;
   }
 `;
 
@@ -317,7 +291,6 @@ export default function Search() {
   const { userInfo } = useUser();
   const [searchPodcast, setSearchPodcast] = useState([]);
   const [searchEpisode, setSearchEpisode] = useState([]);
-  const [keywordInvalid, setKeywordInvalid] = useState(false);
   const { keyword } = useParams();
 
   useEffect(() => {
@@ -325,11 +298,9 @@ export default function Search() {
       let data = podcast.data.results;
       if (data.length) {
         // console.log(podcast);
-        setKeywordInvalid(false);
         setSearchPodcast(data);
       } else {
         setSearchPodcast("");
-        setKeywordInvalid(true);
       }
     });
     // getSearchEpisode(keyword).then((podcast) => {
@@ -355,22 +326,26 @@ export default function Search() {
                 # 搜尋有關“<PodcastName>{keyword}</PodcastName>”的頻道
               </SearchPageTitle>
               <SearchItemWrapper>
-                {userInfo &&
-                  searchPodcast &&
+                {userInfo && searchPodcast ? (
                   searchPodcast.map((data) => (
                     <SearchList key={data.id} data={data} />
-                  ))}
-                {/* {userInfo &&
-                  searchEpisode &&
-                  searchEpisode.map((data) => (
-                    <SearchList key={data.id} data={data} />
-                  ))} */}
-                {keywordInvalid && (
+                  ))
+                ) : (
                   <InvalidKeyword>
-                    <FirstLine>找不到您要的資料</FirstLine>
-                    <SecondLine>請再輸入一次關鍵字</SecondLine>
+                    <div>找不到您要的資料</div>
+                    <div>請再輸入一次關鍵字</div>
                   </InvalidKeyword>
                 )}
+                {/* {userInfo && searchEpisode ? (
+                  searchEpisode.map((data) => (
+                    <SearchList key={data.id} data={data} />
+                  ))
+                ) : (
+                  <InvalidKeyword>
+                    <div>找不到您要的資料</div>
+                    <div>請再輸入一次關鍵字</div>
+                  </InvalidKeyword>
+                )} */}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>
