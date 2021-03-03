@@ -3,50 +3,54 @@ import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 export default function useMusicPlayer() {
-  const audioEl = useRef(null);
+  const audioEl = useRef();
   const { userPlaylists, userPlayedRecord, userInfo } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
-  console.log(userPlayedRecord);
-
+  // 如果有播放紀錄，設定為目前播放
   useEffect(() => {
-    const audio = audioEl.current;
-    if (!audio) return;
-
-    // 最後一筆播放紀錄資料
     let data = userPlayedRecord[0];
-
     if (!data) return;
     if (data && data.episode === undefined) return;
 
-    const lastTime = data.progress;
     data = data.episode;
+    setCurrentEpisode({
+      id: data.id,
+      src: data.audio,
+      title: data.title,
+      channelTitle: data.podcast.title,
+      channelId: data.podcast.id,
+      order: null,
+      playmode: null,
+      playing: false,
+    });
+  }, [userPlayedRecord, setCurrentEpisode]);
 
-    // 設定為目前播放
-    if (data) {
-      setCurrentEpisode(
-        {
-          id: data.id,
-          src: data.audio,
-          title: data.title,
-          channelTitle: data.podcast.title,
-          channelId: data.podcast.id,
-          order: null,
-          playmode: null,
-          playing: false,
-        }
-      )
-    };
+  // 如果有播放紀錄，設定進度條到上次紀錄位置
+  useEffect(() => {
+    const audio = audioEl.current;
+    if (!audio) return;
+    let data = userPlayedRecord[0];
+    if (!data) return;
+    const lastTime = data.progress;
 
-    // 設定進度條到上次紀錄位置
     audio.currentTime = lastTime;
     const percent = ((lastTime / audio.duration) * 100).toFixed(2);
     setPercentage(percent);
     setCurrentTime(lastTime);
-  }, [userPlayedRecord, setCurrentEpisode]);
+  }, [userPlayedRecord, currentEpisode]);
+
+  // 非會員 progress bar 歸零
+  useEffect(() => {
+    if (!userInfo) {
+      setPercentage(0);
+      setCurrentTime(0);
+      setDuration(0);
+    }
+  }, [userInfo]);
 
   // 上一首或下一首
   const handleSong = (keyword) => {
@@ -125,7 +129,6 @@ export default function useMusicPlayer() {
     onChange,
     duration,
     currentTime,
-    currentEpisode,
     handleSong,
     handleEnd,
   };

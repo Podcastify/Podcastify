@@ -14,7 +14,7 @@ import Sound from "./Sound";
 import useBeforeUnload from "../../hooks/useBeforeUnload";
 import useMusicPlayer from "../../hooks/useMusicPlayer";
 import { Link, useLocation } from "react-router-dom";
-import useUser from "../../hooks/useUser";
+import useCurrentEpisode from "../../hooks/useCurrentEpisode";
 
 const Container = styled.div`
   position: absolute;
@@ -231,8 +231,7 @@ const ChannelName = styled(Link)`
 `;
 
 export default function MusicPlayer() {
-  // const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-
+  const { currentEpisode } = useCurrentEpisode();
   const {
     audioEl,
     getCurrentTime,
@@ -241,13 +240,11 @@ export default function MusicPlayer() {
     onChange,
     duration,
     currentTime,
-    currentEpisode,
     handleSong,
     handleEnd,
   } = useMusicPlayer();
-  const { userCurrentEpisode } = useUser();
 
-  useBeforeUnload(audioEl, userCurrentEpisode);
+  useBeforeUnload(audioEl, currentEpisode);
 
   // 如果在註冊頁面或是登入頁面不顯示
   const location = useLocation();

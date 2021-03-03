@@ -142,7 +142,7 @@ export const getRecords = () => {
 };
 
 // 新增播放紀錄
-export const addRecords = (episodeId, progress = 0) => {
+export const addRecords = (episodeId, progress) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/me/record/${episodeId}`, {
     method: "POST",
