@@ -55,8 +55,8 @@ export default function Home() {
       {/* <Loading /> */}
       <MainWrapper>
         <Div>
-          {/* <Sidebar /> */}
-          <PopUpForm title="編輯播放清單名稱" formInputs={formInputs} />
+          <Sidebar />
+          {/* <PopUpForm title="編輯播放清單名稱" formInputs={formInputs} /> */}
           <InfoCard />
         </Div>
       </MainWrapper>

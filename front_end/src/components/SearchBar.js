@@ -131,7 +131,6 @@ export default function SearchBar() {
   const handlePodcastSearch = (keyword) => {
     if (location.pathname.includes("search")) {
       history.push(`/search/${keyword}`);
-      // window.location.reload();
     }
     history.push(`/search/${keyword}`);
     setValue("");
