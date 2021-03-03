@@ -3,12 +3,13 @@ import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
 export default function useMusicPlayer() {
-  const audioEl = useRef();
+  const audioRef = useRef();
   const { userPlaylists, userPlayedRecord, userInfo } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   // 如果有播放紀錄，設定為目前播放
   useEffect(() => {
@@ -28,20 +29,6 @@ export default function useMusicPlayer() {
       playing: false,
     });
   }, [userPlayedRecord, setCurrentEpisode]);
-
-  // 如果有播放紀錄，設定進度條到上次紀錄位置
-  useEffect(() => {
-    const audio = audioEl.current;
-    if (!audio) return;
-    let data = userPlayedRecord[0];
-    if (!data) return;
-    const lastTime = data.progress;
-
-    audio.currentTime = lastTime;
-    const percent = ((lastTime / audio.duration) * 100).toFixed(2);
-    setPercentage(percent);
-    setCurrentTime(lastTime);
-  }, [userPlayedRecord, currentEpisode]);
 
   // 非會員 progress bar 歸零
   useEffect(() => {
@@ -101,7 +88,7 @@ export default function useMusicPlayer() {
   const onChange = (e) => {
     if (!userInfo) return;
 
-    const audio = audioEl.current;
+    const audio = audioRef.current;
     if (audio.duration) {
       audio.currentTime = (audio.duration / 100) * e.target.value;
       setPercentage(e.target.value);
@@ -118,11 +105,25 @@ export default function useMusicPlayer() {
   };
 
   const onLoadData = () => {
-    setDuration(audioEl.current.duration.toFixed(2));
+    const audio = audioRef.current;
+    setDuration(audio.duration.toFixed(2));
+
+    let data = userPlayedRecord[0];
+    if (!data) return;
+
+    // 首次載入時載入歷史紀錄
+    if (firstLoad) {
+      const lastTime = data.progress;
+      audio.currentTime = lastTime;
+      const percent = ((lastTime / audio.duration) * 100).toFixed(2);
+      setPercentage(percent);
+      setCurrentTime(lastTime);
+      setFirstLoad(false);
+    }
   };
 
   return {
-    audioEl,
+    audioRef,
     getCurrentTime,
     onLoadData,
     percentage,

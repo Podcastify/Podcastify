@@ -142,7 +142,7 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({ handleSong, audioEl }) {
+export default function PlayerControl({ handleSong, audioRef }) {
   const { userInfo } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
 
@@ -159,11 +159,11 @@ export default function PlayerControl({ handleSong, audioEl }) {
 
   useEffect(() => {
     if (currentEpisode.playing) {
-      audioEl.current.play();
+      audioRef.current.play();
     } else {
-      audioEl.current.pause();
+      audioRef.current.pause();
     }
-  }, [audioEl, currentEpisode]);
+  }, [audioRef, currentEpisode]);
 
   return (
     <Control>

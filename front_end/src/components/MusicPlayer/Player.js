@@ -233,7 +233,7 @@ const ChannelName = styled(Link)`
 export default function MusicPlayer() {
   const { currentEpisode } = useCurrentEpisode();
   const {
-    audioEl,
+    audioRef,
     getCurrentTime,
     onLoadData,
     percentage,
@@ -244,7 +244,7 @@ export default function MusicPlayer() {
     handleEnd,
   } = useMusicPlayer();
 
-  useBeforeUnload(audioEl, currentEpisode);
+  useBeforeUnload(audioRef, currentEpisode);
 
   // 如果在註冊頁面或是登入頁面不顯示
   const location = useLocation();
@@ -261,9 +261,9 @@ export default function MusicPlayer() {
         <Audio
           src={currentEpisode.src}
           type="audio/mpeg"
-          ref={audioEl}
+          ref={audioRef}
           onTimeUpdate={getCurrentTime}
-          onLoadedData={onLoadData}
+          onLoadedMetadata={onLoadData}
           preload="auto"
           onEnded={handleEnd}
         />
@@ -282,11 +282,11 @@ export default function MusicPlayer() {
           </Content>
         )}
         <Control
-          audioEl={audioEl}
+          audioRef={audioRef}
           currentEpisode={currentEpisode}
           handleSong={handleSong}
         />
-        <Sound audioEl={audioEl} />
+        <Sound audioRef={audioRef} />
       </Player>
     </Container>
   );
