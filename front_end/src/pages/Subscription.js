@@ -55,17 +55,6 @@ const ChannelContainer = styled.section`
     width: 100%;
     margin: 0;
   }
-
-  ${MEDIA_QUERY_SM} {
-    width: 100%;
-    margin: 0;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    width: 100%;
-    margin: 0;
-    padding: 0 10px;
-  }
 `;
 
 const ChannelWrapper = styled.div`
@@ -84,49 +73,63 @@ const ChannelTitleBlock = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+  ${MEDIA_QUERY_XS} {
+    justify-content: space-between;
+  }
 `;
 
-const ChannelTitle = styled.div`
-  font-size: 40px;
+const ChannelTitle = styled.h1`
+  font-size: 42px;
   padding: 10px;
   line-height: 1.2;
   letter-spacing: normal;
   font-weight: bold;
+  margin: 0;
   color: ${(props) => props.theme.white};
 
-  ${MEDIA_QUERY_SM} {
+  ${MEDIA_QUERY_XL} {
+    font-size: 36px;
+  }
+
+  ${MEDIA_QUERY_LG} {
     font-size: 30px;
   }
 
+  ${MEDIA_QUERY_SM} {
+    font-size: 28px;
+  }
+
   ${MEDIA_QUERY_XS} {
-    font-size: 22px;
+    font-size: 19px;
+    padding: 0;
   }
 `;
 
 const ChannelButton = styled.div`
   cursor: pointer;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
   width: 160px;
   height: 45px;
-  border: 1px solid ${(props) => props.theme.white};
-  border-radius: 3px;
+  border: 2px solid ${(props) => props.theme.white_opacity};
   color: ${(props) => props.theme.white};
+  border-radius: 3px;
   margin-left: 25px;
-  font-size: 15px;
-  padding: 10px 32px;
   letter-spacing: normal;
 
-  &:hover {
-    border-color: transparent;
-    background-color: ${(props) => props.theme.hover_color};
+  ${MEDIA_QUERY_XL} {
+    width: 150px;
+    height: 45px;
+    font-size: 15px;
   }
 
-  &:active {
-    border-color: transparent;
-    background-color: ${(props) => props.theme.click_color};
+  ${MEDIA_QUERY_XS} {
+    width: 115px;
+    height: 35px;
+    font-size: 8px;
   }
 `;
 
@@ -136,7 +139,7 @@ const ChannelItemWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  margin: 40px 0;
+  margin: 40px 30px 40px 30px;
 
   ${MEDIA_QUERY_MD} {
     margin: 40px 20px;
@@ -153,7 +156,7 @@ const ChannelItemWrapper = styled.div`
 `;
 
 const InfoCardItem = styled.div`
-  width: 28vh;
+  width: 24vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -163,75 +166,37 @@ const InfoCardItem = styled.div`
 
   ${MEDIA_QUERY_XL} {
     width: 26vh;
-    margin-left: 5px;
     margin-bottom: 40px;
   }
 
   ${MEDIA_QUERY_LG} {
     width: 24vh;
-    margin-left: 5px;
     margin-bottom: 30px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 22vh;
-    margin-left: 5px;
     margin-bottom: 20px;
   }
 
   ${MEDIA_QUERY_SM} {
-    margin-left: 5px;
     margin-bottom: 0;
   }
 
   ${MEDIA_QUERY_XS} {
-    width: 20vh;
-    height: 25vh;
-    margin-right: 0px;
-    margin-bottom: 0;
+    width: 18vh;
+    height: 28vh;
+    margin: 0 0 10px 0;
     padding: 0 10px;
   }
 `;
 
 const InfoCardPhoto = styled.div`
   position: relative;
-  width: 240px;
-  max-width: 100%;
-  height: 220px;
-  text-decoration: none;
-
-  ${MEDIA_QUERY_XL} {
-    width: 170px;
-    max-width: 100%;
-    height: 150px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    width: 150px;
-    max-width: 100%;
-    height: 130px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: 160px;
-    max-width: 100%;
-    height: 160px;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    width: 160px;
-    height: 160px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    width: 130px;
-    height: 130px;
-  }
-
   img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
 
     ${MEDIA_QUERY_XS} {
       border-radius: 50%;
@@ -240,7 +205,8 @@ const InfoCardPhoto = styled.div`
 `;
 
 const InfoCardTitle = styled.h2`
-  width: 80%;
+  font-size: 32px;
+  width: 100%;
   color: ${(props) => props.theme.white};
   margin: 20px 0 15px 0;
   font-weight: bold;
@@ -249,22 +215,21 @@ const InfoCardTitle = styled.h2`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 1.5em;
 
   ${MEDIA_QUERY_XL} {
-    width: 75%;
+    font-size: 24px;
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 60%;
+    font-size: 20px;
   }
 
   ${MEDIA_QUERY_MD} {
-    width: 75%;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 25px;
+    font-size: 22px;
   }
 
   ${MEDIA_QUERY_XS} {
@@ -287,9 +252,19 @@ const DeleteIcon = styled.div`
     left: -12px;
   }
 
+  ${MEDIA_QUERY_MD} {
+    top: -15px;
+    left: -15px;
+  }
+
   ${MEDIA_QUERY_SM} {
     top: -10px;
     left: -10px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    top: -28px;
+    left: -28px;
   }
 
   svg {
@@ -297,23 +272,23 @@ const DeleteIcon = styled.div`
     height: 50px;
 
     ${MEDIA_QUERY_XL} {
+      width: 40px;
+      height: 40px;
+    }
+
+    ${MEDIA_QUERY_LG} {
       width: 38px;
       height: 38px;
     }
 
-    ${MEDIA_QUERY_LG} {
+    ${MEDIA_QUERY_MD} {
       width: 30px;
       height: 30px;
     }
 
-    ${MEDIA_QUERY_MD} {
-      width: 25px;
-      height: 25px;
-    }
-
     ${MEDIA_QUERY_SM} {
-      width: 25px;
-      height: 25px;
+      width: 28px;
+      height: 28px;
     }
 
     ${MEDIA_QUERY_XS} {
