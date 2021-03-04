@@ -14,6 +14,8 @@ import useInputs from "../hooks/useInputs";
 import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
 import { useState } from "react";
 import UserForm from "../components/UserForm";
+import useCurrentEpisode from "../hooks/useCurrentEpisode";
+import { handlePlaylistPlayPauseBtn } from "../utils";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -170,6 +172,8 @@ const PlaylistPlayBtnControl = styled.div`
     }
   }
 `;
+
+const PlaylistPauseBtnControl = styled(PlaylistPlayBtnControl)``;
 
 const SidebarListTitle = styled.div`
   text-decoration: none;
@@ -351,6 +355,40 @@ function CoverPageForm({ showForm, setShowForm }) {
   );
 }
 
+function SidebarListPlayPauseBtn({ episodeInfo }) {
+  const { userPlaylists } = useUser();
+  const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+
+  const onClick = () => {
+    handlePlaylistPlayPauseBtn(
+      episodeInfo,
+      userPlaylists,
+      currentEpisode,
+      setCurrentEpisode
+    );
+  };
+
+  return (
+    <SidebarListRight onClick={onClick}>
+      {currentEpisode.id === episodeInfo.id ? (
+        currentEpisode.playing ? (
+          <PlaylistPauseBtnControl>
+            <Icon.PodcastPauseBtn />
+          </PlaylistPauseBtnControl>
+        ) : (
+          <PlaylistPlayBtnControl>
+            <Icon.PodcastPlayBtn />
+          </PlaylistPlayBtnControl>
+        )
+      ) : (
+        <PlaylistPlayBtnControl>
+          <Icon.PodcastPlayBtn />
+        </PlaylistPlayBtnControl>
+      )}
+    </SidebarListRight>
+  );
+}
+
 export default function Sidebar() {
   const [showForm, setShowForm] = useState(false);
   const { userPlaylists, userInfo } = useUser();
@@ -395,7 +433,7 @@ export default function Sidebar() {
                     dangerouslySetInnerHTML={
                       episodeInfo.description
                         ? {
-                            __html: episodeInfo.description.replace(
+                            __html: episodeInfo.podcast.title.replace(
                               /<[^>]+>/g,
                               ""
                             ),
@@ -404,11 +442,7 @@ export default function Sidebar() {
                     }
                   ></SidebarListContent>
                 </SidebarListLeft>
-                <SidebarListRight>
-                  <PlaylistPlayBtnControl>
-                    <Icon.PlaylistPlayButton />
-                  </PlaylistPlayBtnControl>
-                </SidebarListRight>
+                <SidebarListPlayPauseBtn episodeInfo={episodeInfo} />
               </SidebarListWrapper>
             ))
           ) : (
