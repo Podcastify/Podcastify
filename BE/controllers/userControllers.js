@@ -138,12 +138,59 @@ const getUserByUsername = async (req, res, next) => {
   next();
 };
 
+const changeUserProfile = async (req, res, next) => {
+  const handleInvalidInputs = () => {
+    res.locals.errorMessage =
+      "Invalid inputs, please check your password again.";
+    res.status(400).send(JSON.stringify(res.locals));
+  };
+  let { password, newPassword, ...rest } = req.body;
+  let { username } = req.jwtData;
+  username = username.toLowerCase();
+  let user;
+  try {
+    user = await Users.findOne(
+      {
+        where: {
+          username,
+        },
+      },
+      {
+        raw: true,
+      }
+    );
+  } catch (err) {
+    res.locals.error = err.errors[0].message;
+    return res.status(500).send(JSON.stringify(res.locals));
+  }
+  if (!user) return handleInvalidInputs();
+  if (!bcrypt.compareSync(password, user.password))
+    return handleInvalidInputs();
+  try {
+    const hash = bcrypt.hashSync(newPassword, saltRounds);
+    await Users.update(
+      { password: hash },
+      {
+        where: {
+          username,
+        }
+      }
+    )
+  } catch (err) {
+    res.locals.error = err;
+    return res.status(500).json(res.locals);
+  }
+  res.locals.ok = true;
+  next();
+} 
+
 const userControllers = {
   getMe,
   requiredLogin,
   getUserByUsername,
   register,
   login,
+  changeUserProfile
 };
 
 module.exports = userControllers;
