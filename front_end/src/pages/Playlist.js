@@ -21,11 +21,8 @@ import {
   addPlaylist,
   getAllMyPlaylists,
 } from "../WebAPI/me";
-<<<<<<< HEAD
 import { handlePlaylistPlayPauseBtn } from "../utils";
-=======
 import PopUpForm from "../components/PopUpForm";
->>>>>>> 39dcfeffd501177172d4fe8492dad5e2d10fe03d
 
 const Container = styled.div`
   width: 100%;
@@ -790,7 +787,7 @@ export default function Playlist() {
 
   const handleRenameBtnClick = () => {
     setShowEditForm(true);
-  }
+  };
 
   return (
     <Container>
@@ -846,12 +843,13 @@ export default function Playlist() {
           </PlaylistWrapper>
         </Div>
       </Main>
-      {showEditForm &&
+      {showEditForm && (
         <PopUpForm
           title="編輯播放清單名稱"
           formInputs={formInputs}
           setShowEditForm={setShowEditForm}
-        />}
+        />
+      )}
     </Container>
   );
 }
