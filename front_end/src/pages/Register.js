@@ -4,11 +4,13 @@ import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import {useHistory} from "react-router-dom"
-import { register } from "../WebAPI/users";
+import { login, register } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
+import { getAuthToken } from "../utils";
+import { getEpisodeInfo } from "../WebAPI/listenAPI";
 
 const RegisterPageWrapper = styled.div`
   max-width: 1920px;
@@ -102,10 +104,13 @@ const loginBtnAttributes =   {
   errorMessage: "",
 }
 
-
-
 export default function Register() {
-  const { setUserInfo } = useUser();
+  const {
+    setUserInfo,
+    setUserPlayedRecord,
+    setUserPlaylists,
+    setUserSubscription
+  } = useUser();
   const history = useHistory();
 
   const handleLoginBtn = e => {
@@ -135,6 +140,23 @@ export default function Register() {
     } catch (err) {
     }
     if (result.ok) {
+      const result = await login(username, password);
+      window.localStorage.removeItem('podcastifyToken');
+      window.localStorage.setItem('podcastifyToken', result.token)
+      const response = await getMyInfo(result.token);
+      let { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
+      for (let i = 0; i < playlists.length; i++) {
+        let { Episodes, ...rest } = playlists[i];
+        Episodes = await Promise.all(Episodes.map(async ep => {
+          const episodeInfo = await getEpisodeInfo(ep.id);
+          return episodeInfo.data;
+        }))
+        playlists[i] = ({ Episodes, ...rest });
+      }
+      setUserInfo(userInfo);
+      setUserPlaylists(playlists);
+      setUserSubscription(subscriptions);
+      setUserPlayedRecord(playedRecords)
       history.push('/');
     } else {
       alert(result.errorMessage || result.error);
