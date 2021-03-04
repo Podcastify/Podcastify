@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
 import { login, register } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
 import useInputs from "../hooks/useInputs";
@@ -11,6 +11,7 @@ import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
 import { getAuthToken } from "../utils";
 import { getEpisodeInfo } from "../WebAPI/listenAPI";
+import { setInitialUserContext } from "../utils";
 
 const RegisterPageWrapper = styled.div`
   max-width: 1920px;
@@ -32,16 +33,14 @@ const FormArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const BtnContainer = styled.div`
   max-width: 32.7rem;
   margin: 0 auto;
-`
+`;
 
-const LoginBtn = styled(Input)`
-  
-`
+const LoginBtn = styled(Input)``;
 
 const formInputs = [
   {
@@ -93,7 +92,7 @@ const formInputs = [
   },
 ];
 
-const loginBtnAttributes =   {
+const loginBtnAttributes = {
   attributes: {
     type: "button",
     name: "toLogin",
@@ -102,88 +101,86 @@ const loginBtnAttributes =   {
   },
   title: "已經是會員了？",
   errorMessage: "",
-}
+};
 
 export default function Register() {
   const {
     setUserInfo,
     setUserPlayedRecord,
     setUserPlaylists,
-    setUserSubscription
+    setUserSubscription,
   } = useUser();
   const history = useHistory();
 
-  const handleLoginBtn = e => {
+  const handleLoginBtn = (e) => {
     e.preventDefault();
-    history.push('/login');
-  }
+    history.push("/login");
+  };
 
-  const handleRegister = async e => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const filters = ['username', 'password', 'password_double_check'];
+    const filters = ["username", "password", "password_double_check"];
     const registerInformation = {};
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       for (const filter of filters) {
         if (filter === input.attributes.name) {
-          registerInformation[filter] = input.attributes.value
+          registerInformation[filter] = input.attributes.value;
         }
       }
-    })
-    if (registerInformation.password !== registerInformation.password_double_check) {
-      alert('兩次密碼不符，請重新確認');
+    });
+    if (
+      registerInformation.password !== registerInformation.password_double_check
+    ) {
+      alert("兩次密碼不符，請重新確認");
       return;
     }
     const { username, password } = registerInformation;
-    let result
+    let result;
     try {
       result = await register(username, password);
-    } catch (err) {
-    }
+    } catch (err) {}
+
     if (result.ok) {
       const result = await login(username, password);
-      window.localStorage.removeItem('podcastifyToken');
-      window.localStorage.setItem('podcastifyToken', result.token)
-      const response = await getMyInfo(result.token);
-      let { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
-      for (let i = 0; i < playlists.length; i++) {
-        let { Episodes, ...rest } = playlists[i];
-        Episodes = await Promise.all(Episodes.map(async ep => {
-          const episodeInfo = await getEpisodeInfo(ep.id);
-          return episodeInfo.data;
-        }))
-        playlists[i] = ({ Episodes, ...rest });
-      }
-      setUserInfo(userInfo);
-      setUserPlaylists(playlists);
-      setUserSubscription(subscriptions);
-      setUserPlayedRecord(playedRecords)
-      history.push('/');
+      window.localStorage.removeItem("podcastifyToken");
+      window.localStorage.setItem("podcastifyToken", result.token);
+      setInitialUserContext(
+        getMyInfo,
+        getEpisodeInfo,
+        setUserInfo,
+        setUserPlaylists,
+        setUserPlayedRecord,
+        setUserSubscription
+      );
+      history.push("/");
     } else {
       alert(result.errorMessage || result.error);
       return;
     }
-  }
+  };
 
   const { inputs, handlers } = useInputs(formInputs);
-  const { inputs: loginBtnInput, handlers: loginBtnHandlers } = useInputs(loginBtnAttributes);
+  const { inputs: loginBtnInput, handlers: loginBtnHandlers } = useInputs(
+    loginBtnAttributes
+  );
 
   return (
     <RegisterPageWrapper>
       <StyledLogo />
       {/* <FormArea> */}
-        <RegisterForm
-          formTitle={"會員註冊"}
-          inputs={inputs}
-          handlers={handlers}
-          onSubmit={handleRegister}
+      <RegisterForm
+        formTitle={"會員註冊"}
+        inputs={inputs}
+        handlers={handlers}
+        onSubmit={handleRegister}
+      />
+      <BtnContainer>
+        <LoginBtn
+          {...loginBtnInput}
+          handlers={loginBtnHandlers}
+          onClick={handleLoginBtn}
         />
-        <BtnContainer>
-          <LoginBtn
-            {...loginBtnInput}
-            handlers={loginBtnHandlers}
-            onClick={handleLoginBtn}
-          />
-        </BtnContainer>
+      </BtnContainer>
       {/* </FormArea> */}
     </RegisterPageWrapper>
   );

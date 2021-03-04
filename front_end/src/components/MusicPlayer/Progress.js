@@ -181,8 +181,8 @@ export default function ProgressControl({
   useEffect(() => {
     setIsLoading(true);
 
-    // 如果非會員不須有 loading 畫面
-    if (!userInfo) {
+    // 如果非會員或沒有進度條要跑，不須有 loading 畫面
+    if (!userInfo || !percentage) {
       setIsLoading(false);
     }
 
