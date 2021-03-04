@@ -106,7 +106,7 @@ const ChannelTitle = styled.h1`
   }
 `;
 
-const ChannelButton = styled.div`
+const ChannelBtn = styled.div`
   cursor: pointer;
   font-size: 15px;
   display: flex;
@@ -131,6 +131,14 @@ const ChannelButton = styled.div`
     height: 35px;
     font-size: 8px;
   }
+`;
+
+const DeletedChannelBtn = styled(ChannelBtn)`
+  outline: none;
+  border: hidden;
+  color: ${(props) => props.theme.white};
+  background: ${(props) => props.theme.click_color};
+  border: 3px solid ${(props) => props.theme.click_color};
 `;
 
 const ChannelItemWrapper = styled.div`
@@ -271,6 +279,13 @@ const DeleteIcon = styled.div`
     width: 50px;
     height: 50px;
 
+    &:hover {
+      cursor: pointer;
+      rect {
+        fill: ${(props) => props.theme.orange};
+      }
+    }
+
     ${MEDIA_QUERY_XL} {
       width: 40px;
       height: 40px;
@@ -299,12 +314,21 @@ const DeleteIcon = styled.div`
       top: 25px;
       left: 25px;
     }
+
+    &hover {
+    }
   }
 `;
 
 export default function Subcription() {
   const { userSubscription } = useUser();
-  console.log(userSubscription);
+  const [showDeletedBtn, setShowDeletedBtn] = useState(false);
+  // console.log(userSubscription);
+
+  const handleToggleIsDeleted = () => {
+    setShowDeletedBtn(!showDeletedBtn);
+  };
+
   return (
     <Container>
       <MainWrapper>
@@ -312,80 +336,30 @@ export default function Subcription() {
           <Sidebar />
           <ChannelContainer>
             <ChannelWrapper>
-              <ChannelTitleBlock>
+              <ChannelTitleBlock onClick={handleToggleIsDeleted}>
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                <ChannelButton>管理我的頻道</ChannelButton>
+                {showDeletedBtn ? (
+                  <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
+                ) : (
+                  <ChannelBtn>管理我的頻道</ChannelBtn>
+                )}
               </ChannelTitleBlock>
               <ChannelItemWrapper>
                 <InfoCardItem>
                   <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
                     <DeleteIcon>
-                      <DeleteButton />
+                      {showDeletedBtn ? <DeleteButton /> : ""}
                     </DeleteIcon>
+                    <img src={DemoImage} alt="" />
                   </InfoCardPhoto>
                   <InfoCardTitle>頻道名稱</InfoCardTitle>
                 </InfoCardItem>
                 <InfoCardItem>
                   <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
                     <DeleteIcon>
-                      <DeleteButton />
+                      {showDeletedBtn ? <DeleteButton /> : ""}
                     </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
                     <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
                   </InfoCardPhoto>
                   <InfoCardTitle>頻道名稱</InfoCardTitle>
                 </InfoCardItem>

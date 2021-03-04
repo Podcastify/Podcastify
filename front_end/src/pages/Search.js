@@ -225,7 +225,19 @@ const SearchItem = styled.div`
 `;
 
 const InfoCardPhoto = styled(Link)`
-  text-decoration: none;
+  position: relative;
+
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      background: rgba(0, 0, 0, 0.2);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
 
   img {
     width: 100%;
@@ -297,22 +309,20 @@ export default function Search() {
     getSearchPodcast(keyword).then((podcast) => {
       let data = podcast.data.results;
       if (data.length) {
-        // console.log(podcast);
+        console.log(podcast);
         setSearchPodcast(data);
       } else {
         setSearchPodcast("");
       }
     });
-    // getSearchEpisode(keyword).then((podcast) => {
-    //   let data = podcast.data.results;
-    //   if (data.length) {
-    //     setKeywordInvalid(false);
-    //     setSearchEpisode(data);
-    //   } else {
-    //     setSearchPodcast("");
-    //     setKeywordInvalid(true);
-    //   }
-    // });
+    //   getSearchEpisode(keyword).then((podcast) => {
+    //     let data = podcast.data.results;
+    //     if (data.length) {
+    //       setSearchEpisode(data);
+    //     } else {
+    //       setSearchPodcast("");
+    //     }
+    //   });
   }, [keyword]);
 
   return (
