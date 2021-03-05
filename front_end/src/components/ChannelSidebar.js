@@ -283,6 +283,7 @@ export default function ChannelSidebar({ podcastInfo }) {
         if (response.ok) {
           setShowPopUp(true);
           setSubscription(true);
+          return;
         }
       });
     }
@@ -291,6 +292,7 @@ export default function ChannelSidebar({ podcastInfo }) {
         if (response.ok) {
           setShowPopUp(true);
           setSubscription(false);
+          return;
         }
       });
     }

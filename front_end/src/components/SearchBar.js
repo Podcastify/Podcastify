@@ -7,7 +7,7 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import useUser from "../hooks/useUser";
 
@@ -119,7 +119,6 @@ const MagnifierControl = styled.div`
 `;
 
 export default function SearchBar() {
-  const location = useLocation();
   const history = useHistory();
   const [value, setValue] = useState("");
   const { userInfo } = useUser();
@@ -128,23 +127,20 @@ export default function SearchBar() {
     setValue(e.target.value);
   };
 
-  const handlePodcastSearch = (keyword) => {
-    if (location.pathname.includes("search")) {
-      history.push(`/${keyword}`);
-    }
+  const PodcastSearch = (keyword) => {
     history.push(`/search/${keyword}`);
     setValue("");
   };
 
   const handleEnterKeyPressed = (e) => {
     if (e.key === "Enter" && value !== "") {
-      handlePodcastSearch(value);
+      PodcastSearch(value);
     }
   };
 
   const handleButtonSubmit = () => {
     if (value !== "") {
-      handlePodcastSearch(value);
+      PodcastSearch(value);
     }
   };
 
