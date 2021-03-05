@@ -72,36 +72,36 @@ export const setInitialUserContext = async (
       playlists[i] = { Episodes, ...rest };
     }
 
-    if (playedRecords.length === 0) return;
-
-    // 節省打 API 次數，只取最後三筆播放紀錄
-    let lastThreePlayedRecords = [];
-    if (playedRecords.length > 3) {
-      for (let i = 0; i < 3; i++) {
-        lastThreePlayedRecords[i] = playedRecords[i];
-      }
-    } else {
-      for (let i = 0; i < playedRecords.length; i++) {
-        lastThreePlayedRecords[i] = playedRecords[i];
-      }
-    }
-
-    // 拿到播放紀錄的單集詳細資料
-    let playedRecordsDetails = await Promise.all(
-      lastThreePlayedRecords.map(async (ep) => {
-        if (ep.episodeId.length !== 32 || ep.progress === 0) return;
-        const episodeInfo = await getEpisodeInfo(ep.episodeId);
-        return episodeInfo.data;
-      })
-    );
-
-    // 播放紀錄資料重整
     let record = [];
-    for (let i = 0; i < playedRecordsDetails.length; i++) {
-      record[i] = {
-        episode: playedRecordsDetails[i],
-        progress: lastThreePlayedRecords[i].progress,
-      };
+    if (playedRecords.length !== 0) {
+      // 節省打 API 次數，只取最後三筆播放紀錄
+      let lastThreePlayedRecords = [];
+      if (playedRecords.length > 3) {
+        for (let i = 0; i < 3; i++) {
+          lastThreePlayedRecords[i] = playedRecords[i];
+        }
+      } else {
+        for (let i = 0; i < playedRecords.length; i++) {
+          lastThreePlayedRecords[i] = playedRecords[i];
+        }
+      }
+
+      // 拿到播放紀錄的單集詳細資料
+      let playedRecordsDetails = await Promise.all(
+        lastThreePlayedRecords.map(async (ep) => {
+          if (ep.episodeId.length !== 32 || ep.progress === 0) return;
+          const episodeInfo = await getEpisodeInfo(ep.episodeId);
+          return episodeInfo.data;
+        })
+      );
+
+      // 播放紀錄資料重整
+      for (let i = 0; i < playedRecordsDetails.length; i++) {
+        record[i] = {
+          episode: playedRecordsDetails[i],
+          progress: lastThreePlayedRecords[i].progress,
+        };
+      }
     }
 
     setUserInfo(userInfo);
