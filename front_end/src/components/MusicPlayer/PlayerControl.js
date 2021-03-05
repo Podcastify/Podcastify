@@ -9,7 +9,7 @@ import {
 } from "../../constants/breakpoints";
 import useUser from "../../hooks/useUser";
 import useCurrentEpisode from "../../hooks/useCurrentEpisode";
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 
 const Control = styled.div`
   display: flex;
@@ -142,7 +142,7 @@ const NextControl = styled(PrevControl)`
   margin-right: 30px;
 `;
 
-export default function PlayerControl({ handleSong, audioEl }) {
+function PlayerControl({ handleSong, audioRef }) {
   const { userInfo } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
 
@@ -159,11 +159,11 @@ export default function PlayerControl({ handleSong, audioEl }) {
 
   useEffect(() => {
     if (currentEpisode.playing) {
-      audioEl.current.play();
+      audioRef.current.play();
     } else {
-      audioEl.current.pause();
+      audioRef.current.pause();
     }
-  }, [audioEl, currentEpisode]);
+  }, [audioRef, currentEpisode]);
 
   return (
     <Control>
@@ -187,3 +187,6 @@ export default function PlayerControl({ handleSong, audioEl }) {
     </Control>
   );
 }
+
+const MemoControl = memo(PlayerControl);
+export default MemoControl;

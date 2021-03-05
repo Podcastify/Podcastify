@@ -1,16 +1,22 @@
 import { useEffect, useState, useContext } from "react";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import coverImg from "../images/loginPageCover.jpg";
-import {MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL, MEDIA_QUERY_XXL } from "../constants/breakpoints"
+import {
+  MEDIA_QUERY_MD,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
+  MEDIA_QUERY_XXL,
+} from "../constants/breakpoints";
 import { login } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
 import { getEpisodeInfo } from "../WebAPI/listenAPI";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
+import { setInitialUserContext } from "../utils";
 
 const LoginPageWrapper = styled.div`
   max-width: 1920px;
@@ -25,14 +31,13 @@ const StyledLogo = styled(Images.PodcastifyLogo)`
 
 const LoginForm = styled(UserForm)`
   width: 100%;
-
 `;
 
 const MainContainer = styled.main`
   display: flex;
   justify-content: space-around;
   align-items: center;
-`
+`;
 
 const CoverImage = styled.div`
   display: none;
@@ -53,12 +58,12 @@ const CoverImage = styled.div`
   }
 
   height: 100vh;
-  width: 100%;  
+  width: 100%;
   background-image: url(${coverImg});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-`
+`;
 
 const FormArea = styled.div`
   height: 100vh;
@@ -66,11 +71,11 @@ const FormArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const RegisterBtn = styled(Input)`
   width: 32.7rem;
-`
+`;
 
 const formInputs = [
   {
@@ -121,68 +126,65 @@ const registerBtnAttributes = {
   },
   title: "還不是會員嗎？",
   errorMessage: "",
-}
+};
 
 export default function Login() {
   const {
     setUserInfo,
     setUserPlayedRecord,
     setUserPlaylists,
-    setUserSubscription
+    setUserSubscription,
   } = useUser();
-  const history = useHistory()
+  const history = useHistory();
 
-  const handleToRegisterBtn = e => {
+  const handleToRegisterBtn = (e) => {
     e.preventDefault();
-    history.push('/register');
-  }
+    history.push("/register");
+  };
 
-  const handleLogin = async e => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const filters = ['username', 'password'];
+    const filters = ["username", "password"];
     const loginInformation = {};
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       for (const filter of filters) {
         if (filter === input.attributes.name) {
-          loginInformation[filter] = input.attributes.value
+          loginInformation[filter] = input.attributes.value;
         }
       }
-    })
-    let result
-    const {username, password} = loginInformation
+    });
+    let result;
+    const { username, password } = loginInformation;
     try {
       result = await login(username, password);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
+
     if (result.ok) {
-      window.localStorage.removeItem('podcastifyToken');
-      window.localStorage.setItem('podcastifyToken', result.token)
-      const response = await getMyInfo(result.token);
-      let { playlists, subscriptions, playedRecords, ...userInfo } = response.data;
-      for (let i = 0; i < playlists.length; i++) {
-        let { Episodes, ...rest } = playlists[i];
-        Episodes = await Promise.all(Episodes.map(async ep => {
-          const episodeInfo = await getEpisodeInfo(ep.id);
-          return episodeInfo.data;
-        }))
-        playlists[i] = ({ Episodes, ...rest });
-      }
-      setUserInfo(userInfo);
-      setUserPlaylists(playlists);
-      setUserSubscription(subscriptions);
-      setUserPlayedRecord(playedRecords)
-      history.push('/');
+      window.localStorage.removeItem("podcastifyToken");
+      window.localStorage.setItem("podcastifyToken", result.token);
+      setInitialUserContext(
+        getMyInfo,
+        getEpisodeInfo,
+        setUserInfo,
+        setUserPlaylists,
+        setUserPlayedRecord,
+        setUserSubscription
+      );
+      history.push("/");
     } else {
-      window.localStorage.removeItem('podcastifyToken');
+      window.localStorage.removeItem("podcastifyToken");
       alert(result.errorMessage);
       return;
     }
-  }
+  };
 
   const { inputs, handlers } = useInputs(formInputs);
 
-  const { inputs:registerBtnInput, handlers:registerBtnHandlers } = useInputs(registerBtnAttributes);
+  const { inputs: registerBtnInput, handlers: registerBtnHandlers } = useInputs(
+    registerBtnAttributes
+  );
 
   return (
     <LoginPageWrapper>
@@ -196,7 +198,11 @@ export default function Login() {
             handlers={handlers}
             onSubmit={handleLogin}
           />
-          <RegisterBtn {...registerBtnInput} handlers={registerBtnHandlers} onClick={handleToRegisterBtn}/>
+          <RegisterBtn
+            {...registerBtnInput}
+            handlers={registerBtnHandlers}
+            onClick={handleToRegisterBtn}
+          />
         </FormArea>
       </MainContainer>
     </LoginPageWrapper>

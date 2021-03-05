@@ -21,6 +21,7 @@ import {
   addPlaylist,
   getAllMyPlaylists,
 } from "../WebAPI/me";
+import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
 
 const Container = styled.div`
@@ -713,40 +714,12 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
   };
 
   const handlePlayPauseBtn = () => {
-    if (!episodeInfo) return;
-
-    // 取得目前該集數在播放列表的順序
-    let playlistOrder;
-    const episodes = userPlaylists[0].Episodes;
-    for (let i = 0; i < episodes.length; i++) {
-      if (episodeInfo.id === episodes[i].id) {
-        playlistOrder = i;
-      }
-    }
-
-    // 如果現在播放內容就是該集內容，先確認播放狀況並設定播放順序
-    if (currentEpisode.id === episodeInfo.id) {
-      const { playing, playmode, order, ...rest } = currentEpisode;
-      setCurrentEpisode({
-        playing: !playing,
-        playmode: "continued",
-        order: playlistOrder,
-        ...rest,
-      });
-      return;
-    }
-
-    // 如果現在播放內容不是該集內容，直接播放並設定播放順序
-    setCurrentEpisode({
-      id: episodeInfo.id,
-      src: episodeInfo.audio,
-      title: episodeInfo.title,
-      channelTitle: episodeInfo.podcast.title,
-      channelId: episodeInfo.podcast.id,
-      order: playlistOrder,
-      playmode: "continued",
-      playing: true,
-    });
+    handlePlaylistPlayPauseBtn(
+      episodeInfo,
+      userPlaylists,
+      currentEpisode,
+      setCurrentEpisode
+    );
   };
 
   return (
@@ -775,10 +748,12 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
             dangerouslySetInnerHTML={
               episodeInfo.description
                 ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
-                : {__html: '沒東西'}
+                : { __html: "沒東西" }
             }
           ></EpisodeDescription>
-          <ChannelName>{episodeInfo.podcast ? episodeInfo.podcast.title : 'demo: 社畜日記'}</ChannelName>
+          <ChannelName>
+            {episodeInfo.podcast ? episodeInfo.podcast.title : "demo: 社畜日記"}
+          </ChannelName>
         </Text>
         <DeleteBtnControl onClick={handleDeleteIconClick}>
           <Images.DeleteBtn />
@@ -812,7 +787,7 @@ export default function Playlist() {
 
   const handleRenameBtnClick = () => {
     setShowEditForm(true);
-  }
+  };
 
   return (
     <Container>
@@ -868,12 +843,13 @@ export default function Playlist() {
           </PlaylistWrapper>
         </Div>
       </Main>
-      {showEditForm &&
+      {showEditForm && (
         <PopUpForm
           title="編輯播放清單名稱"
           formInputs={formInputs}
           setShowEditForm={setShowEditForm}
-        />}
+        />
+      )}
     </Container>
   );
 }

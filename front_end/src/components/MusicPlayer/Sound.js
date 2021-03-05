@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import Icon from "../Images";
 import { Slider, ProgressCurrent, ProgressBar } from "./Progress";
 import {
@@ -77,7 +77,7 @@ const SoundOnControl = styled.div`
 
 const MuteControl = styled(SoundOnControl)``;
 
-export default function SoundControl({ audioEl }) {
+function SoundControl({ audioRef }) {
   const [isMute, setIsMute] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [SoundBarWidth, setSoundBarWidth] = useState(50);
@@ -86,7 +86,7 @@ export default function SoundControl({ audioEl }) {
     // 設定音量
     const currentVolume = e.target.value / 100;
     setVolume(currentVolume);
-    audioEl.current.volume = currentVolume;
+    audioRef.current.volume = currentVolume;
 
     // 設定進度條寬度
     setSoundBarWidth(currentVolume * 100);
@@ -97,16 +97,16 @@ export default function SoundControl({ audioEl }) {
   };
 
   useEffect(() => {
-    audioEl.current.volume = volume;
+    audioRef.current.volume = volume;
 
     if (isMute) {
-      audioEl.current.volume = 0;
+      audioRef.current.volume = 0;
     }
 
     if (!isMute) {
-      audioEl.current.volume = volume;
+      audioRef.current.volume = volume;
     }
-  }, [isMute, audioEl, volume]);
+  }, [isMute, audioRef, volume]);
 
   return (
     <Sound>
@@ -132,3 +132,6 @@ export default function SoundControl({ audioEl }) {
     </Sound>
   );
 }
+
+const MemoSound = memo(SoundControl);
+export default MemoSound;

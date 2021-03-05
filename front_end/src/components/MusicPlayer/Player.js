@@ -9,12 +9,14 @@ import {
   MEDIA_QUERY_XXL,
 } from "../../constants/breakpoints";
 import Progress from "./Progress";
+import Content from "./Content";
 import Control from "./PlayerControl";
 import Sound from "./Sound";
 import useBeforeUnload from "../../hooks/useBeforeUnload";
 import useMusicPlayer from "../../hooks/useMusicPlayer";
+import useCurrentEpisode from "../../hooks/useCurrentEpisode";
 import { Link, useLocation } from "react-router-dom";
-import useUser from "../../hooks/useUser";
+import { memo } from "react";
 
 const Container = styled.div`
   position: absolute;
@@ -142,112 +144,31 @@ const PlaylistControl = styled(Link)`
 
 const Audio = styled.audio``;
 
-const Content = styled.div`
-  width: calc(100% / 12 * 1.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+function PlaylistBtn() {
+  return (
+    <PlaylistControl to="/myplaylist">
+      <Icon.PlaylistBtn />
+    </PlaylistControl>
+  );
+}
 
-  ${MEDIA_QUERY_XXL} {
-    width: calc(100% / 12 * 1.8);
-  }
-
-  ${MEDIA_QUERY_MD} {
-    width: calc(100% / 12 * 2.5);
-    line-height: 1.2;
-  }
-
-  ${MEDIA_QUERY_SM} {
-    width: calc(100% / 12 * 5);
-    margin: 18px 40px 0 0;
-    line-height: 1.2;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    width: calc(100% / 12 * 4.5);
-    margin: 18px 40px 0 0;
-    line-height: 1.2;
-  }
-`;
-
-const EpisodeName = styled.div`
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: ${(props) => props.theme.white};
-  font-size: 15px;
-  margin-bottom: 5px;
-
-  ${MEDIA_QUERY_SM} {
-    font-size: 17px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    font-size: 17px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    font-size: 17px;
-  }
-
-  ${MEDIA_QUERY_XL} {
-    font-size: 20px;
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    font-size: 25px;
-  }
-`;
-
-const ChannelName = styled(Link)`
-  color: ${(props) => props.theme.white_opacity};
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 15px;
-
-  ${MEDIA_QUERY_SM} {
-    font-size: 17px;
-  }
-
-  ${MEDIA_QUERY_MD} {
-    font-size: 17px;
-  }
-
-  ${MEDIA_QUERY_LG} {
-    font-size: 17px;
-  }
-
-  ${MEDIA_QUERY_XL} {
-    font-size: 20px;
-  }
-
-  ${MEDIA_QUERY_XXL} {
-    font-size: 25px;
-  }
-`;
+const MemoPlaylistBtn = memo(PlaylistBtn);
 
 export default function MusicPlayer() {
-  // const src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-
+  const { currentEpisode } = useCurrentEpisode();
   const {
-    audioEl,
+    audioRef,
     getCurrentTime,
     onLoadData,
     percentage,
     onChange,
     duration,
     currentTime,
-    currentEpisode,
     handleSong,
     handleEnd,
   } = useMusicPlayer();
-  const { userCurrentEpisode } = useUser();
 
-  useBeforeUnload(audioEl, userCurrentEpisode);
+  useBeforeUnload(audioRef, currentEpisode);
 
   // 如果在註冊頁面或是登入頁面不顯示
   const location = useLocation();
@@ -258,15 +179,13 @@ export default function MusicPlayer() {
   return (
     <Container>
       <Player>
-        <PlaylistControl to="/myplaylist">
-          <Icon.PlaylistBtn />
-        </PlaylistControl>
+        <MemoPlaylistBtn />
         <Audio
           src={currentEpisode.src}
           type="audio/mpeg"
-          ref={audioEl}
+          ref={audioRef}
           onTimeUpdate={getCurrentTime}
-          onLoadedData={onLoadData}
+          onLoadedMetadata={onLoadData}
           preload="auto"
           onEnded={handleEnd}
         />
@@ -276,20 +195,9 @@ export default function MusicPlayer() {
           duration={duration}
           currentTime={currentTime}
         />
-        {currentEpisode.src && (
-          <Content>
-            <EpisodeName>{currentEpisode.title}</EpisodeName>
-            <ChannelName to={`/channel/${currentEpisode.channelId}`}>
-              {currentEpisode.channelTitle}
-            </ChannelName>
-          </Content>
-        )}
-        <Control
-          audioEl={audioEl}
-          currentEpisode={currentEpisode}
-          handleSong={handleSong}
-        />
-        <Sound audioEl={audioEl} />
+        {currentEpisode.src && <Content currentEpisode={currentEpisode} />}
+        <Control audioRef={audioRef} handleSong={handleSong} />
+        <Sound audioRef={audioRef} />
       </Player>
     </Container>
   );
