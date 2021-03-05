@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 
@@ -40,44 +40,53 @@ export default function useMusicPlayer() {
   }, [userInfo]);
 
   // 上一首或下一首
-  const handleSong = (keyword) => {
-    const playlist = userPlaylists[0];
+  const handleSong = useCallback(
+    (keyword) => {
+      const playlist = userPlaylists[0];
 
-    // 如果非會員或不是播放播放清單
-    if (!userInfo || !currentEpisode.playmode) return;
+      // 如果非會員或不是播放播放清單
+      if (!userInfo || !currentEpisode.playmode) return;
 
-    // 如果播放清單只有一首
-    if (playlist.Episodes.length === 1) return;
+      // 如果播放清單只有一首
+      if (playlist.Episodes.length === 1) return;
 
-    // 如果按下一首且目前是是播放清單最後一首
-    if (
-      keyword === "next" &&
-      currentEpisode.order === playlist.Episodes.length - 1
-    )
-      return;
+      // 如果按下一首且目前是是播放清單最後一首
+      if (
+        keyword === "next" &&
+        currentEpisode.order === playlist.Episodes.length - 1
+      )
+        return;
 
-    // 如果按上一首且目前是是播放清單第一首
-    if (keyword === "last" && currentEpisode.order === 0) return;
+      // 如果按上一首且目前是是播放清單第一首
+      if (keyword === "last" && currentEpisode.order === 0) return;
 
-    const episode =
-      keyword === "next"
-        ? playlist.Episodes[currentEpisode.order + 1]
-        : playlist.Episodes[currentEpisode.order - 1];
-
-    setCurrentEpisode({
-      id: episode.id,
-      src: episode.audio,
-      title: episode.title,
-      channelTitle: episode.podcast.title,
-      channelId: episode.podcast.id,
-      order:
+      const episode =
         keyword === "next"
-          ? currentEpisode.order + 1
-          : currentEpisode.order - 1,
-      playmode: "continued",
-      playing: true,
-    });
-  };
+          ? playlist.Episodes[currentEpisode.order + 1]
+          : playlist.Episodes[currentEpisode.order - 1];
+
+      setCurrentEpisode({
+        id: episode.id,
+        src: episode.audio,
+        title: episode.title,
+        channelTitle: episode.podcast.title,
+        channelId: episode.podcast.id,
+        order:
+          keyword === "next"
+            ? currentEpisode.order + 1
+            : currentEpisode.order - 1,
+        playmode: "continued",
+        playing: true,
+      });
+    },
+    [
+      currentEpisode.order,
+      currentEpisode.playmode,
+      setCurrentEpisode,
+      userInfo,
+      userPlaylists,
+    ]
+  );
 
   // 該集播放結束時
   const handleEnd = () => {

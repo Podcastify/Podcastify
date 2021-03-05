@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import Icon from "../Images";
 import { Slider, ProgressCurrent, ProgressBar } from "./Progress";
 import {
@@ -77,7 +77,7 @@ const SoundOnControl = styled.div`
 
 const MuteControl = styled(SoundOnControl)``;
 
-export default function SoundControl({ audioRef }) {
+function SoundControl({ audioRef }) {
   const [isMute, setIsMute] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [SoundBarWidth, setSoundBarWidth] = useState(50);
@@ -132,3 +132,6 @@ export default function SoundControl({ audioRef }) {
     </Sound>
   );
 }
+
+const MemoSound = memo(SoundControl);
+export default MemoSound;
