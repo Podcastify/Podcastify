@@ -774,10 +774,12 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
             dangerouslySetInnerHTML={
               episodeInfo.description
                 ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
-                : {__html: '沒東西'}
+                : { __html: "沒東西" }
             }
           ></EpisodeDescription>
-          <ChannelName>{episodeInfo.podcast ? episodeInfo.podcast.title : 'demo: 社畜日記'}</ChannelName>
+          <ChannelName>
+            {episodeInfo.podcast ? episodeInfo.podcast.title : "demo: 社畜日記"}
+          </ChannelName>
         </Text>
         <DeleteBtnControl onClick={handleDeleteIconClick}>
           <Images.DeleteBtn />

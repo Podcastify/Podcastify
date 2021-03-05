@@ -8,8 +8,8 @@ import {
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
 import { useHistory, useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
-import { UserContext } from "../context/context";
+import { useState } from "react";
+import useUser from "../hooks/useUser";
 
 const SearchBox = styled.div`
   width: calc(100% / 12 * 7.5);
@@ -122,7 +122,7 @@ export default function SearchBar() {
   const location = useLocation();
   const history = useHistory();
   const [value, setValue] = useState("");
-  const { userInfo } = useContext(UserContext);
+  const { userInfo } = useUser();
 
   const handleInputChange = (e) => {
     setValue(e.target.value);
@@ -130,7 +130,7 @@ export default function SearchBar() {
 
   const handlePodcastSearch = (keyword) => {
     if (location.pathname.includes("search")) {
-      history.push(`/search/${keyword}`);
+      history.push(`/${keyword}`);
     }
     history.push(`/search/${keyword}`);
     setValue("");

@@ -10,7 +10,7 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import { Link, useParams } from "react-router-dom";
-import { getSearchPodcast, getSearchEpisode } from "../WebAPI/listenAPI";
+import { getSearchPodcast } from "../WebAPI/listenAPI";
 import useUser from "../hooks/useUser";
 
 const Container = styled.div`
@@ -302,7 +302,6 @@ function SearchList({ data }) {
 export default function Search() {
   const { userInfo } = useUser();
   const [searchPodcast, setSearchPodcast] = useState([]);
-  const [searchEpisode, setSearchEpisode] = useState([]);
   const { keyword } = useParams();
 
   useEffect(() => {
@@ -315,14 +314,6 @@ export default function Search() {
         setSearchPodcast("");
       }
     });
-    //   getSearchEpisode(keyword).then((podcast) => {
-    //     let data = podcast.data.results;
-    //     if (data.length) {
-    //       setSearchEpisode(data);
-    //     } else {
-    //       setSearchPodcast("");
-    //     }
-    //   });
   }, [keyword]);
 
   return (
@@ -346,16 +337,6 @@ export default function Search() {
                     <div>請再輸入一次關鍵字</div>
                   </InvalidKeyword>
                 )}
-                {/* {userInfo && searchEpisode ? (
-                  searchEpisode.map((data) => (
-                    <SearchList key={data.id} data={data} />
-                  ))
-                ) : (
-                  <InvalidKeyword>
-                    <div>找不到您要的資料</div>
-                    <div>請再輸入一次關鍵字</div>
-                  </InvalidKeyword>
-                )} */}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>
