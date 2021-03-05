@@ -14,7 +14,7 @@ import {
   deleteSubsciption,
 } from "../WebAPI/me";
 import { useParams } from "react-router-dom";
-import AlertMessage from "./AlertMessage";
+import PopUpMessage from "./PopUpMessage";
 import useUser from "../hooks/useUser";
 
 export const SidebarContainer = styled.aside`
@@ -46,9 +46,9 @@ export const SidebarContainer = styled.aside`
 
   ${MEDIA_QUERY_XS} {
     width: 100%;
+    height: 100%;
     border: none;
     padding: 5px 0;
-    height: 100%;
     margin-bottom: 20px;
   }
 `;
@@ -274,27 +274,27 @@ export default function ChannelSidebar({ podcastInfo }) {
   const { userInfo } = useUser();
   const { podcastId } = useParams();
   const [subscription, setSubscription] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const handleSubscribeClick = useCallback(() => {
-    setSubscription(!subscription);
-    setShowPopup(!showPopup);
+    setShowPopUp(!showPopUp);
     if (!subscription) {
       addSubsciption(podcastId).then((response) => {
         if (response.ok) {
+          setShowPopUp(true);
           setSubscription(true);
-          setShowPopup(true);
-        }
-      });
-    } else if (subscription) {
-      deleteSubsciption(podcastId).then((response) => {
-        if (response.ok) {
-          setSubscription(false);
-          setShowPopup(true);
         }
       });
     }
-  }, [podcastId, setSubscription, subscription, setShowPopup, showPopup]);
+    if (subscription) {
+      deleteSubsciption(podcastId).then((response) => {
+        if (response.ok) {
+          setShowPopUp(true);
+          setSubscription(false);
+        }
+      });
+    }
+  }, [podcastId, subscription, setShowPopUp, showPopUp]);
 
   useEffect(() => {
     getMySubsciption().then((response) => {
@@ -311,7 +311,7 @@ export default function ChannelSidebar({ podcastInfo }) {
 
   return (
     <>
-      {showPopup && <AlertMessage />}
+      {showPopUp && <PopUpMessage subscription={subscription} />}
       <SidebarContainer>
         <InfoCardWrapper>
           {podcastInfo ? (

@@ -9,7 +9,20 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 
-const ErrorContainer = styled.div`
+const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(55, 55, 55, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+`;
+
+const Container = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -95,72 +108,23 @@ const CloseBtnControl = styled.div`
   }
 `;
 
-const ErrorControl = styled.div`
-  svg {
-    width: 84px;
-    height: 84px;
-
-    & circle {
-      stroke: ${(props) => props.theme.orange};
-    }
-
-    & line {
-      stroke: ${(props) => props.theme.orange};
-    }
-  }
-
-  ${MEDIA_QUERY_XL} {
-    svg {
-      width: 78px;
-      height: 78px;
-    }
-  }
-
-  ${MEDIA_QUERY_LG} {
-    svg {
-      width: 50px;
-      height: 50px;
-    }
-  }
-
-  ${MEDIA_QUERY_MD} {
-    svg {
-      width: 60px;
-      height: 60px;
-    }
-  }
-
-  ${MEDIA_QUERY_SM} {
-    svg {
-      width: 50px;
-      height: 50px;
-    }
-  }
-
-  ${MEDIA_QUERY_XS} {
-    svg {
-      width: 50px;
-      height: 50px;
-    }
-  }
-`;
-
-const ErrorBlock = styled.div`
+const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   color: ${(props) => props.theme.white};
   font-size: 30px;
   line-height: 2;
   letter-spacing: 2px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 20px;
+    font-size: 26px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 18px;
+    font-size: 22px;
     margin-top: 10px;
   }
 
@@ -176,11 +140,11 @@ const ErrorBlock = styled.div`
 
   ${MEDIA_QUERY_XS} {
     font-size: 18px;
-    margin-top: 15px;
+    margin: 15px 5px 0 5px;
   }
 `;
 
-export default function AlertMessage() {
+export default function PopUptMessage({ subscription }) {
   const [showAlert, setShowAlert] = useState(true);
 
   const handleClosedButton = () => {
@@ -189,18 +153,22 @@ export default function AlertMessage() {
 
   return (
     showAlert && (
-      <ErrorContainer>
-        <CloseBtnControl onClick={handleClosedButton}>
-          <Images.Error />
-        </CloseBtnControl>
-        <ErrorBlock>
-          <ErrorControl>
+      <Background>
+        <Container>
+          <CloseBtnControl onClick={handleClosedButton}>
             <Images.Error />
-          </ErrorControl>
-          <div>連線錯誤</div>
-          <div>請稍後重新再試一次</div>
-        </ErrorBlock>
-      </ErrorContainer>
+          </CloseBtnControl>
+          {subscription ? (
+            <TextWrapper>
+              <div>已新增至您的頻道清單</div>
+            </TextWrapper>
+          ) : (
+            <TextWrapper>
+              <div>已從您的頻道清單移除</div>
+            </TextWrapper>
+          )}
+        </Container>
+      </Background>
     )
   );
 }
