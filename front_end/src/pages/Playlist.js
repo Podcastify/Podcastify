@@ -699,7 +699,6 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 
   const deleteEpisode = useCallback(async () => {
     await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
-    console.log(episodeInfo.id);
     const newPlaylist = userPlaylists.map((playlist) => {
       let { Episodes, ...rest } = playlist;
       Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
@@ -755,10 +754,10 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
           <ChannelName>
             {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
           </ChannelName>
+          <DeleteBtnControl onClick={handleDeleteIconClick}>
+            <Images.DeleteBtn />
+          </DeleteBtnControl>
         </Text>
-        <DeleteBtnControl onClick={handleDeleteIconClick}>
-          <Images.DeleteBtn />
-        </DeleteBtnControl>
       </Summary>
     </Details>
   );

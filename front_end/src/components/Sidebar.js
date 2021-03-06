@@ -62,6 +62,10 @@ const SidebarTitle = styled.h3`
   white-space: nowrap;
   color: ${(props) => props.theme.white};
 
+  &:hover {
+    color: ${(props) => props.theme.white_opacity};
+  }
+
   ${MEDIA_QUERY_XL} {
     font-size: 23px;
   }

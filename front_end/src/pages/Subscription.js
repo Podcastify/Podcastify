@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
 import Sidebar from "../components/Sidebar";
@@ -12,7 +12,7 @@ import {
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { deleteSubsciption, getPodcastInfo } from "../WebAPI/me";
+import { deleteSubsciption } from "../WebAPI/me";
 
 const Container = styled.div`
   width: 100%;
@@ -340,14 +340,14 @@ function PodcastList({
   setUserSubscription,
   showDeletedBtn,
 }) {
-  const deletePodcast = useCallback(async () => {
+  const deletePodcast = async () => {
     await deleteSubsciption(podcastInfo.id);
     console.log(podcastInfo.id);
     const newSubscription = userSubscription.filter(
       (data) => data.id !== podcastInfo.id
     );
     setUserSubscription(newSubscription);
-  }, [setUserSubscription, userSubscription, podcastInfo]);
+  };
 
   const handleDeleteBtnClick = async (e) => {
     e.preventDefault();
@@ -372,7 +372,17 @@ function PodcastList({
 export default function Subcription() {
   const { userSubscription, setUserSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
+  const [subscribedPodcast, setSubscribedPodcast] = useState();
   // console.log(userSubscription);
+
+  useEffect(() => {
+    setUserSubscription(userSubscription);
+  }, [setUserSubscription, userSubscription]);
+
+  const handleShowDeletedBtn = (e) => {
+    e.preventDefault();
+    setShowDeletedBtn(!showDeletedBtn);
+  };
 
   return (
     <Container>
@@ -381,9 +391,7 @@ export default function Subcription() {
           <Sidebar />
           <ChannelContainer>
             <ChannelWrapper>
-              <ChannelTitleBlock
-                onClick={() => setShowDeletedBtn(!showDeletedBtn)}
-              >
+              <ChannelTitleBlock onClick={handleShowDeletedBtn}>
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
                 {userSubscription.length > 0 && showDeletedBtn ? (
                   <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
