@@ -13,8 +13,8 @@ import {
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { getMySubsciption, deleteSubsciption } from "../WebAPI/me";
-import { getPodcastInfo } from "../WebAPI/listenAPI";
+import { deleteSubsciption } from "../WebAPI/me";
+import { setInitialUserContext } from "../utils";
 
 const Container = styled.div`
   width: 100%;
@@ -337,10 +337,8 @@ const DeleteIcon = styled.div`
 `;
 
 export default function Subcription() {
-  const { userInfo } = useUser();
+  const { userSubscription, setUserSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-  // const [podcastInfo, setPodcastInfo] = useState();
-  // console.log(userInfo);
 
   const handleShowDeletedBtn = (e) => {
     e.preventDefault();
@@ -356,31 +354,32 @@ export default function Subcription() {
             <ChannelWrapper>
               <ChannelTitleBlock onClick={handleShowDeletedBtn}>
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                {userInfo && showDeletedBtn ? (
+                {userSubscription && showDeletedBtn ? (
                   <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
                 ) : (
                   <ChannelBtn>管理我的頻道</ChannelBtn>
                 )}
               </ChannelTitleBlock>
+
               <ChannelItemWrapper>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <DeleteIcon>
-                      {showDeletedBtn ? <DeleteButton /> : ""}
-                    </DeleteIcon>
-                    <img src={DemoImage} alt="" />
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <DeleteIcon>
-                      {showDeletedBtn ? <DeleteButton /> : ""}
-                    </DeleteIcon>
-                    <img src={DemoImage} alt="" />
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
+                {userSubscription.length > 0
+                  ? userSubscription.map((podcastInfo) => (
+                      <InfoCardItem key={podcastInfo.id}>
+                        <InfoCardPhoto to={`/channel/${podcastInfo.id}`}>
+                          <DeleteIcon>
+                            {showDeletedBtn ? <DeleteButton /> : ""}
+                          </DeleteIcon>
+                          <img
+                            src={podcastInfo.image}
+                            alt={`The Podcast titled: ${podcastInfo.title_original}`}
+                          />
+                        </InfoCardPhoto>
+                        <InfoCardTitle to={`/channel/${podcastInfo.id}`}>
+                          {podcastInfo.title}
+                        </InfoCardTitle>
+                      </InfoCardItem>
+                    ))
+                  : ""}
               </ChannelItemWrapper>
             </ChannelWrapper>
           </ChannelContainer>
