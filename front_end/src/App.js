@@ -80,7 +80,6 @@ function App() {
       <UserContext.Provider value={userContextValue}>
         <AlertMessageContext.Provider value={AlertMessageContextValue}>
           <CurrentEpisodeContext.Provider value={currentEpisodeContextValue}>
-            {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
             <ThemeProvider theme={theme}>
               <GlobalStyle />
               <Router>

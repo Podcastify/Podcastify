@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import styled from "styled-components";
-import DemoImage from "../images/avatar.jpg";
 import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
@@ -13,8 +12,7 @@ import {
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { deleteSubsciption } from "../WebAPI/me";
-import { setInitialUserContext } from "../utils";
+import { deleteSubsciption, getPodcastInfo } from "../WebAPI/me";
 
 const Container = styled.div`
   width: 100%;
@@ -336,14 +334,45 @@ const DeleteIcon = styled.div`
   }
 `;
 
+function PodcastList({
+  podcastInfo,
+  userSubscription,
+  setUserSubscription,
+  showDeletedBtn,
+}) {
+  const deletePodcast = useCallback(async () => {
+    await deleteSubsciption(podcastInfo.id);
+    console.log(podcastInfo.id);
+    const newSubscription = userSubscription.filter(
+      (data) => data.id !== podcastInfo.id
+    );
+    setUserSubscription(newSubscription);
+  }, [setUserSubscription, userSubscription, podcastInfo]);
+
+  const handleDeleteBtnClick = async (e) => {
+    e.preventDefault();
+    deletePodcast();
+  };
+
+  return (
+    <InfoCardItem key={podcastInfo.id}>
+      <InfoCardPhoto to={`/channel/${podcastInfo.id}`}>
+        <DeleteIcon onClick={handleDeleteBtnClick}>
+          {showDeletedBtn ? <DeleteButton /> : ""}
+        </DeleteIcon>
+        <img src={podcastInfo.image} alt={podcastInfo.title} />
+      </InfoCardPhoto>
+      <InfoCardTitle to={`/channel/${podcastInfo.id}`}>
+        {podcastInfo.title}
+      </InfoCardTitle>
+    </InfoCardItem>
+  );
+}
+
 export default function Subcription() {
   const { userSubscription, setUserSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-
-  const handleShowDeletedBtn = (e) => {
-    e.preventDefault();
-    setShowDeletedBtn(!showDeletedBtn);
-  };
+  // console.log(userSubscription);
 
   return (
     <Container>
@@ -352,9 +381,11 @@ export default function Subcription() {
           <Sidebar />
           <ChannelContainer>
             <ChannelWrapper>
-              <ChannelTitleBlock onClick={handleShowDeletedBtn}>
+              <ChannelTitleBlock
+                onClick={() => setShowDeletedBtn(!showDeletedBtn)}
+              >
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                {userSubscription && showDeletedBtn ? (
+                {userSubscription.length > 0 && showDeletedBtn ? (
                   <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
                 ) : (
                   <ChannelBtn>管理我的頻道</ChannelBtn>
@@ -364,20 +395,13 @@ export default function Subcription() {
               <ChannelItemWrapper>
                 {userSubscription.length > 0
                   ? userSubscription.map((podcastInfo) => (
-                      <InfoCardItem key={podcastInfo.id}>
-                        <InfoCardPhoto to={`/channel/${podcastInfo.id}`}>
-                          <DeleteIcon>
-                            {showDeletedBtn ? <DeleteButton /> : ""}
-                          </DeleteIcon>
-                          <img
-                            src={podcastInfo.image}
-                            alt={`The Podcast titled: ${podcastInfo.title_original}`}
-                          />
-                        </InfoCardPhoto>
-                        <InfoCardTitle to={`/channel/${podcastInfo.id}`}>
-                          {podcastInfo.title}
-                        </InfoCardTitle>
-                      </InfoCardItem>
+                      <PodcastList
+                        key={podcastInfo.id}
+                        podcastInfo={podcastInfo}
+                        userSubscription={userSubscription}
+                        setUserSubscription={setUserSubscription}
+                        showDeletedBtn={showDeletedBtn}
+                      />
                     ))
                   : ""}
               </ChannelItemWrapper>

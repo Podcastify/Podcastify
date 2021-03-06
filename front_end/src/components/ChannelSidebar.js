@@ -302,7 +302,7 @@ export default function ChannelSidebar({ podcastInfo }) {
   useEffect(() => {
     getMySubsciption().then((response) => {
       let data = response.data;
-      console.log(data);
+      // console.log(data);
       const SubscribedId = data.find((item) => item.id === podcastId);
       if (SubscribedId) {
         setSubscription(true);

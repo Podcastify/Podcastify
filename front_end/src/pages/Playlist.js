@@ -699,6 +699,7 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 
   const deleteEpisode = useCallback(async () => {
     await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
+    console.log(episodeInfo.id);
     const newPlaylist = userPlaylists.map((playlist) => {
       let { Episodes, ...rest } = playlist;
       Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
@@ -752,7 +753,7 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
             }
           ></EpisodeDescription>
           <ChannelName>
-            {episodeInfo.podcast ? episodeInfo.podcast.title : "demo: 社畜日記"}
+            {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
           </ChannelName>
         </Text>
         <DeleteBtnControl onClick={handleDeleteIconClick}>
@@ -833,6 +834,7 @@ export default function Playlist() {
                 {userPlaylists.length > 0
                   ? userPlaylists[0].Episodes.map((episodeInfo) => (
                       <EpisodeInfoDetails
+                        key={episodeInfo.id}
                         episodeInfo={episodeInfo}
                         userPlaylists={userPlaylists}
                       />
