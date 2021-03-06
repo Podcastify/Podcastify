@@ -12,6 +12,9 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
+import { Link } from "react-router-dom";
+import { getMySubsciption, deleteSubsciption } from "../WebAPI/me";
+import { getPodcastInfo } from "../WebAPI/listenAPI";
 
 const Container = styled.div`
   width: 100%;
@@ -106,7 +109,7 @@ const ChannelTitle = styled.h1`
   }
 `;
 
-const ChannelButton = styled.div`
+const ChannelBtn = styled.div`
   cursor: pointer;
   font-size: 15px;
   display: flex;
@@ -131,6 +134,14 @@ const ChannelButton = styled.div`
     height: 35px;
     font-size: 8px;
   }
+`;
+
+const DeletedChannelBtn = styled(ChannelBtn)`
+  outline: none;
+  border: hidden;
+  color: ${(props) => props.theme.white};
+  background: ${(props) => props.theme.click_color};
+  border: 3px solid ${(props) => props.theme.click_color};
 `;
 
 const ChannelItemWrapper = styled.div`
@@ -191,8 +202,20 @@ const InfoCardItem = styled.div`
   }
 `;
 
-const InfoCardPhoto = styled.div`
+const InfoCardPhoto = styled(Link)`
   position: relative;
+
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      background: rgba(0, 0, 0, 0.2);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
   img {
     width: 100%;
     height: 100%;
@@ -204,7 +227,7 @@ const InfoCardPhoto = styled.div`
   }
 `;
 
-const InfoCardTitle = styled.h2`
+const InfoCardTitle = styled(Link)`
   font-size: 32px;
   width: 100%;
   color: ${(props) => props.theme.white};
@@ -241,6 +264,7 @@ const DeleteIcon = styled.div`
   position: absolute;
   top: -25px;
   left: -25px;
+  z-index: 10;
 
   ${MEDIA_QUERY_XL} {
     top: -13px;
@@ -271,6 +295,13 @@ const DeleteIcon = styled.div`
     width: 50px;
     height: 50px;
 
+    &:hover {
+      cursor: pointer;
+      rect {
+        fill: ${(props) => props.theme.orange};
+      }
+    }
+
     ${MEDIA_QUERY_XL} {
       width: 40px;
       height: 40px;
@@ -299,12 +330,23 @@ const DeleteIcon = styled.div`
       top: 25px;
       left: 25px;
     }
+
+    &hover {
+    }
   }
 `;
 
 export default function Subcription() {
-  const { userSubscription } = useUser();
-  console.log(userSubscription);
+  const { userInfo } = useUser();
+  const [showDeletedBtn, setShowDeletedBtn] = useState(false);
+  // const [podcastInfo, setPodcastInfo] = useState();
+  // console.log(userInfo);
+
+  const handleShowDeletedBtn = (e) => {
+    e.preventDefault();
+    setShowDeletedBtn(!showDeletedBtn);
+  };
+
   return (
     <Container>
       <MainWrapper>
@@ -312,80 +354,30 @@ export default function Subcription() {
           <Sidebar />
           <ChannelContainer>
             <ChannelWrapper>
-              <ChannelTitleBlock>
+              <ChannelTitleBlock onClick={handleShowDeletedBtn}>
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                <ChannelButton>管理我的頻道</ChannelButton>
+                {userInfo && showDeletedBtn ? (
+                  <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
+                ) : (
+                  <ChannelBtn>管理我的頻道</ChannelBtn>
+                )}
               </ChannelTitleBlock>
               <ChannelItemWrapper>
                 <InfoCardItem>
                   <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
                     <DeleteIcon>
-                      <DeleteButton />
+                      {showDeletedBtn ? <DeleteButton /> : ""}
                     </DeleteIcon>
+                    <img src={DemoImage} alt="" />
                   </InfoCardPhoto>
                   <InfoCardTitle>頻道名稱</InfoCardTitle>
                 </InfoCardItem>
                 <InfoCardItem>
                   <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
                     <DeleteIcon>
-                      <DeleteButton />
+                      {showDeletedBtn ? <DeleteButton /> : ""}
                     </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
                     <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <img src={DemoImage} alt="" />
-                    <DeleteIcon>
-                      <DeleteButton />
-                    </DeleteIcon>
                   </InfoCardPhoto>
                   <InfoCardTitle>頻道名稱</InfoCardTitle>
                 </InfoCardItem>

@@ -10,7 +10,7 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import { Link, useParams } from "react-router-dom";
-import { getSearchPodcast, getSearchEpisode } from "../WebAPI/listenAPI";
+import { getSearchPodcast } from "../WebAPI/listenAPI";
 import useUser from "../hooks/useUser";
 
 const Container = styled.div`
@@ -225,7 +225,19 @@ const SearchItem = styled.div`
 `;
 
 const InfoCardPhoto = styled(Link)`
-  text-decoration: none;
+  position: relative;
+
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      background: rgba(0, 0, 0, 0.2);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
 
   img {
     width: 100%;
@@ -290,29 +302,17 @@ function SearchList({ data }) {
 export default function Search() {
   const { userInfo } = useUser();
   const [searchPodcast, setSearchPodcast] = useState([]);
-  const [searchEpisode, setSearchEpisode] = useState([]);
   const { keyword } = useParams();
 
   useEffect(() => {
     getSearchPodcast(keyword).then((podcast) => {
       let data = podcast.data.results;
       if (data.length) {
-        // console.log(podcast);
         setSearchPodcast(data);
       } else {
         setSearchPodcast("");
       }
     });
-    // getSearchEpisode(keyword).then((podcast) => {
-    //   let data = podcast.data.results;
-    //   if (data.length) {
-    //     setKeywordInvalid(false);
-    //     setSearchEpisode(data);
-    //   } else {
-    //     setSearchPodcast("");
-    //     setKeywordInvalid(true);
-    //   }
-    // });
   }, [keyword]);
 
   return (
@@ -336,16 +336,6 @@ export default function Search() {
                     <div>請再輸入一次關鍵字</div>
                   </InvalidKeyword>
                 )}
-                {/* {userInfo && searchEpisode ? (
-                  searchEpisode.map((data) => (
-                    <SearchList key={data.id} data={data} />
-                  ))
-                ) : (
-                  <InvalidKeyword>
-                    <div>找不到您要的資料</div>
-                    <div>請再輸入一次關鍵字</div>
-                  </InvalidKeyword>
-                )} */}
               </SearchItemWrapper>
             </SearchPageWrapper>
           </SearchPageContainer>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import {
@@ -8,8 +8,14 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
-import { addSubsciption, getMySubsciption } from "../WebAPI/me";
+import {
+  addSubsciption,
+  getMySubsciption,
+  deleteSubsciption,
+} from "../WebAPI/me";
 import { useParams } from "react-router-dom";
+import PopUpMessage from "./PopUpMessage";
+import useUser from "../hooks/useUser";
 
 export const SidebarContainer = styled.aside`
   width: 22vw;
@@ -24,6 +30,7 @@ export const SidebarContainer = styled.aside`
 
   ${MEDIA_QUERY_LG} {
     height: 69vh;
+    padding: 14px 18px;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -39,9 +46,9 @@ export const SidebarContainer = styled.aside`
 
   ${MEDIA_QUERY_XS} {
     width: 100%;
+    height: 100%;
     border: none;
     padding: 5px 0;
-    height: 100%;
     margin-bottom: 20px;
   }
 `;
@@ -152,13 +159,13 @@ const InfoCardTitle = styled.h2`
   ${MEDIA_QUERY_LG} {
     width: 80%;
     font-size: 20px;
-    margin: 20px 0px 30px 0px;
+    margin: 15px 0px 25px 0px;
   }
 
   ${MEDIA_QUERY_MD} {
     width: 80%;
     font-size: 22px;
-    margin: 20px 0px 40px 0px;
+    margin: 10px 0px 25px 0px;
   }
 
   ${MEDIA_QUERY_SM} {
@@ -264,17 +271,30 @@ const InfoCardText = styled.div`
 `;
 
 export default function ChannelSidebar({ podcastInfo }) {
+  const { userInfo } = useUser();
   const { podcastId } = useParams();
   const [subscription, setSubscription] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
 
-  const handleSubscribeClick = (e) => {
-    e.preventDefault();
+  const handleSubscribeClick = () => {
+    setShowPopUp(!showPopUp);
+
     if (!subscription) {
       addSubsciption(podcastId).then((response) => {
         if (response.ok) {
           setSubscription(true);
+          setShowPopUp(true);
+          return;
         }
-        return;
+      });
+    }
+    if (subscription) {
+      deleteSubsciption(podcastId).then((response) => {
+        if (response.ok) {
+          setSubscription(false);
+          setShowPopUp(true);
+          return;
+        }
       });
     }
   };
@@ -283,52 +303,55 @@ export default function ChannelSidebar({ podcastInfo }) {
     getMySubsciption().then((response) => {
       let data = response.data;
       console.log(data);
-      const SubscribedID = data.find((item) => item.id === podcastId);
-      if (SubscribedID) {
+      const SubscribedId = data.find((item) => item.id === podcastId);
+      if (SubscribedId) {
         setSubscription(true);
       } else {
-        return setSubscription(false);
+        setSubscription(false);
       }
     });
   }, [podcastId]);
 
   return (
-    <SidebarContainer>
-      <InfoCardWrapper>
-        {podcastInfo ? (
-          <InfoCardPhoto>
-            <img
-              src={podcastInfo.image}
-              alt={`The Podcast titled: ${podcastInfo.title}`}
-            />
-          </InfoCardPhoto>
-        ) : (
-          <InfoCardPhoto>
-            <img src={DemoImage} alt="" />
-          </InfoCardPhoto>
-        )}
-        <InfoCardContent>
-          <InfoCardBlock>
-            <InfoCardTitle>
-              {podcastInfo ? podcastInfo.title : "demo: 社畜日記"}
-            </InfoCardTitle>
-            <div onClick={handleSubscribeClick}>
-              {subscription ? (
-                <SubscriptionBtn>訂閱中</SubscriptionBtn>
-              ) : (
-                <UnsubscriptionBtn>訂閱</UnsubscriptionBtn>
-              )}
-            </div>
-          </InfoCardBlock>
-          {podcastInfo && (
-            <InfoCardText
-              dangerouslySetInnerHTML={{
-                __html: podcastInfo.description.replace(/<[^>]+>/g, ""),
-              }}
-            ></InfoCardText>
+    <>
+      {showPopUp && <PopUpMessage subscription={subscription} />}
+      <SidebarContainer>
+        <InfoCardWrapper>
+          {podcastInfo ? (
+            <InfoCardPhoto>
+              <img
+                src={podcastInfo.image}
+                alt={`The Podcast titled: ${podcastInfo.title}`}
+              />
+            </InfoCardPhoto>
+          ) : (
+            <InfoCardPhoto>
+              <img src={DemoImage} alt="" />
+            </InfoCardPhoto>
           )}
-        </InfoCardContent>
-      </InfoCardWrapper>
-    </SidebarContainer>
+          <InfoCardContent>
+            <InfoCardBlock>
+              <InfoCardTitle>
+                {podcastInfo ? podcastInfo.title : "社畜日記"}
+              </InfoCardTitle>
+              <div onClick={handleSubscribeClick}>
+                {userInfo && subscription ? (
+                  <SubscriptionBtn>訂閱中</SubscriptionBtn>
+                ) : (
+                  <UnsubscriptionBtn>訂閱</UnsubscriptionBtn>
+                )}
+              </div>
+            </InfoCardBlock>
+            {podcastInfo && (
+              <InfoCardText
+                dangerouslySetInnerHTML={{
+                  __html: podcastInfo.description.replace(/<[^>]+>/g, ""),
+                }}
+              ></InfoCardText>
+            )}
+          </InfoCardContent>
+        </InfoCardWrapper>
+      </SidebarContainer>
+    </>
   );
 }

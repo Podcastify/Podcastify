@@ -107,6 +107,7 @@ const InfoCardTitle = styled.h2`
 
   ${MEDIA_QUERY_XL} {
     font-size: 24px;
+    margin: 20px 0 10px 0;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -143,6 +144,7 @@ const InfoCardContent = styled.p`
 
   ${MEDIA_QUERY_XL} {
     font-size: 20px;
+    margin-top: 10px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -165,8 +167,8 @@ const InfoCardContent = styled.p`
 const breakPoints = [
   { width: 1, itemsToShow: 1, pagination: false },
   { width: 400, itemsToShow: 2, pagination: false },
-  { width: 500, itemsToShow: 3, pagination: false },
-  { width: 560, itemsToShow: 4, pagination: false },
+  { width: 450, itemsToShow: 3, pagination: false },
+  { width: 500, itemsToShow: 4, pagination: false },
 ];
 
 export default function InfoCard() {

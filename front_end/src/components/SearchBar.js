@@ -7,9 +7,9 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { useHistory, useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
-import { UserContext } from "../context/context";
+import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import useUser from "../hooks/useUser";
 
 const SearchBox = styled.div`
   width: calc(100% / 12 * 7.5);
@@ -119,32 +119,28 @@ const MagnifierControl = styled.div`
 `;
 
 export default function SearchBar() {
-  const location = useLocation();
   const history = useHistory();
   const [value, setValue] = useState("");
-  const { userInfo } = useContext(UserContext);
+  const { userInfo } = useUser();
 
   const handleInputChange = (e) => {
     setValue(e.target.value);
   };
 
-  const handlePodcastSearch = (keyword) => {
-    if (location.pathname.includes("search")) {
-      history.push(`/search/${keyword}`);
-    }
+  const PodcastSearch = (keyword) => {
     history.push(`/search/${keyword}`);
     setValue("");
   };
 
   const handleEnterKeyPressed = (e) => {
     if (e.key === "Enter" && value !== "") {
-      handlePodcastSearch(value);
+      PodcastSearch(value);
     }
   };
 
   const handleButtonSubmit = () => {
     if (value !== "") {
-      handlePodcastSearch(value);
+      PodcastSearch(value);
     }
   };
 
