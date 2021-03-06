@@ -308,7 +308,6 @@ export default function Search() {
     getSearchPodcast(keyword).then((podcast) => {
       let data = podcast.data.results;
       if (data.length) {
-        console.log(podcast);
         setSearchPodcast(data);
       } else {
         setSearchPodcast("");

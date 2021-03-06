@@ -276,13 +276,14 @@ export default function ChannelSidebar({ podcastInfo }) {
   const [subscription, setSubscription] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
 
-  const handleSubscribeClick = useCallback(() => {
+  const handleSubscribeClick = () => {
     setShowPopUp(!showPopUp);
+
     if (!subscription) {
       addSubsciption(podcastId).then((response) => {
         if (response.ok) {
-          setShowPopUp(true);
           setSubscription(true);
+          setShowPopUp(true);
           return;
         }
       });
@@ -290,26 +291,26 @@ export default function ChannelSidebar({ podcastInfo }) {
     if (subscription) {
       deleteSubsciption(podcastId).then((response) => {
         if (response.ok) {
-          setShowPopUp(true);
           setSubscription(false);
+          setShowPopUp(true);
           return;
         }
       });
     }
-  }, [podcastId, subscription, setShowPopUp, showPopUp]);
+  };
 
   useEffect(() => {
     getMySubsciption().then((response) => {
       let data = response.data;
       console.log(data);
-      const SubscribedID = data.find((item) => item.id === podcastId);
-      if (SubscribedID) {
+      const SubscribedId = data.find((item) => item.id === podcastId);
+      if (SubscribedId) {
         setSubscription(true);
       } else {
         setSubscription(false);
       }
     });
-  }, [podcastId, handleSubscribeClick]);
+  }, [podcastId]);
 
   return (
     <>

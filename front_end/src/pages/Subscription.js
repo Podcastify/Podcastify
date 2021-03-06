@@ -12,6 +12,9 @@ import {
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
+import { Link } from "react-router-dom";
+import { getMySubsciption, deleteSubsciption } from "../WebAPI/me";
+import { getPodcastInfo } from "../WebAPI/listenAPI";
 
 const Container = styled.div`
   width: 100%;
@@ -199,8 +202,20 @@ const InfoCardItem = styled.div`
   }
 `;
 
-const InfoCardPhoto = styled.div`
+const InfoCardPhoto = styled(Link)`
   position: relative;
+
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      background: rgba(0, 0, 0, 0.2);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
   img {
     width: 100%;
     height: 100%;
@@ -212,7 +227,7 @@ const InfoCardPhoto = styled.div`
   }
 `;
 
-const InfoCardTitle = styled.h2`
+const InfoCardTitle = styled(Link)`
   font-size: 32px;
   width: 100%;
   color: ${(props) => props.theme.white};
@@ -249,6 +264,7 @@ const DeleteIcon = styled.div`
   position: absolute;
   top: -25px;
   left: -25px;
+  z-index: 10;
 
   ${MEDIA_QUERY_XL} {
     top: -13px;
@@ -321,11 +337,13 @@ const DeleteIcon = styled.div`
 `;
 
 export default function Subcription() {
-  const { userSubscription } = useUser();
+  const { userInfo } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-  // console.log(userSubscription);
+  // const [podcastInfo, setPodcastInfo] = useState();
+  // console.log(userInfo);
 
-  const handleToggleIsDeleted = () => {
+  const handleShowDeletedBtn = (e) => {
+    e.preventDefault();
     setShowDeletedBtn(!showDeletedBtn);
   };
 
@@ -336,9 +354,9 @@ export default function Subcription() {
           <Sidebar />
           <ChannelContainer>
             <ChannelWrapper>
-              <ChannelTitleBlock onClick={handleToggleIsDeleted}>
+              <ChannelTitleBlock onClick={handleShowDeletedBtn}>
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                {showDeletedBtn ? (
+                {userInfo && showDeletedBtn ? (
                   <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
                 ) : (
                   <ChannelBtn>管理我的頻道</ChannelBtn>
