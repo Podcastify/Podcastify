@@ -12,7 +12,9 @@ import {
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { deleteSubsciption } from "../WebAPI/me";
+import { getMySubsciption, deleteSubsciption } from "../WebAPI/me";
+import Loading from "../components/Loading";
+import usePageStatus from "../hooks/usePageStatus";
 
 const Container = styled.div`
   width: 100%;
@@ -346,16 +348,17 @@ function PodcastList({
     const newSubscription = userSubscription.filter(
       (data) => data.id !== podcastInfo.id
     );
+
     setUserSubscription(newSubscription);
   };
 
-  const handleDeleteBtnClick = async (e) => {
+  const handleDeleteBtnClick = (e) => {
     e.preventDefault();
     deletePodcast();
   };
 
   return (
-    <InfoCardItem key={podcastInfo.id}>
+    <InfoCardItem>
       <InfoCardPhoto to={`/channel/${podcastInfo.id}`}>
         <DeleteIcon onClick={handleDeleteBtnClick}>
           {showDeletedBtn ? <DeleteButton /> : ""}
@@ -372,12 +375,7 @@ function PodcastList({
 export default function Subcription() {
   const { userSubscription, setUserSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-  const [subscribedPodcast, setSubscribedPodcast] = useState();
-  // console.log(userSubscription);
-
-  useEffect(() => {
-    setUserSubscription(userSubscription);
-  }, [setUserSubscription, userSubscription]);
+  console.log(userSubscription);
 
   const handleShowDeletedBtn = (e) => {
     e.preventDefault();

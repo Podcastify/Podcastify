@@ -47,7 +47,7 @@ function App() {
       }
     }
     getUser();
-  }, []);
+  }, [setUserSubscription]);
 
   const AlertMessageContextValue = {
     Alert,

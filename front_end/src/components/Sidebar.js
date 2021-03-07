@@ -19,6 +19,7 @@ import { handlePlaylistPlayPauseBtn } from "../utils";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
+  width: 25vw;
 
   &::after {
     content: "";
@@ -37,7 +38,6 @@ const SidebarWrapper = styled(SidebarContainer)`
 
   ${MEDIA_QUERY_LG} {
     position: relative;
-    width: 25vw;
   }
 
   ${MEDIA_QUERY_MD} {
@@ -67,11 +67,11 @@ const SidebarTitle = styled.h3`
   }
 
   ${MEDIA_QUERY_XL} {
-    font-size: 23px;
+    font-size: 25px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 20px;
+    font-size: 23px;
     margin: 2px 10px 10px 25px;
   }
 
@@ -132,7 +132,7 @@ const SidebarListWrapper = styled.div`
 `;
 
 const SidebarListLeft = styled.div`
-  width: 85%;
+  width: 70%;
   display: block;
   font-size: 23px;
 
