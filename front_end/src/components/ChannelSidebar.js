@@ -277,7 +277,7 @@ export default function ChannelSidebar({ podcastInfo }) {
   const [subscription, setSubscription] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
 
-  const handleSubscriptionClick = async () => {
+  const handleSubscriptionBtnClick = async () => {
     setShowPopUp(!showPopUp);
 
     if (!subscription) {
@@ -330,7 +330,7 @@ export default function ChannelSidebar({ podcastInfo }) {
               <InfoCardTitle>
                 {podcastInfo ? podcastInfo.title : "社畜日記"}
               </InfoCardTitle>
-              <div onClick={handleSubscriptionClick}>
+              <div onClick={handleSubscriptionBtnClick}>
                 {userInfo && subscription ? (
                   <SubscriptionBtn>訂閱中</SubscriptionBtn>
                 ) : (

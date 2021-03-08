@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
 import Sidebar from "../components/Sidebar";
@@ -12,9 +12,7 @@ import {
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { getMySubsciption, deleteSubsciption } from "../WebAPI/me";
-import Loading from "../components/Loading";
-import usePageStatus from "../hooks/usePageStatus";
+import { deleteSubsciption } from "../WebAPI/me";
 
 const Container = styled.div`
   width: 100%;
@@ -375,7 +373,6 @@ function PodcastList({
 export default function Subcription() {
   const { userSubscription, setUserSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-  console.log(userSubscription);
 
   const handleShowDeletedBtn = (e) => {
     e.preventDefault();
