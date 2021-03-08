@@ -628,7 +628,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     });
     console.log({ newPlaylist });
     setUserPlaylists(newPlaylist);
-  }, [userPlaylists, episodeInfo, history]);
+  }, [setUserPlaylists, userPlaylists, episodeInfo, history]);
 
   const handleAddIconClick = async (e) => {
     e.preventDefault();
@@ -748,6 +748,7 @@ export default function Channel() {
                     <EpisodeInfoDetails
                       podcastInfo={podcastInfo}
                       episodeInfo={el}
+                      key={el.id}
                     />
                   ))
                 : ""}

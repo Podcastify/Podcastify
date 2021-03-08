@@ -78,7 +78,7 @@ export const setInitialUserContext = async (
     subscriptions = await Promise.all(
       subscriptions.map(async (data) => {
         const podcastInfo = await getPodcastInfo(data.id);
-        return podcastInfo.ok ? podcastInfo.data : data;
+        return podcastInfo.data;
       })
     );
 
