@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DemoImage from "../images/avatar.jpg";
 import {
@@ -13,6 +13,7 @@ import {
   getMySubsciption,
   deleteSubsciption,
 } from "../WebAPI/me";
+import { getAllPodcastsInfo } from "../WebAPI/listenAPI";
 import { useParams } from "react-router-dom";
 import PopUpMessage from "./PopUpMessage";
 import useUser from "../hooks/useUser";
@@ -271,38 +272,33 @@ const InfoCardText = styled.div`
 `;
 
 export default function ChannelSidebar({ podcastInfo }) {
-  const { userInfo } = useUser();
+  const { userInfo, setUserSubscription } = useUser();
   const { podcastId } = useParams();
   const [subscription, setSubscription] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
 
-  const handleSubscribeClick = () => {
+  const handleSubscriptionBtnClick = async () => {
     setShowPopUp(!showPopUp);
 
     if (!subscription) {
-      addSubsciption(podcastId).then((response) => {
-        if (response.ok) {
-          setSubscription(true);
-          setShowPopUp(true);
-          return;
-        }
-      });
+      await addSubsciption(podcastId);
+      setSubscription(true);
+      setShowPopUp(true);
     }
     if (subscription) {
-      deleteSubsciption(podcastId).then((response) => {
-        if (response.ok) {
-          setSubscription(false);
-          setShowPopUp(true);
-          return;
-        }
-      });
+      await deleteSubsciption(podcastId);
+      setSubscription(false);
+      setShowPopUp(true);
     }
+
+    const { data: newSubscriptionIds } = await getMySubsciption();
+    const newPodcastData = await getAllPodcastsInfo(newSubscriptionIds);
+    setUserSubscription(newPodcastData);
   };
 
   useEffect(() => {
     getMySubsciption().then((response) => {
       let data = response.data;
-      console.log(data);
       const SubscribedId = data.find((item) => item.id === podcastId);
       if (SubscribedId) {
         setSubscription(true);
@@ -334,7 +330,7 @@ export default function ChannelSidebar({ podcastInfo }) {
               <InfoCardTitle>
                 {podcastInfo ? podcastInfo.title : "社畜日記"}
               </InfoCardTitle>
-              <div onClick={handleSubscribeClick}>
+              <div onClick={handleSubscriptionBtnClick}>
                 {userInfo && subscription ? (
                   <SubscriptionBtn>訂閱中</SubscriptionBtn>
                 ) : (

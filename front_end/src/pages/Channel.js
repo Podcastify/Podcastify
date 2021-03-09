@@ -16,6 +16,8 @@ import { addEpisodeToPlaylist } from "../WebAPI/me";
 import { useCallback, useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
+import Loading from "../components/Loading";
+import usePageStatus from "../hooks/usePageStatus";
 
 const Container = styled.div`
   width: 100%;
@@ -628,7 +630,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     });
     console.log({ newPlaylist });
     setUserPlaylists(newPlaylist);
-  }, [userPlaylists, episodeInfo, history]);
+  }, [setUserPlaylists, userPlaylists, episodeInfo, history]);
 
   const handleAddIconClick = async (e) => {
     e.preventDefault();
@@ -725,36 +727,45 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
 export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
+  const { isLoading, setIsLoading } = usePageStatus();
+
   useEffect(() => {
+    setIsLoading(true);
+
     getPodcastInfo(podcastId).then((response) => {
       setPodcastInfo(response.data);
+      setIsLoading(false);
     });
-  }, [podcastId]);
+  }, [podcastId, setIsLoading]);
 
   return (
-    <Container>
-      <Main>
-        <Div>
-          <ChannelSidebar podcastInfo={podcastInfo} />
-          <PlayList>
-            <TitleHeader>
-              <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-              <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
-              <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-            </TitleHeader>
-            <Body>
-              {podcastInfo
-                ? podcastInfo.episodes.map((el) => (
-                    <EpisodeInfoDetails
-                      podcastInfo={podcastInfo}
-                      episodeInfo={el}
-                    />
-                  ))
-                : ""}
-            </Body>
-          </PlayList>
-        </Div>
-      </Main>
-    </Container>
+    <>
+      {isLoading && <Loading />}
+      <Container>
+        <Main>
+          <Div>
+            <ChannelSidebar podcastInfo={podcastInfo} />
+            <PlayList>
+              <TitleHeader>
+                <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+                <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
+                <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+              </TitleHeader>
+              <Body>
+                {podcastInfo
+                  ? podcastInfo.episodes.map((el) => (
+                      <EpisodeInfoDetails
+                        podcastInfo={podcastInfo}
+                        episodeInfo={el}
+                        key={el.id}
+                      />
+                    ))
+                  : ""}
+              </Body>
+            </PlayList>
+          </Div>
+        </Main>
+      </Container>
+    </>
   );
 }

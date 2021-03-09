@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import DemoImage from "../images/avatar.jpg";
 import { ReactComponent as DeleteButton } from "../images/Delete_button.svg";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
@@ -13,8 +12,7 @@ import {
 } from "../constants/breakpoints";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { getMySubsciption, deleteSubsciption } from "../WebAPI/me";
-import { getPodcastInfo } from "../WebAPI/listenAPI";
+import { deleteSubsciption } from "../WebAPI/me";
 
 const Container = styled.div`
   width: 100%;
@@ -336,11 +334,45 @@ const DeleteIcon = styled.div`
   }
 `;
 
+function PodcastList({
+  podcastInfo,
+  userSubscription,
+  setUserSubscription,
+  showDeletedBtn,
+}) {
+  const deletePodcast = async () => {
+    await deleteSubsciption(podcastInfo.id);
+    console.log(podcastInfo.id);
+    const newSubscription = userSubscription.filter(
+      (data) => data.id !== podcastInfo.id
+    );
+
+    setUserSubscription(newSubscription);
+  };
+
+  const handleDeleteBtnClick = (e) => {
+    e.preventDefault();
+    deletePodcast();
+  };
+
+  return (
+    <InfoCardItem>
+      <InfoCardPhoto to={`/channel/${podcastInfo.id}`}>
+        <DeleteIcon onClick={handleDeleteBtnClick}>
+          {showDeletedBtn ? <DeleteButton /> : ""}
+        </DeleteIcon>
+        <img src={podcastInfo.image} alt={podcastInfo.title} />
+      </InfoCardPhoto>
+      <InfoCardTitle to={`/channel/${podcastInfo.id}`}>
+        {podcastInfo.title}
+      </InfoCardTitle>
+    </InfoCardItem>
+  );
+}
+
 export default function Subcription() {
-  const { userInfo } = useUser();
+  const { userSubscription, setUserSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-  // const [podcastInfo, setPodcastInfo] = useState();
-  // console.log(userInfo);
 
   const handleShowDeletedBtn = (e) => {
     e.preventDefault();
@@ -356,31 +388,25 @@ export default function Subcription() {
             <ChannelWrapper>
               <ChannelTitleBlock onClick={handleShowDeletedBtn}>
                 <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                {userInfo && showDeletedBtn ? (
+                {userSubscription.length > 0 && showDeletedBtn ? (
                   <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
                 ) : (
                   <ChannelBtn>管理我的頻道</ChannelBtn>
                 )}
               </ChannelTitleBlock>
+
               <ChannelItemWrapper>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <DeleteIcon>
-                      {showDeletedBtn ? <DeleteButton /> : ""}
-                    </DeleteIcon>
-                    <img src={DemoImage} alt="" />
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
-                <InfoCardItem>
-                  <InfoCardPhoto>
-                    <DeleteIcon>
-                      {showDeletedBtn ? <DeleteButton /> : ""}
-                    </DeleteIcon>
-                    <img src={DemoImage} alt="" />
-                  </InfoCardPhoto>
-                  <InfoCardTitle>頻道名稱</InfoCardTitle>
-                </InfoCardItem>
+                {userSubscription.length > 0
+                  ? userSubscription.map((podcastInfo) => (
+                      <PodcastList
+                        key={podcastInfo.id}
+                        podcastInfo={podcastInfo}
+                        userSubscription={userSubscription}
+                        setUserSubscription={setUserSubscription}
+                        showDeletedBtn={showDeletedBtn}
+                      />
+                    ))
+                  : ""}
               </ChannelItemWrapper>
             </ChannelWrapper>
           </ChannelContainer>

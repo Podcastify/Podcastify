@@ -42,6 +42,16 @@ export const getPodcastInfo = (podcastId) => {
   ).then((res) => res.json());
 };
 
+// 取得所有訂閱 Podcasts 詳細資料
+export const getAllPodcastsInfo = async (podcastIdList) => {
+  return Promise.all(
+    podcastIdList.map(async (data) => {
+      const podcastInfo = await getPodcastInfo(data.id);
+      return podcastInfo.data;
+    })
+  );
+};
+
 // 取得單一 Episode 詳細資料
 export const getEpisodeInfo = (episodeId) => {
   return fetch(`${BASE_URL}/listenAPI/episodes/${episodeId}`, {

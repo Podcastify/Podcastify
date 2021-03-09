@@ -1,3 +1,5 @@
+import { getPodcastInfo } from "./WebAPI/listenAPI";
+
 export const getAuthToken = () => {
   return window.localStorage.getItem("podcastifyToken");
 };
@@ -71,6 +73,14 @@ export const setInitialUserContext = async (
       );
       playlists[i] = { Episodes, ...rest };
     }
+
+    // 將 Podcast 的詳細資料，放進頻道訂閱清單
+    subscriptions = await Promise.all(
+      subscriptions.map(async (data) => {
+        const podcastInfo = await getPodcastInfo(data.id);
+        return podcastInfo.data;
+      })
+    );
 
     let record = [];
     if (playedRecords.length !== 0) {

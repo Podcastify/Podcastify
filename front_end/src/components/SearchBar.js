@@ -127,20 +127,20 @@ export default function SearchBar() {
     setValue(e.target.value);
   };
 
-  const PodcastSearch = (keyword) => {
+  const searchPodcast = (keyword) => {
     history.push(`/search/${keyword}`);
     setValue("");
   };
 
   const handleEnterKeyPressed = (e) => {
     if (e.key === "Enter" && value !== "") {
-      PodcastSearch(value);
+      searchPodcast(value);
     }
   };
 
   const handleButtonSubmit = () => {
     if (value !== "") {
-      PodcastSearch(value);
+      searchPodcast(value);
     }
   };
 

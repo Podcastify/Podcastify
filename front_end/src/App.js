@@ -47,13 +47,6 @@ function App() {
       }
     }
     getUser();
-    /* 
-      在這邊把會員的訂閱等資訊放入 state 中
-      拿到的資料可以用 destructure 寫成下面這樣
-      {playlists, subscription, playedRecord, ...userInfo}
-      再分別填入 state 中。
-      之後要修改把新的東西放進 setState() 中
-    */
   }, []);
 
   const AlertMessageContextValue = {
@@ -87,7 +80,6 @@ function App() {
       <UserContext.Provider value={userContextValue}>
         <AlertMessageContext.Provider value={AlertMessageContextValue}>
           <CurrentEpisodeContext.Provider value={currentEpisodeContextValue}>
-            {/* 如果要使用 Context 請用 hooks 裡面的 customhook，因為之後如果要加一些身份驗證之類的會直接加在 hook 中 */}
             <ThemeProvider theme={theme}>
               <GlobalStyle />
               <Router>

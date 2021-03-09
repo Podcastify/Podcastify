@@ -752,12 +752,12 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
             }
           ></EpisodeDescription>
           <ChannelName>
-            {episodeInfo.podcast ? episodeInfo.podcast.title : "demo: 社畜日記"}
+            {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
           </ChannelName>
+          <DeleteBtnControl onClick={handleDeleteIconClick}>
+            <Images.DeleteBtn />
+          </DeleteBtnControl>
         </Text>
-        <DeleteBtnControl onClick={handleDeleteIconClick}>
-          <Images.DeleteBtn />
-        </DeleteBtnControl>
       </Summary>
     </Details>
   );
@@ -833,6 +833,7 @@ export default function Playlist() {
                 {userPlaylists.length > 0
                   ? userPlaylists[0].Episodes.map((episodeInfo) => (
                       <EpisodeInfoDetails
+                        key={episodeInfo.id}
                         episodeInfo={episodeInfo}
                         userPlaylists={userPlaylists}
                       />
