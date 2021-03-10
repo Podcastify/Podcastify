@@ -5,7 +5,6 @@ import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
 import { useCallback, useState } from "react";
 import useUser from "../hooks/useUser";
-import useInputs from "../hooks/useInputs";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import {
   MEDIA_QUERY_XS,
@@ -15,12 +14,7 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import UserForm from "../components/UserForm";
-import {
-  deleteEpisodeFromPlaylist,
-  addPlaylist,
-  getAllMyPlaylists,
-} from "../WebAPI/me";
+import { deleteEpisodeFromPlaylist } from "../WebAPI/me";
 import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
 
@@ -327,7 +321,7 @@ const TitleHeader = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    margin: 0 0 0 68.5px;
+    margin: 0 0 0 58.5px;
     font-size: 18px;
   }
 
@@ -345,7 +339,7 @@ const EpisodeTitleHeader = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 170px;
+    width: 150px;
   }
 `;
 const EpisodeDescriptionHeader = styled.div`
@@ -364,7 +358,7 @@ const EpisodeDescriptionHeader = styled.div`
 `;
 const ChannelNameHeader = styled(EpisodeTitleHeader)`
   ${MEDIA_QUERY_LG} {
-    width: 120px;
+    width: 100px;
   }
 
   ${MEDIA_QUERY_XL} {
@@ -558,7 +552,6 @@ const Text = styled.div`
   font-size: 25px;
   letter-spacing: 0.5px;
   line-height: 1.2;
-  /* margin-left: 13.5px; */
   color: ${(props) => props.theme.white};
   width: 90%;
   min-height: 58px;
@@ -568,7 +561,7 @@ const Text = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    left: 68.5px;
+    left: 58.5px;
     font-size: 17px;
   }
 
@@ -608,7 +601,7 @@ const EpisodeTitle = styled.div`
   }
 
   ${MEDIA_QUERY_LG} {
-    width: 170px;
+    width: 150px;
     margin: 0 20px 0 0;
   }
 
@@ -650,7 +643,7 @@ const EpisodeDescription = styled.div`
 
 const ChannelName = styled(EpisodeTitle)`
   ${MEDIA_QUERY_LG} {
-    width: 120px;
+    width: 100px;
   }
 
   ${MEDIA_QUERY_XL} {
@@ -660,6 +653,9 @@ const ChannelName = styled(EpisodeTitle)`
 `;
 
 const DeleteBtnControl = styled.div`
+  position: absolute;
+  right: 20px;
+
   svg {
     display: none;
     width: 25px;
@@ -704,7 +700,7 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
       Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
       return { Episodes, ...rest };
     });
-    console.log(newPlaylist);
+
     setUserPlaylists(newPlaylist);
   }, [userPlaylists, episodeInfo, setUserPlaylists]);
 
@@ -754,17 +750,17 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
           <ChannelName>
             {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
           </ChannelName>
-          <DeleteBtnControl onClick={handleDeleteIconClick}>
-            <Images.DeleteBtn />
-          </DeleteBtnControl>
         </Text>
+        <DeleteBtnControl onClick={handleDeleteIconClick}>
+          <Images.DeleteBtn />
+        </DeleteBtnControl>
       </Summary>
     </Details>
   );
 }
 
 export default function Playlist() {
-  const { userPlaylists, setUserPlaylists } = useUser();
+  const { userPlaylists } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
   const [showEditForm, setShowEditForm] = useState(false);
 
