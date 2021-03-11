@@ -25,8 +25,20 @@ export const getSearchEpisode = (keyword) => {
   ).then((res) => res.json());
 };
 
-// HOT Podcasts
-export const getHotPodcasts = () => {
+// You Might Also Like with random genres
+export const getMightLovePodcasts = () => {
+  let randomGenres = parseInt(Math.floor(Math.random() * 200) + 1);
+
+  return fetch(
+    `${BASE_URL}/listenAPI/best_podcasts?genre_id=${randomGenres}&region=tw&safe_mode=0`,
+    {
+      method: "GET",
+    }
+  ).then((res) => res.json());
+};
+
+// Hot Podcasts in Taiwan
+export const getHotPodcastsInTaiwan = () => {
   return fetch(`${BASE_URL}/listenAPI/best_podcasts?region=tw&safe_mode=0`, {
     method: "GET",
   }).then((res) => res.json());

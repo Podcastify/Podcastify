@@ -1,10 +1,16 @@
+import React, { useState, useEffect } from "react";
 import InfoCard from "../components/InfoCard";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
 import Loading from "../components/Loading";
-import AlertMessage from "../components/AlertMessage";
+import usePageStatus from "../hooks/usePageStatus";
+import {
+  getMightLovePodcasts,
+  getHotPodcastsInTaiwan,
+} from "../WebAPI/listenAPI";
+import useUser from "../hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -23,15 +29,41 @@ const MainWrapper = styled(Main)`
 `;
 
 export default function Home() {
+  const { userInfo } = useUser;
+  const { isLoading, setIsLoading } = usePageStatus();
+  const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
+  const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    getMightLovePodcasts().then((response) => {
+      let hotPodcastsByGenres = response.data.podcasts;
+      console.log(response);
+      setCurrentHotPodcasts(hotPodcastsByGenres);
+    });
+
+    getHotPodcastsInTaiwan().then((res) => {
+      let hotPodcastsInTaiwan = res.data.podcasts;
+      setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
+      setIsLoading(false);
+    });
+  }, [setIsLoading]);
+
   return (
-    <Container>
-      {/* <Loading /> */}
-      <MainWrapper>
-        <Div>
-          <Sidebar />
-          <InfoCard />
-        </Div>
-      </MainWrapper>
-    </Container>
+    <>
+      {isLoading && <Loading />}
+      <Container>
+        <MainWrapper>
+          <Div>
+            <Sidebar />
+            <InfoCard
+              currentHotPodcasts={currentHotPodcasts}
+              hotPodactsInTaiwan={hotPodcastsInTaiwan}
+            />
+          </Div>
+        </MainWrapper>
+      </Container>
+    </>
   );
 }
