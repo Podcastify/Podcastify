@@ -448,6 +448,7 @@ const DetailsBlock = styled.div`
   background-color: ${(props) => props.theme.orange};
   position: relative;
   border-radius: 10px;
+  width: 100%;
 
   ${MEDIA_QUERY_SM} {
     &::before {
@@ -478,12 +479,15 @@ const DetailsHeader = styled.div`
   display: flex;
   justify-content: space-between;
   letter-spacing: 0.5px;
+  width: 100%;
 `;
 
 const DetailsEpisodeName = styled.div`
   color: ${(props) => props.theme.white};
   font-weight: bold;
   line-height: 1.2;
+  width: 90%;
+  margin-right: 5px;
 
   ${MEDIA_QUERY_LG} {
     font-size: 20px;
