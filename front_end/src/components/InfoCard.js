@@ -250,7 +250,7 @@ export default function InfoCard({ currentHotPodcasts, hotPodactsInTaiwan }) {
               : ""}
           </Carousel>
         </PodcastInfoWrapper>
-        <PodcastInfoWrapper>
+        {/* <PodcastInfoWrapper>
           <PodcastInfoTitle># 最近播放單元</PodcastInfoTitle>
           <Carousel
             itemsToScroll={1}
@@ -258,66 +258,29 @@ export default function InfoCard({ currentHotPodcasts, hotPodactsInTaiwan }) {
             itemPadding={[0, 10]}
             className="InfoCard"
           >
-            <InfoCardWrapper>
-              <InfoCardPhoto>
-                <img src={DemoImage} alt="" />
-              </InfoCardPhoto>
-              <InfoCardTitle>社畜日記</InfoCardTitle>
-              <InfoCardContent>
-                用隨性的對話包裝知識， 用認真的口吻胡說八道。
-                我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-                用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
-              </InfoCardContent>
-            </InfoCardWrapper>
-            <InfoCardWrapper>
-              <InfoCardPhoto>
-                <img src={DemoImage} alt="" />
-              </InfoCardPhoto>
-              <InfoCardTitle>社畜日記</InfoCardTitle>
-              <InfoCardContent>
-                用隨性的對話包裝知識， 用認真的口吻胡說八道。
-                我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-                用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
-              </InfoCardContent>
-            </InfoCardWrapper>
-            <InfoCardWrapper>
-              <InfoCardPhoto>
-                <img src={DemoImage} alt="" />
-              </InfoCardPhoto>
-              <InfoCardTitle>社畜日記</InfoCardTitle>
-              <InfoCardContent>
-                用隨性的對話包裝知識， 用認真的口吻胡說八道。
-                我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-                用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
-              </InfoCardContent>
-            </InfoCardWrapper>
-            <InfoCardWrapper>
-              <InfoCardPhoto>
-                <img src={DemoImage} alt="" />
-              </InfoCardPhoto>
-              <InfoCardTitle>社畜日記</InfoCardTitle>
-              <InfoCardContent>
-                用隨性的對話包裝知識， 用認真的口吻胡說八道。
-                我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-                用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
-              </InfoCardContent>
-            </InfoCardWrapper>
-            <InfoCardWrapper>
-              <InfoCardPhoto>
-                <img src={DemoImage} alt="" />
-              </InfoCardPhoto>
-              <InfoCardTitle>社畜日記</InfoCardTitle>
-              <InfoCardContent>
-                用隨性的對話包裝知識， 用認真的口吻胡說八道。
-                我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...用隨性的對話包裝知識，
-                用認真的口吻胡說八道。我們閒聊也談正經事，讓生硬的國際大事變得鬆軟...
-              </InfoCardContent>
-            </InfoCardWrapper>
+            {currentHotPodcasts
+              ? currentHotPodcasts.map((data) => (
+                  <InfoCardWrapper to={`/channel/${data.id}`} key={data.id}>
+                    <InfoCardPhoto>
+                      <img
+                        src={data.image}
+                        alt={`The Podcast titled: ${data.title}`}
+                      />
+                    </InfoCardPhoto>
+                    <InfoCardTitle>{data.title}</InfoCardTitle>
+                    {currentHotPodcasts && (
+                      <InfoCardContent
+                        dangerouslySetInnerHTML={{
+                          __html: data.description.replace(/<[^>]+>/g, ""),
+                        }}
+                      ></InfoCardContent>
+                    )}
+                  </InfoCardWrapper>
+                ))
+              : ""}
           </Carousel>
-        </PodcastInfoWrapper>
+        </PodcastInfoWrapper> */}
       </Div>
     </PodcastInfoContainer>
   );
 }
-
-// to={`/channel/${data.id}`}
