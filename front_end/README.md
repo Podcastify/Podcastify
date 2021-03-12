@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Podcastify
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Podcast 線上串流服務平台
 
-## Available Scripts
+[網站連結](http://podcastify.tw/)
 
-In the project directory, you can run:
+| 測試用身份 | 帳號 | 密碼 |
+| --- | --- | -------- |
+| 會員 | test01 |  test01  |
 
-### `npm start`
+(動圖示意)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 專案簡介
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Podcastify 是一個提供給使用者收聽 Podcast 的音樂串流平台，前端採用 React Hooks 技術、[串接第三方 API](https://www.listennotes.com/api/) 
+取得 Podcast 的資料，搭配後端 Express、Sequelize 技術進行開發。使用者身份為訪客、會員，功能如下：
 
-### `npm test`
+- 會員可使用功能：
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  - **訂閱系統**：進入專屬訂閱頻道頁面，點擊 Podcast 圖示可進入各個頻道頁面，也能夠對頻道訂閱的內容進行管理。
+  - **播放清單系統**：建立專屬會員的播放清單，能夠編輯清單名稱，一鍵播放清單內全部單元，也可取消單元訂閱。
+  - **音樂播放器系統**：播放、暫停當前單元、選取下一首與前一首單元，並可操控進度條的時間進度及控制音量。
+  - **搜尋系統**：透過輸入想要關注的 Podcast 頻道名稱，進行搜尋。
+  - **會員資料管理系統**：可定期更新登入密碼，保障會員隱私與資料安全。
+ 
+- 訪客可使用功能：
+  - 註冊、登入成為會員
+  - 瀏覽首頁頁面
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 專案展示
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### `會員模組`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+![登入頁面](https://imgur.com/hHqYI5W）
+![註冊頁面](https://imgur.com/aoFFH0i)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### `訂閱模組`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### `播放清單模組`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### `音樂播放器模組`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### `搜尋模組`
 
-## Learn More
+#### `支援 RWD`
+(動圖示意)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+##  使用技術
+#### `前端框架`
+- [React Hooks](https://reactjs.org/)
+- [React DOM](https://www.npmjs.com/package/react-dom)
 
-### Code Splitting
+#### `第三方 套件`
+- [React Router DOM](https://reactrouter.com/)：使用 BrowserRouter 進行路由管理
+- [styled-components](https://styled-components.com/)：使用 CSS-in-JS 處理版面配置、動態更新 CSS
+- [react-elastic-carousel](https://sag1v.github.io/react-elastic-carousel/)：首頁圖片輪播功能
+- [Normalize.css](https://sag1v.github.io/react-elastic-carousel/)：處理跨瀏覽器樣式的一致性
+- [ESLint](https://eslint.org/)：檢查語法，統一程式撰寫風格
+- [Prettier](https://prettier.io/)：統一程式碼格式
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### `第三方 API`
+- [Listen API](https://www.listennotes.com/api/)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 專案執行
+1. 複製專案在 GitHub 的連結，在終端機執行以下指令
+``` 
+git clone https://github.com/cwc329/mtr04-final-project-Podcastify.git
+```
+2. 安裝專案所需套件
+```
+npm install
+```
+3. 在本地端開啟此專案
+```
+npm run start
+```
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 聲明
+本網站僅作為個人練習，註冊時請勿使用真實資料。另本網站包含之圖片與內容僅作練習使用，不作任何商業用途。

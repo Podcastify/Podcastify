@@ -89,6 +89,7 @@ const InfoCardWrapper = styled(Link)`
 
 const InfoCardPhoto = styled.div`
   position: relative;
+  width: 100%;
 
   &:hover {
     &::after {
