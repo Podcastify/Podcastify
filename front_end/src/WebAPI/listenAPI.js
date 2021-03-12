@@ -70,10 +70,3 @@ export const getEpisodeInfo = (episodeId) => {
     method: "GET",
   }).then((res) => res.json());
 };
-
-// You Might Also Like
-export const getRandomEpisode = () => {
-  return fetch(`${BASE_URL}/listenAPI/just_listen`, {
-    method: "GET",
-  }).then((res) => res.json());
-};

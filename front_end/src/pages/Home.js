@@ -35,19 +35,17 @@ export default function Home() {
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-
-    getMightLovePodcasts().then((response) => {
-      let hotPodcastsByGenres = response.data.podcasts;
-      console.log(response);
-      setCurrentHotPodcasts(hotPodcastsByGenres);
-    });
-
-    getHotPodcastsInTaiwan().then((res) => {
-      let hotPodcastsInTaiwan = res.data.podcasts;
-      setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
-      setIsLoading(false);
-    });
+    // setIsLoading(true);
+    // getMightLovePodcasts().then((response) => {
+    //   let hotPodcastsByGenres = response.data.podcasts;
+    //   console.log(response);
+    //   setCurrentHotPodcasts(hotPodcastsByGenres);
+    // });
+    // getHotPodcastsInTaiwan().then((res) => {
+    //   let hotPodcastsInTaiwan = res.data.podcasts;
+    //   setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
+    //   setIsLoading(false);
+    // });
   }, [setIsLoading]);
 
   return (
