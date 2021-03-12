@@ -40,14 +40,14 @@ export const SidebarContainer = styled.aside`
 
   ${MEDIA_QUERY_SM} {
     width: 100%;
-    height: 100%;
+    height: 300%;
     border: none;
     padding: 5px 0;
   }
 
   ${MEDIA_QUERY_XS} {
     width: 100%;
-    height: 100%;
+    height: 300%;
     border: none;
     padding: 5px 0;
     margin-bottom: 20px;
@@ -172,16 +172,13 @@ const InfoCardTitle = styled.h2`
   ${MEDIA_QUERY_SM} {
     font-size: 22px;
     width: 180px;
-    margin: 10px 0 10px 0;
+    margin: 0;
   }
 
   ${MEDIA_QUERY_XS} {
     font-size: 25px;
     width: 180px;
-    margin: 10px 0 10px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    margin: 0;
   }
 `;
 
