@@ -31,7 +31,7 @@ export const getMightLovePodcasts = () => {
   // let randomGenres = randomNumber.toString();
 
   return fetch(
-    `${BASE_URL}/listenAPI/best_podcasts?genre_id=119&region=tw&safe_mode=0`,
+    `${BASE_URL}/listenAPI/best_podcasts?genre_id=114&region=tw&safe_mode=0`,
     {
       method: "GET",
     }
