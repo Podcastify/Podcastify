@@ -32,7 +32,7 @@ const StyledLogo = styled(Images.PodcastifyLogo)`
 `;
 
 const LoginForm = styled(UserForm)`
-  
+  width: 100%;
 `;
 
 const MainContainer = styled.main`
