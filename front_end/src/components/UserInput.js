@@ -1,7 +1,13 @@
-//TODO caret styling
-
-// import { useState, useEffect } from 'react';
 import styled from "styled-components";
+import {
+  MEDIA_QUERY_MD,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_XL,
+  MEDIA_QUERY_XXL,
+  MEDIA_QUERY_SM,
+  MEDIA_QUERY_XS,
+} from "../constants/breakpoints";
+
 const StyledInputContainer = styled.div`
   & ~ & {
     margin-top: 18px;
@@ -54,6 +60,22 @@ const StyledInput = styled.input`
       outline: none;
     }
   `}
+
+  ${MEDIA_QUERY_MD} {
+    height: 57px;
+    font-size: 21px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    height: 45px;
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    height: 37px;
+    font-size: 15px;
+  }
+
 `;
 
 const StyledInputTitle = styled.h3`
@@ -63,6 +85,17 @@ const StyledInputTitle = styled.h3`
   letter-spacing: 3px;
   color: #ffffff;
   font-weight: normal;
+  ${MEDIA_QUERY_XS} {
+    font-size: 22px
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 22px
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 22px
+  }
 `;
 
 const FormInputErrorMessage = styled.div`

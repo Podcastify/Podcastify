@@ -9,6 +9,8 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
+  MEDIA_QUERY_SM,
+  MEDIA_QUERY_XS,
 } from "../constants/breakpoints";
 import { login } from "../WebAPI/users";
 import { getMyInfo } from "../WebAPI/me";
@@ -30,13 +32,21 @@ const StyledLogo = styled(Images.PodcastifyLogo)`
 `;
 
 const LoginForm = styled(UserForm)`
-  width: 100%;
+  
 `;
 
 const MainContainer = styled.main`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 100%;
+  ${MEDIA_QUERY_MD} {
+
+  }
+
+  ${MEDIA_QUERY_XS} {
+    justify-content: center
+  }
 `;
 
 const CoverImage = styled.div`
@@ -66,15 +76,15 @@ const CoverImage = styled.div`
 `;
 
 const FormArea = styled.div`
-  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 const RegisterBtn = styled(Input)`
-  width: 32.7rem;
+  width: 100%;
 `;
 
 const formInputs = [
