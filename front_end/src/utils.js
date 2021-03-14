@@ -1,7 +1,13 @@
-import { getPodcastInfo } from "./WebAPI/listenAPI";
+import { getPodcastInfo, getEpisodeInfo } from "./WebAPI/listenAPI";
+import { addRecords } from "./WebAPI/me";
 
 export const getAuthToken = () => {
   return window.localStorage.getItem("podcastifyToken");
+};
+
+export const addRecord = (audio, currentEpisode) => {
+  const currentTime = audio.current.currentTime.toFixed(2);
+  addRecords(currentEpisode.id, currentTime);
 };
 
 export const handlePlaylistPlayPauseBtn = (
@@ -46,9 +52,44 @@ export const handlePlaylistPlayPauseBtn = (
   });
 };
 
+export const getPlayRecordDetail = async (playedRecords) => {
+  let record = [];
+
+  if (playedRecords.length !== 0) {
+    // 節省打 API 次數，只取最後四筆播放紀錄
+    let lastFourPlayedRecords = [];
+    if (playedRecords.length > 4) {
+      for (let i = 0; i < 4; i++) {
+        lastFourPlayedRecords[i] = playedRecords[i];
+      }
+    } else {
+      for (let i = 0; i < playedRecords.length; i++) {
+        lastFourPlayedRecords[i] = playedRecords[i];
+      }
+    }
+
+    // 拿到播放紀錄的單集詳細資料
+    let playedRecordsDetails = await Promise.all(
+      lastFourPlayedRecords.map(async (ep) => {
+        if (ep.episodeId.length !== 32) return;
+        const episodeInfo = await getEpisodeInfo(ep.episodeId);
+        return episodeInfo.data;
+      })
+    );
+
+    // 播放紀錄資料重整
+    for (let i = 0; i < playedRecordsDetails.length; i++) {
+      record[i] = {
+        episode: playedRecordsDetails[i],
+        progress: lastFourPlayedRecords[i].progress,
+      };
+    }
+  }
+  return record;
+};
+
 export const setInitialUserContext = async (
   getMyInfo,
-  getEpisodeInfo,
   setUserInfo,
   setUserPlaylists,
   setUserPlayedRecord,
@@ -82,41 +123,13 @@ export const setInitialUserContext = async (
       })
     );
 
-    let record = [];
-    if (playedRecords.length !== 0) {
-      // 節省打 API 次數，只取最後三筆播放紀錄
-      let lastThreePlayedRecords = [];
-      if (playedRecords.length > 3) {
-        for (let i = 0; i < 3; i++) {
-          lastThreePlayedRecords[i] = playedRecords[i];
-        }
-      } else {
-        for (let i = 0; i < playedRecords.length; i++) {
-          lastThreePlayedRecords[i] = playedRecords[i];
-        }
-      }
-
-      // 拿到播放紀錄的單集詳細資料
-      let playedRecordsDetails = await Promise.all(
-        lastThreePlayedRecords.map(async (ep) => {
-          if (ep.episodeId.length !== 32 || ep.progress === 0) return;
-          const episodeInfo = await getEpisodeInfo(ep.episodeId);
-          return episodeInfo.data;
-        })
-      );
-
-      // 播放紀錄資料重整
-      for (let i = 0; i < playedRecordsDetails.length; i++) {
-        record[i] = {
-          episode: playedRecordsDetails[i],
-          progress: lastThreePlayedRecords[i].progress,
-        };
-      }
-    }
+    // 取得紀錄並設定 context
+    getPlayRecordDetail(playedRecords).then((record) => {
+      setUserPlayedRecord(record);
+    });
 
     setUserInfo(userInfo);
     setUserPlaylists(playlists);
-    setUserPlayedRecord(record);
     setUserSubscription(subscriptions);
   }
 };

@@ -786,67 +786,69 @@ export default function Playlist() {
   };
 
   return (
-    <Container>
-      <Main>
-        <Div>
-          <Sidebar />
-          <PlaylistWrapper>
-            <PlaylistHeader>
-              <Photo />
-              <TitleWrapper>
-                <TitleText>
-                  <PlaylistName>我的播放清單</PlaylistName>
-                  <Subtitle>
-                    {userPlaylists.length > 0
-                      ? userPlaylists[0].name
-                      : "播放列表"}
-                    ，共{" "}
-                    {userPlaylists.length > 0
-                      ? userPlaylists[0].Episodes.length
-                      : 0}{" "}
-                    部單元
-                  </Subtitle>
-                </TitleText>
-                <Buttons>
-                  <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
-                    <Images.PodcastPlayBtn />
-                  </PlaylistPlayBtnControl>
-                  <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
-                    <Images.RenamePlaylistBtn />
-                  </RenamePlaylistBtnControl>
-                </Buttons>
-              </TitleWrapper>
-            </PlaylistHeader>
-            <PlayList>
-              {userPlaylists.length > 0 && (
-                <TitleHeader>
-                  <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-                  <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
-                  <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-                </TitleHeader>
-              )}
-              <Body>
-                {userPlaylists.length > 0
-                  ? userPlaylists[0].Episodes.map((episodeInfo) => (
-                      <EpisodeInfoDetails
-                        key={episodeInfo.id}
-                        episodeInfo={episodeInfo}
-                        userPlaylists={userPlaylists}
-                      />
-                    ))
-                  : ""}
-              </Body>
-            </PlayList>
-          </PlaylistWrapper>
-        </Div>
-      </Main>
-      {showEditForm && (
-        <PopUpForm
-          title="編輯播放清單名稱"
-          formInputs={formInputs}
-          setShowEditForm={setShowEditForm}
-        />
-      )}
-    </Container>
+      <Container>
+        <Main>
+          <Div>
+            <Sidebar />
+            <PlaylistWrapper>
+              <PlaylistHeader>
+                <Photo />
+                <TitleWrapper>
+                  <TitleText>
+                    <PlaylistName>我的播放清單</PlaylistName>
+                    <Subtitle>
+                      {userPlaylists.length > 0
+                        ? userPlaylists[0].name
+                        : "播放列表"}
+                      ，共{" "}
+                      {userPlaylists.length > 0
+                        ? userPlaylists[0].Episodes.length
+                        : 0}{" "}
+                      部單元
+                    </Subtitle>
+                  </TitleText>
+                  <Buttons>
+                    <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
+                      <Images.PodcastPlayBtn />
+                    </PlaylistPlayBtnControl>
+                    <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
+                      <Images.RenamePlaylistBtn />
+                    </RenamePlaylistBtnControl>
+                  </Buttons>
+                </TitleWrapper>
+              </PlaylistHeader>
+              <PlayList>
+                {userPlaylists.length > 0 && (
+                  <TitleHeader>
+                    <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+                    <EpisodeDescriptionHeader>
+                      單元描述
+                    </EpisodeDescriptionHeader>
+                    <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+                  </TitleHeader>
+                )}
+                <Body>
+                  {userPlaylists.length > 0
+                    ? userPlaylists[0].Episodes.map((episodeInfo) => (
+                        <EpisodeInfoDetails
+                          key={episodeInfo.id}
+                          episodeInfo={episodeInfo}
+                          userPlaylists={userPlaylists}
+                        />
+                      ))
+                    : ""}
+                </Body>
+              </PlayList>
+            </PlaylistWrapper>
+          </Div>
+        </Main>
+        {showEditForm && (
+          <PopUpForm
+            title="編輯播放清單名稱"
+            formInputs={formInputs}
+            setShowEditForm={setShowEditForm}
+          />
+        )}
+      </Container>
   );
 }

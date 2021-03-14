@@ -10,7 +10,6 @@ import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
 import { getAuthToken } from "../utils";
-import { getEpisodeInfo } from "../WebAPI/listenAPI";
 import { setInitialUserContext } from "../utils";
 
 const RegisterPageWrapper = styled.div`
@@ -146,7 +145,6 @@ export default function Register() {
       window.localStorage.setItem("podcastifyToken", result.token);
       setInitialUserContext(
         getMyInfo,
-        getEpisodeInfo,
         setUserInfo,
         setUserPlaylists,
         setUserPlayedRecord,

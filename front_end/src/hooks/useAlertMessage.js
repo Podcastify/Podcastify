@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { AlertMessageContext } from "../context/context";
 
 export default function useAlertMessage() {
-  const { Alert, setAlert } = useContext(AlertMessageContext);
+  const { alert, setAlert } = useContext(AlertMessageContext);
   return {
-    Alert,
+    alert,
     setAlert,
   };
 }

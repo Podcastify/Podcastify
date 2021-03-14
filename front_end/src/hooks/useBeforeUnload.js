@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { addRecords } from "../WebAPI/me";
+import { addRecord } from "../utils";
 
 export default function useBeforeUnload(audio, currentEpisode) {
   useEffect(() => {
@@ -8,8 +8,7 @@ export default function useBeforeUnload(audio, currentEpisode) {
       if (!currentEpisode.id) return;
 
       e.preventDefault();
-      const currentTime = audio.current.currentTime.toFixed(2);
-      addRecords(currentEpisode.id, currentTime);
+      addRecord(audio, currentEpisode);
     };
 
     window.addEventListener("beforeunload", handleBeforeunload);
