@@ -11,7 +11,6 @@ import {
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
 import { login } from "../WebAPI/users";
-import { getMyInfo } from "../WebAPI/me";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
@@ -164,7 +163,6 @@ export default function Login() {
       window.localStorage.removeItem("podcastifyToken");
       window.localStorage.setItem("podcastifyToken", result.token);
       setInitialUserContext(
-        getMyInfo,
         setUserInfo,
         setUserPlaylists,
         setUserPlayedRecord,

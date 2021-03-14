@@ -10,7 +10,6 @@ import {
 import GlobalStyle from "./constants/globalStyle";
 import { theme } from "./constants/theme";
 import { getAuthToken } from "./utils";
-import { getMyInfo } from "./WebAPI/me";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
@@ -36,7 +35,6 @@ function App() {
     function getUser() {
       if (getAuthToken()) {
         setInitialUserContext(
-          getMyInfo,
           setUserInfo,
           setUserPlaylists,
           setUserPlayedRecord,

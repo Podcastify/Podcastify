@@ -1,5 +1,5 @@
 import { getPodcastInfo, getEpisodeInfo } from "./WebAPI/listenAPI";
-import { addRecords } from "./WebAPI/me";
+import { addRecords, getMyInfo } from "./WebAPI/me";
 
 export const getAuthToken = () => {
   return window.localStorage.getItem("podcastifyToken");
@@ -89,7 +89,6 @@ export const getPlayRecordDetail = async (playedRecords) => {
 };
 
 export const setInitialUserContext = async (
-  getMyInfo,
   setUserInfo,
   setUserPlaylists,
   setUserPlayedRecord,

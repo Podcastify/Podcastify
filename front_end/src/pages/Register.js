@@ -5,7 +5,6 @@ import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import { useHistory } from "react-router-dom";
 import { login, register } from "../WebAPI/users";
-import { getMyInfo } from "../WebAPI/me";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
@@ -144,7 +143,6 @@ export default function Register() {
       window.localStorage.removeItem("podcastifyToken");
       window.localStorage.setItem("podcastifyToken", result.token);
       setInitialUserContext(
-        getMyInfo,
         setUserInfo,
         setUserPlaylists,
         setUserPlayedRecord,
