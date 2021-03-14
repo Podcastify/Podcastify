@@ -26,6 +26,7 @@ const StyledLogo = styled(Images.PodcastifyLogo)`
 const RegisterForm = styled(UserForm)`
   margin: auto auto;
   height: auto;
+  width: 100%;
 `;
 
 const FormArea = styled.div`
@@ -38,9 +39,16 @@ const FormArea = styled.div`
 const BtnContainer = styled.div`
   max-width: 32.7rem;
   margin: 0 auto;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justift-content: center;
+  align-items: center;
 `;
 
-const LoginBtn = styled(Input)``;
+const LoginBtn = styled(Input)`
+  width: 100%;
+`;
 
 const formInputs = [
   {
@@ -167,21 +175,21 @@ export default function Register() {
   return (
     <RegisterPageWrapper>
       <StyledLogo />
-      {/* <FormArea> */}
-      <RegisterForm
-        formTitle={"會員註冊"}
-        inputs={inputs}
-        handlers={handlers}
-        onSubmit={handleRegister}
-      />
-      <BtnContainer>
+      <FormArea>
+        <RegisterForm
+          formTitle={"會員註冊"}
+          inputs={inputs}
+          handlers={handlers}
+          onSubmit={handleRegister}
+        />
+        <BtnContainer>
         <LoginBtn
           {...loginBtnInput}
           handlers={loginBtnHandlers}
           onClick={handleLoginBtn}
         />
       </BtnContainer>
-      {/* </FormArea> */}
+      </FormArea>
     </RegisterPageWrapper>
   );
 }

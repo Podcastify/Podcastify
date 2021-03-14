@@ -35,18 +35,21 @@ const LoginForm = styled(UserForm)`
   width: 100%;
 `;
 
+const BtnContainer = styled.div`
+  max-width: 32.7rem;
+  margin: 0 auto;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justift-content: center;
+  align-items: center;
+`;
+
 const MainContainer = styled.main`
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 100%;
-  ${MEDIA_QUERY_MD} {
-
-  }
-
-  ${MEDIA_QUERY_XS} {
-    justify-content: center
-  }
 `;
 
 const CoverImage = styled.div`
@@ -81,6 +84,18 @@ const FormArea = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  ${MEDIA_QUERY_XS} {
+    margin: auto 65px
+  }
+  ${MEDIA_QUERY_SM} {
+    margin: auto 65px
+  }
+  ${MEDIA_QUERY_MD} {
+    margin: auto 65px
+  }
+  ${MEDIA_QUERY_LG} {
+    margin: auto 65px
+  }
 `;
 
 const RegisterBtn = styled(Input)`
@@ -208,11 +223,13 @@ export default function Login() {
             handlers={handlers}
             onSubmit={handleLogin}
           />
-          <RegisterBtn
-            {...registerBtnInput}
-            handlers={registerBtnHandlers}
-            onClick={handleToRegisterBtn}
-          />
+          <BtnContainer>
+            <RegisterBtn
+              {...registerBtnInput}
+              handlers={registerBtnHandlers}
+              onClick={handleToRegisterBtn}
+            />
+          </BtnContainer>
         </FormArea>
       </MainContainer>
     </LoginPageWrapper>
