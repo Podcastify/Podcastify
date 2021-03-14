@@ -50,23 +50,23 @@ export default function useMusicPlayer() {
 
   // 新增播放紀錄
   useEffect(() => {
+    if (currentEpisode.id === undefined) return;
+
     // 將記錄存進資料庫
-    if (Object.keys(currentEpisode).length !== 0) {
-      addRecord(audioRef, currentEpisode);
-    }
+    addRecord(audioRef, currentEpisode.id);
 
     // 從資料庫抓紀錄、打 API 拿詳細資料後再放入 context
-    getRecords().then((response) => {
-      if (response.ok) {
-        const playedRecord = response.data;
-        getPlayRecordDetail(playedRecord).then((record) => {
-          setUserPlayedRecord(record);
-        });
-      } else {
-        setAlert(true);
-      }
-    });
-  }, [currentEpisode, setUserPlayedRecord, setAlert]);
+    // getRecords().then((response) => {
+    //   if (response.ok) {
+    //     const playedRecord = response.data;
+    //     getPlayRecordDetail(playedRecord).then((record) => {
+    //       setUserPlayedRecord(record);
+    //     });
+    //   } else {
+    //     setAlert(true);
+    //   }
+    // });
+  }, [currentEpisode.id, setUserPlayedRecord, setAlert]);
 
   // 上一首或下一首
   const handleSong = useCallback(

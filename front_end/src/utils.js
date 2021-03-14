@@ -5,9 +5,9 @@ export const getAuthToken = () => {
   return window.localStorage.getItem("podcastifyToken");
 };
 
-export const addRecord = (audio, currentEpisode) => {
+export const addRecord = (audio, currentEpisodeId) => {
   const currentTime = audio.current.currentTime.toFixed(2);
-  addRecords(currentEpisode.id, currentTime);
+  addRecords(currentEpisodeId, currentTime);
 };
 
 export const handlePlaylistPlayPauseBtn = (
