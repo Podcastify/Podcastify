@@ -27,10 +27,11 @@ export const getSearchEpisode = (keyword) => {
 
 // You Might Also Like with random genres
 export const getMightLovePodcasts = () => {
-  // let randomGenres = parseInt(Math.floor(Math.random() * 200) + 150);
+  // let randomGenres = Math.floor(Math.random() * 200) + 150;
+  // let randomGenres = randomNumber.toString();
 
   return fetch(
-    `${BASE_URL}/listenAPI/best_podcasts?genre_id=115&region=tw&safe_mode=0`,
+    `${BASE_URL}/listenAPI/best_podcasts?genre_id=119&region=tw&safe_mode=0`,
     {
       method: "GET",
     }
