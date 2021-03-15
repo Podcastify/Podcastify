@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback, useMemo } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import useAlertMessage from "../hooks/useAlertMessage";
@@ -54,6 +54,7 @@ export default function useMusicPlayer() {
 
     // 將記錄存進資料庫
     addRecord(audioRef, currentEpisode.id);
+
     // 從資料庫抓紀錄、打 API 拿詳細資料後再放入 context
     // getRecords().then((response) => {
     //   if (response.ok) {
