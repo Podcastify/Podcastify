@@ -610,7 +610,7 @@ function EpisodeInfoDetails({
   podcastInfo,
   episodeInfo,
   setShowPopUp,
-  setAddNewEpisode,
+  setPopUpText,
 }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
@@ -641,14 +641,14 @@ function EpisodeInfoDetails({
 
     setUserPlaylists(newPlaylist);
     setShowPopUp(true);
-    setAddNewEpisode("已新增至您的播放清單");
+    setPopUpText("已新增至您的播放清單");
   }, [
     setUserPlaylists,
     userPlaylists,
     episodeInfo,
     history,
     setShowPopUp,
-    setAddNewEpisode,
+    setPopUpText,
   ]);
 
   const handleAddIconClick = async (e) => {
@@ -748,7 +748,7 @@ export default function Channel() {
   const [podcastInfo, setPodcastInfo] = useState();
   const { isLoading, setIsLoading } = usePageStatus();
   const [showPopUp, setShowPopUp] = useState(false);
-  const [addNewEpisode, setAddNewEpisode] = useState();
+  const [popUpText, setPopUpText] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -762,7 +762,7 @@ export default function Channel() {
   return (
     <>
       {isLoading && <Loading />}
-      {showPopUp && <PopUpMessage text={addNewEpisode} />}
+      {showPopUp && <PopUpMessage text={popUpText} />}
       <Container>
         <Main>
           <Div>
@@ -781,7 +781,7 @@ export default function Channel() {
                         episodeInfo={el}
                         key={el.id}
                         setShowPopUp={setShowPopUp}
-                        setAddNewEpisode={setAddNewEpisode}
+                        setPopUpText={setPopUpText}
                       />
                     ))
                   : ""}
