@@ -9,6 +9,8 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
+  MEDIA_QUERY_SM,
+  MEDIA_QUERY_XS,
 } from "../constants/breakpoints";
 import { login } from "../WebAPI/users";
 import useInputs from "../hooks/useInputs";
@@ -31,10 +33,21 @@ const LoginForm = styled(UserForm)`
   width: 100%;
 `;
 
+const BtnContainer = styled.div`
+  max-width: 32.7rem;
+  margin: 0 auto;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justift-content: center;
+  align-items: center;
+`;
+
 const MainContainer = styled.main`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 100%;
 `;
 
 const CoverImage = styled.div`
@@ -64,15 +77,27 @@ const CoverImage = styled.div`
 `;
 
 const FormArea = styled.div`
-  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  ${MEDIA_QUERY_XS} {
+    margin: auto 65px
+  }
+  ${MEDIA_QUERY_SM} {
+    margin: auto 65px
+  }
+  ${MEDIA_QUERY_MD} {
+    margin: auto 65px
+  }
+  ${MEDIA_QUERY_LG} {
+    margin: auto 65px
+  }
 `;
 
 const RegisterBtn = styled(Input)`
-  width: 32.7rem;
+  width: 100%;
 `;
 
 const formInputs = [
@@ -194,11 +219,13 @@ export default function Login() {
             handlers={handlers}
             onSubmit={handleLogin}
           />
-          <RegisterBtn
-            {...registerBtnInput}
-            handlers={registerBtnHandlers}
-            onClick={handleToRegisterBtn}
-          />
+          <BtnContainer>
+            <RegisterBtn
+              {...registerBtnInput}
+              handlers={registerBtnHandlers}
+              onClick={handleToRegisterBtn}
+            />
+          </BtnContainer>
         </FormArea>
       </MainContainer>
     </LoginPageWrapper>

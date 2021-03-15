@@ -11,6 +11,14 @@ import {
   ButtonName,
 } from "../components/ButtonGroup";
 import { changeUserProfile } from "../WebAPI/users";
+import {
+  MEDIA_QUERY_XXL,
+  MEDIA_QUERY_XL,
+  MEDIA_QUERY_LG,
+  MEDIA_QUERY_MD,
+  MEDIA_QUERY_SM,
+  MEDIA_QUERY_XS
+} from "../constants/breakpoints";
 
 const Container = styled.div`
   width: 100%;
@@ -28,10 +36,31 @@ const SectionContainer = styled(Container)`
   align-items: stretch;
 `;
 
+const ManagementForm = styled(UserForm)`
+  margin-top: 5px;
+`
+
 const PageTitle = styled.h1`
   color: #ffffff;
-  font-size: 4rem;
   font-weight: normal;
+  ${MEDIA_QUERY_XXL} {
+    font-size: 52px;
+  }
+  ${MEDIA_QUERY_XL} {
+    font-size: 36px;
+  }
+  ${MEDIA_QUERY_LG} {
+    font-size: 30px;
+  }
+  ${MEDIA_QUERY_MD} {
+    font-size: 30px;
+  }
+  ${MEDIA_QUERY_SM} {
+    font-size: 30px;
+  }
+  ${MEDIA_QUERY_XS} {
+    fontsize: 22px;
+  }
 `;
 
 const TitleContainer = styled(SectionContainer)`
@@ -40,6 +69,27 @@ const TitleContainer = styled(SectionContainer)`
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
+  ${MEDIA_QUERY_XXL} {
+    
+  }
+  ${MEDIA_QUERY_XL} {
+
+  }
+  ${MEDIA_QUERY_LG} {
+
+  }
+  ${MEDIA_QUERY_MD} {
+    flex-direction: column;
+    align-items: start;
+  }
+  ${MEDIA_QUERY_SM} {
+    flex-direction: column;
+    align-items: start;
+  }
+  ${MEDIA_QUERY_XS} {
+    flex-direction: column;
+    align-items: start;
+  }
 `;
 
 const ManageButton = styled.div`
@@ -64,6 +114,16 @@ const ManageButton = styled.div`
   &:active {
     border-color: transparent;
     background-color: ${(props) => props.theme.click_color};
+  }
+  ${MEDIA_QUERY_MD} {
+    
+  }
+  ${MEDIA_QUERY_SM} {
+  }
+  ${MEDIA_QUERY_XS} {
+      & ~ & {
+        margin-top: 5px
+      }
   }
 `;
 
@@ -159,11 +219,6 @@ export default function UserManagement() {
     }
   }
 
-  const handleUserProfileChange = e => {
-    e.preventDefault();
-
-  }
-
   return (
     <Container>
       <Main>
@@ -187,7 +242,7 @@ export default function UserManagement() {
                 </ManageButton>
               }
             </TitleContainer>
-            <UserForm
+            <ManagementForm
               id="profileForm"
               inputs={inputs}
               handlers={handlers}
