@@ -182,7 +182,7 @@ export default function MusicPlayer() {
     handleEnd,
   } = useMusicPlayer();
 
-  useBeforeUnload(audioRef, currentEpisode);
+  useBeforeUnload(audioRef, currentEpisode.id);
 
   // 如果在註冊頁面或是登入頁面不顯示
   const location = useLocation();

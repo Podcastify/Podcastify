@@ -136,7 +136,13 @@ export default function useMusicPlayer() {
   const getCurrentTime = (e) => {
     const target = e.target;
     const time = target.currentTime;
-    const percent = ((time / target.duration) * 100).toFixed(2);
+    let percent;
+
+    if (time) {
+      percent = ((time / target.duration) * 100).toFixed(2);
+    } else {
+      percent = 0;
+    }
 
     setPercentage(percent);
     setCurrentTime(time.toFixed(2));
@@ -154,6 +160,7 @@ export default function useMusicPlayer() {
       const lastTime = data.progress;
       audio.currentTime = lastTime;
       const percent = ((lastTime / audio.duration) * 100).toFixed(2);
+
       setPercentage(percent);
       setCurrentTime(lastTime);
       setFirstLoad(false);
