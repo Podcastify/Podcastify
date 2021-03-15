@@ -175,14 +175,13 @@ export default function ProgressControl({
   const [progressBarWidth, setProgressBarWidth] = useState(0);
   const { isLoading, setIsLoading } = usePageStatus();
   const { userInfo } = useUser();
-
   const rangeRef = useRef();
 
   useEffect(() => {
     setIsLoading(true);
 
-    // 如果非會員或沒有進度條要跑，不須有 loading 畫面
-    if (!userInfo || !percentage) {
+    // 如果非會員或沒有播放內容，不須有 loading 畫面
+    if (!userInfo || !duration) {
       setIsLoading(false);
     }
 
@@ -194,11 +193,10 @@ export default function ProgressControl({
     const currentProgressBar = (rangeWidth / 100) * percentage;
     setProgressBarWidth(currentProgressBar);
 
-    // 如果進度條跑好，loading 畫面結束
-    if (currentProgressBar) {
+    if (currentProgressBar === 0 || currentProgressBar) {
       setIsLoading(false);
     }
-  }, [percentage, setIsLoading, userInfo]);
+  }, [percentage, setIsLoading, userInfo, duration]);
 
   // 轉換秒數
   const secondsToStandardTime = (seconds) => {

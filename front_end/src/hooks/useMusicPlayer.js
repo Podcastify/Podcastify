@@ -1,10 +1,19 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { addRecord, getPlayRecordDetail } from "../utils";
+import { getRecords } from "../WebAPI/me";
 
 export default function useMusicPlayer() {
   const audioRef = useRef();
-  const { userPlaylists, userPlayedRecord, userInfo } = useUser();
+  const {
+    userPlaylists,
+    userPlayedRecord,
+    userInfo,
+    setUserPlayedRecord,
+  } = useUser();
+  const { setAlert } = useAlertMessage();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -38,6 +47,26 @@ export default function useMusicPlayer() {
       setDuration(0);
     }
   }, [userInfo]);
+
+  // 新增播放紀錄
+  useEffect(() => {
+    if (currentEpisode.id === undefined) return;
+
+    // 將記錄存進資料庫
+    addRecord(audioRef, currentEpisode.id);
+
+    // 從資料庫抓紀錄、打 API 拿詳細資料後再放入 context
+    // getRecords().then((response) => {
+    //   if (response.ok) {
+    //     const playedRecord = response.data;
+    //     getPlayRecordDetail(playedRecord).then((record) => {
+    //       setUserPlayedRecord(record);
+    //     });
+    //   } else {
+    //     setAlert(true);
+    //   }
+    // });
+  }, [currentEpisode.id, setUserPlayedRecord, setAlert]);
 
   // 上一首或下一首
   const handleSong = useCallback(

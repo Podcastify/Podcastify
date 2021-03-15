@@ -230,8 +230,8 @@ export default function InfoCard({ currentHotPodcasts, hotPodactsInTaiwan }) {
           >
             {hotPodactsInTaiwan
               ? hotPodactsInTaiwan.map((data) => (
-                  <InfoCardWrapper key={data.id}>
-                    <InfoCardPhoto to={`/channel/${data.id}`} o>
+                  <InfoCardWrapper to={`/channel/${data.id}`} key={data.id}>
+                    <InfoCardPhoto>
                       <img
                         src={data.image}
                         alt={`The Podcast titled: ${data.title}`}
