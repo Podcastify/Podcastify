@@ -163,7 +163,7 @@ function PlayerControl({ handleSong, audioRef }) {
     } else {
       audioRef.current.pause();
     }
-  }, [audioRef, currentEpisode.playing]);
+  }, [audioRef, currentEpisode]);
 
   return (
     <Control>

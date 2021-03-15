@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import useAlertMessage from "../hooks/useAlertMessage";
@@ -54,7 +54,6 @@ export default function useMusicPlayer() {
 
     // 將記錄存進資料庫
     addRecord(audioRef, currentEpisode.id);
-
     // 從資料庫抓紀錄、打 API 拿詳細資料後再放入 context
     // getRecords().then((response) => {
     //   if (response.ok) {
@@ -136,7 +135,13 @@ export default function useMusicPlayer() {
   const getCurrentTime = (e) => {
     const target = e.target;
     const time = target.currentTime;
-    const percent = ((time / target.duration) * 100).toFixed(2);
+    let percent;
+
+    if (time) {
+      percent = ((time / target.duration) * 100).toFixed(2);
+    } else {
+      percent = 0;
+    }
 
     setPercentage(percent);
     setCurrentTime(time.toFixed(2));
@@ -154,6 +159,7 @@ export default function useMusicPlayer() {
       const lastTime = data.progress;
       audio.currentTime = lastTime;
       const percent = ((lastTime / audio.duration) * 100).toFixed(2);
+
       setPercentage(percent);
       setCurrentTime(lastTime);
       setFirstLoad(false);
