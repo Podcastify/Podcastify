@@ -16,8 +16,9 @@ import { addEpisodeToPlaylist } from "../WebAPI/me";
 import { useCallback, useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
-import Loading from "../components/Loading";
 import usePageStatus from "../hooks/usePageStatus";
+import Loading from "../components/Loading";
+import PopUpMessage from "../components/PopUpMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -605,7 +606,12 @@ const CollapseControl = styled.div`
   }
 `;
 
-function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
+function EpisodeInfoDetails({
+  podcastInfo,
+  episodeInfo,
+  setShowPopUp,
+  setAddNewEpisode,
+}) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const { userPlaylists, setUserPlaylists } = useUser();
@@ -622,19 +628,28 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
       history.push("/myplaylist");
     }
     await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
-    console.log({ userPlaylists });
+
     const response = await getEpisodeInfo(episodeInfo.id);
     const newEpisode = response.data;
-    console.log({ newEpisode });
+
     const newPlaylist = userPlaylists.map((playlist) => {
       if (playlist.id !== userPlaylists[0].id) return playlist;
       let { Episodes, ...rest } = playlist;
       Episodes = [...Episodes, newEpisode];
       return { Episodes, ...rest };
     });
-    console.log({ newPlaylist });
+
     setUserPlaylists(newPlaylist);
-  }, [setUserPlaylists, userPlaylists, episodeInfo, history]);
+    setShowPopUp(true);
+    setAddNewEpisode("已新增至您的播放清單");
+  }, [
+    setUserPlaylists,
+    userPlaylists,
+    episodeInfo,
+    history,
+    setShowPopUp,
+    setAddNewEpisode,
+  ]);
 
   const handleAddIconClick = async (e) => {
     e.preventDefault();
@@ -732,6 +747,8 @@ export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
   const { isLoading, setIsLoading } = usePageStatus();
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [addNewEpisode, setAddNewEpisode] = useState();
 
   useEffect(() => {
     setIsLoading(true);
@@ -745,6 +762,7 @@ export default function Channel() {
   return (
     <>
       {isLoading && <Loading />}
+      {showPopUp && <PopUpMessage text={addNewEpisode} />}
       <Container>
         <Main>
           <Div>
@@ -762,6 +780,8 @@ export default function Channel() {
                         podcastInfo={podcastInfo}
                         episodeInfo={el}
                         key={el.id}
+                        setShowPopUp={setShowPopUp}
+                        setAddNewEpisode={setAddNewEpisode}
                       />
                     ))
                   : ""}

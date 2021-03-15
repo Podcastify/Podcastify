@@ -272,6 +272,7 @@ export default function ChannelSidebar({ podcastInfo }) {
   const { userInfo, setUserSubscription } = useUser();
   const { podcastId } = useParams();
   const [subscription, setSubscription] = useState(false);
+  const [popUpText, setPopUpText] = useState(null);
   const [showPopUp, setShowPopUp] = useState(false);
 
   const handleSubscriptionBtnClick = async () => {
@@ -281,11 +282,13 @@ export default function ChannelSidebar({ podcastInfo }) {
       await addSubsciption(podcastId);
       setSubscription(true);
       setShowPopUp(true);
+      setPopUpText("已新增至您的頻道清單");
     }
     if (subscription) {
       await deleteSubsciption(podcastId);
       setSubscription(false);
       setShowPopUp(true);
+      setPopUpText("已從您的頻道清單移除");
     }
 
     const { data: newSubscriptionIds } = await getMySubsciption();
@@ -307,7 +310,7 @@ export default function ChannelSidebar({ podcastInfo }) {
 
   return (
     <>
-      {showPopUp && <PopUpMessage subscription={subscription} />}
+      {showPopUp && <PopUpMessage text={popUpText} />}
       <SidebarContainer>
         <InfoCardWrapper>
           {podcastInfo ? (
