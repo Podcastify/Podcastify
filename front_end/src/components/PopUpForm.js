@@ -76,7 +76,7 @@ const Title = styled.div`
   font-size: 30px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -156,40 +156,40 @@ export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
   const { inputs, handlers } = useInputs(formInputs);
   const { setUserPlaylists, userPlaylists } = useUser();
 
-  const handleCloseBtnClick = e => {
+  const handleCloseBtnClick = (e) => {
     setShowEditForm(false);
-  }
+  };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(inputs);
-    const filters = ['name'];
+    const filters = ["name"];
     const editInformation = {};
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       for (const filter of filters) {
         if (filter === input.attributes.name) {
-          editInformation[filter] = input.attributes.value
+          editInformation[filter] = input.attributes.value;
         }
       }
-    })
+    });
     let result;
     const { name } = editInformation;
     try {
       result = await renamePlaylist(userPlaylists[0].id, name);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
     if (result.ok) {
       const [playlist, ...rest] = userPlaylists;
       setUserPlaylists([
         {
           ...playlist,
-          name
-        }
-      ])
+          name,
+        },
+      ]);
       setShowEditForm(false);
     }
-  }
+  };
 
   return (
     <CoverPage>
@@ -200,11 +200,7 @@ export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
             <Icon.Error />
           </CloseBtnControl>
         </Headline>
-        <Form
-          inputs={inputs}
-          handlers={handlers}
-          onSubmit={handleSubmit}
-        />
+        <Form inputs={inputs} handlers={handlers} onSubmit={handleSubmit} />
       </FormContainer>
     </CoverPage>
   );
