@@ -144,7 +144,7 @@ const TextWrapper = styled.div`
   }
 `;
 
-export default function PopUptMessage({ subscription }) {
+export default function PopUptMessage({ text }) {
   const [showAlert, setShowAlert] = useState(true);
 
   const handleClosedButton = () => {
@@ -158,15 +158,9 @@ export default function PopUptMessage({ subscription }) {
           <CloseBtnControl onClick={handleClosedButton}>
             <Images.Error />
           </CloseBtnControl>
-          {subscription ? (
-            <TextWrapper>
-              <div>已新增至您的頻道清單</div>
-            </TextWrapper>
-          ) : (
-            <TextWrapper>
-              <div>已從您的頻道清單移除</div>
-            </TextWrapper>
-          )}
+          <TextWrapper>
+            <div>{text}</div>
+          </TextWrapper>
         </Container>
       </Background>
     )
