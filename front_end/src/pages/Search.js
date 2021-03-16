@@ -30,7 +30,7 @@ const MainWrapper = styled(Main)`
 
   ${MEDIA_QUERY_XS} {
     left: unset;
-    width: 95%;
+    width: 100%;
     height: 74vh;
     padding-left: 0px;
   }
@@ -55,10 +55,6 @@ const SearchPageContainer = styled.section`
     width: 100%;
     margin: 0;
   }
-
-  ${MEDIA_QUERY_XS} {
-    padding: 0 10px;
-  }
 `;
 
 const SearchPageWrapper = styled.div`
@@ -75,11 +71,10 @@ const SearchPageWrapper = styled.div`
 const SearchPageTitle = styled.h1`
   width: 100%;
   font-size: 42px;
-  padding: 10px;
   line-height: 1.2;
   letter-spacing: normal;
   font-weight: bold;
-  margin: 0;
+  margin: 10px 0;
   color: ${(props) => props.theme.white};
 
   ${MEDIA_QUERY_XL} {
@@ -184,7 +179,7 @@ const SearchItemWrapper = styled.div`
 
   ${MEDIA_QUERY_XS} {
     justify-content: space-around;
-    margin: 10px 0;
+    margin: 20px 0;
   }
 `;
 

@@ -8,11 +8,11 @@ Podcast 線上串流服務平台
 | --- | --- | -------- |
 | 會員 | test01 |  test01  |
 
-![網站 Demo](./front_end/img/podcastify_demo.gif)
+![網站 Demo](https://i.imgur.com/hW5QUqi.gif)
 
 ## 專案簡介
 
-Podcastify 是一個提供給使用者收聽 Podcast 的串流服務平台，前端採用 React Hooks 技術、串接 [第三方 API](https://www.listennotes.com/api/) 
+Podcastify 是一個提供給使用者收聽 Podcast 的串流服務平台，並支援 RWD。前端採用 React Hooks 技術、串接 [第三方 API](https://www.listennotes.com/api/) 
 取得 Podcast 的資料，搭配後端 Express、Sequelize 技術進行開發。使用者身份為訪客、會員，功能如下：
 
 - 會員可使用功能：
@@ -35,35 +35,30 @@ Podcastify 是一個提供給使用者收聽 Podcast 的串流服務平台，前
 - 會員登入：輸入帳號、密碼，即可登入。
 - 會員專區：會員登入之後，可定期更新密碼。
 
-![註冊頁面](./front_end/img/register_page.png)
-
 #### `頻道搜尋功能`
 輸入頻道關鍵字搜尋相關資料，也能在搜尋結果頁面上，點取圖示連結到頻道頁面。
 
-![頻道搜尋](./front_end/img/search_demo.gif)
+![頻道搜尋](https://i.imgur.com/snZyZ2Q.gif)
 
 #### `頻道訂閱功能`
 - 頻道頁面：每個獨立頻道頁，可直接訂閱或取消訂閱頻道。
 - 管理頻道頁面：統一管理訂閱中的頻道，提供刪除頻道的功能。
 
-![訂閱功能](./front_end/img/subscription.gif)
+![訂閱功能](https://i.imgur.com/taoq8b0.gif)
 
 #### `播放清單功能`
 - 首頁頁面：新增會員專屬播放清單。
 - 頻道頁面：加入喜愛的單元到播放清單。
-- 播放清單頁面：會員能編輯播放清單名稱、一鍵播放清單內全部單元，也可將單元從播放清單移除。
+- 播放清單頁面：會員能編輯播放清單名稱，一鍵播放清單內全部單元，也可將單元從播放清單移除。
 
-![播放清單](./front_end/img/playlist.gif)
+![播放清單](https://i.imgur.com/Tr3o9JB.gif)
 
 #### `音樂播放器功能`
 - 音樂播放器：播放、暫停當前播放單元、選取播放清單中下一個與前一個單元，並可操控進度條的時間進度及控制音量。
 - 單元播放功能：在頁面側邊欄、頻道頁面、播放清單頁面，提供單元播放、暫停的按鍵，讓會員自在點選單元播放。
 
-![播放器](./front_end/img/musicPlayer.gif)
-![單元播放](./front_end/img/playingBtn.gif)
-
-
-#### `支援 RWD`
+![播放器](https://i.imgur.com/L5xuAGY.gif)
+![單元播放](https://i.imgur.com/njsy09X.gif)
 
 
 ##  使用技術
