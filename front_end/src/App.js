@@ -25,7 +25,7 @@ import { setInitialUserContext } from "./utils";
 function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [userSubscription, setUserSubscription] = useState([]);
-  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [userPlaylists, setUserPlaylists] = useState(null);
   const [userPlayedRecord, setUserPlayedRecord] = useState([]);
   const [currentEpisode, setCurrentEpisode] = useState({});
   const [isLoading, setIsLoading] = useState(false);

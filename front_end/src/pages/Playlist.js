@@ -14,7 +14,7 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { deleteEpisodeFromPlaylist } from "../WebAPI/me";
+import { addPlaylist, deleteEpisodeFromPlaylist } from "../WebAPI/me";
 import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
 
@@ -156,6 +156,7 @@ const PlaylistName = styled.div`
 `;
 const Subtitle = styled.div`
   font-size: 26px;
+  line-height: 20px;
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
@@ -663,6 +664,60 @@ const DeleteBtnControl = styled.div`
   }
 `;
 
+const RemindBlock = styled.div`
+  color: ${(props) => props.theme.white};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  ${MEDIA_QUERY_SM} {
+    margin-top: 17px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    margin-top: 15px;
+  }
+`;
+
+const RemindText = styled.div`
+  font-size: 25px;
+  letter-spacing: 1.3px;
+  line-height: 25px;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 20px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 15px;
+  }
+`;
+
+const AddPlaylist = styled.button`
+  color: ${(props) => props.theme.white};
+  border-radius: 3px;
+  border: 1px solid ${(props) => props.theme.white};
+  background-color: unset;
+  margin-top: 15px;
+  padding: 10px;
+  outline: none;
+  cursor: pointer;
+`;
+
 const formInputs = [
   {
     attributes: {
@@ -760,7 +815,7 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 }
 
 export default function Playlist() {
-  const { userPlaylists } = useUser();
+  const { userPlaylists, userInfo } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
   const [showEditForm, setShowEditForm] = useState(false);
 
@@ -786,69 +841,81 @@ export default function Playlist() {
   };
 
   return (
-      <Container>
-        <Main>
-          <Div>
-            <Sidebar />
-            <PlaylistWrapper>
-              <PlaylistHeader>
-                <Photo />
-                <TitleWrapper>
-                  <TitleText>
-                    <PlaylistName>我的播放清單</PlaylistName>
-                    <Subtitle>
-                      {userPlaylists.length > 0
-                        ? userPlaylists[0].name
-                        : "播放列表"}
-                      ，共{" "}
-                      {userPlaylists.length > 0
-                        ? userPlaylists[0].Episodes.length
-                        : 0}{" "}
-                      部單元
-                    </Subtitle>
-                  </TitleText>
-                  <Buttons>
-                    <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
-                      <Images.PodcastPlayBtn />
-                    </PlaylistPlayBtnControl>
-                    <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
-                      <Images.RenamePlaylistBtn />
-                    </RenamePlaylistBtnControl>
-                  </Buttons>
-                </TitleWrapper>
-              </PlaylistHeader>
-              <PlayList>
-                {userPlaylists.length > 0 && (
-                  <TitleHeader>
-                    <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-                    <EpisodeDescriptionHeader>
-                      單元描述
-                    </EpisodeDescriptionHeader>
-                    <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-                  </TitleHeader>
+    <Container>
+      <Main>
+        <Div>
+          <Sidebar />
+          <PlaylistWrapper>
+            <PlaylistHeader>
+              <Photo />
+              <TitleWrapper>
+                <TitleText>
+                  <PlaylistName>我的播放清單</PlaylistName>
+                  <Subtitle>
+                    {!userInfo
+                      ? ""
+                      : userPlaylists.length > 0
+                      ? userPlaylists[0].name
+                      : "播放列表"}
+                    ，共{" "}
+                    {!userInfo
+                      ? ""
+                      : userPlaylists.length > 0
+                      ? userPlaylists[0].Episodes.length
+                      : 0}{" "}
+                    部單元
+                  </Subtitle>
+                </TitleText>
+                <Buttons>
+                  <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
+                    <Images.PodcastPlayBtn />
+                  </PlaylistPlayBtnControl>
+                  <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
+                    <Images.RenamePlaylistBtn />
+                  </RenamePlaylistBtnControl>
+                </Buttons>
+              </TitleWrapper>
+            </PlaylistHeader>
+            <PlayList>
+              <TitleHeader>
+                <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+                <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
+                <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+              </TitleHeader>
+              <Body>
+                {userPlaylists.length === 0 ? (
+                  <RemindBlock>
+                    <RemindText>尚無播放清單，請先新增播放清單</RemindText>
+                    <AddPlaylist>新增播放清單</AddPlaylist>
+                  </RemindBlock>
+                ) : userPlaylists[0].Episodes.length > 0 ? (
+                  userPlaylists[0].Episodes.map((episodeInfo) => (
+                    <EpisodeInfoDetails
+                      key={episodeInfo.id}
+                      episodeInfo={episodeInfo}
+                      userPlaylists={userPlaylists}
+                    />
+                  ))
+                ) : (
+                  <RemindBlock>
+                    <RemindText>
+                      {userPlaylists[0].name} 為空，請至頻道頁面將單元新增進{" "}
+                      {userPlaylists[0].name}
+                    </RemindText>
+                  </RemindBlock>
                 )}
-                <Body>
-                  {userPlaylists.length > 0
-                    ? userPlaylists[0].Episodes.map((episodeInfo) => (
-                        <EpisodeInfoDetails
-                          key={episodeInfo.id}
-                          episodeInfo={episodeInfo}
-                          userPlaylists={userPlaylists}
-                        />
-                      ))
-                    : ""}
-                </Body>
-              </PlayList>
-            </PlaylistWrapper>
-          </Div>
-        </Main>
-        {showEditForm && (
-          <PopUpForm
-            title="編輯播放清單名稱"
-            formInputs={formInputs}
-            setShowEditForm={setShowEditForm}
-          />
-        )}
-      </Container>
+              </Body>
+            </PlayList>
+          </PlaylistWrapper>
+        </Div>
+      </Main>
+      {showEditForm && (
+        <PopUpForm
+          title="編輯播放清單名稱"
+          formInputs={formInputs}
+          setShowEditForm={setShowEditForm}
+        />
+      )}
+    </Container>
   );
 }

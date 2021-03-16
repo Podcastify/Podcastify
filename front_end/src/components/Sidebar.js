@@ -400,7 +400,7 @@ export default function Sidebar() {
   return (
     <SidebarWrapper>
       {userInfo ? (
-        userPlaylists.length > 0 ? (
+        userPlaylists && userPlaylists.length > 0 ? (
           <Link to="/myplaylist">
             <SidebarTitle>{userPlaylists[0].name}</SidebarTitle>
           </Link>
@@ -425,7 +425,7 @@ export default function Sidebar() {
       )}
       <SideListContainer>
         {userInfo ? (
-          userPlaylists.length > 0 ? (
+          userPlaylists && userPlaylists.length > 0 ? (
             userPlaylists[0].Episodes.map((episodeInfo) => (
               <SidebarListWrapper key={episodeInfo.id}>
                 <SidebarListLeft>
