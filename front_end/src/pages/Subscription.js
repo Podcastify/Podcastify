@@ -287,8 +287,8 @@ const DeleteIcon = styled.div`
   }
 
   ${MEDIA_QUERY_XS} {
-    top: -28px;
-    left: -28px;
+    top: -22px;
+    left: -22px;
   }
 
   svg {

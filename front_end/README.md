@@ -8,7 +8,7 @@ Podcast 線上串流服務平台
 | --- | --- | -------- |
 | 會員 | test01 |  test01  |
 
-![網站 Demo](./img/podcastify_demo.gif)
+![網站 Demo](https://i.imgur.com/sSHoai0.gif)
 
 ## 專案簡介
 
@@ -35,32 +35,32 @@ Podcastify 是一個提供給使用者收聽 Podcast 的串流服務平台，前
 - 會員登入：輸入帳號、密碼，即可登入。
 - 會員專區：會員登入之後，可定期更新密碼。
 
-![註冊頁面](./img/register_page.png)
+![註冊頁面](https://i.imgur.com/Zm8DKQm.png)
 
 #### `頻道搜尋功能`
 輸入頻道關鍵字搜尋相關資料，也能在搜尋結果頁面上，點取圖示連結到頻道頁面。
 
-![頻道搜尋](./img/search_demo.gif)
+![頻道搜尋](https://i.imgur.com/3YlObWV.gif)
 
 #### `頻道訂閱功能`
 - 頻道頁面：每個獨立頻道頁，可直接訂閱或取消訂閱頻道。
 - 管理頻道頁面：統一管理訂閱中的頻道，提供刪除頻道的功能。
 
-![訂閱功能](./img/subscription.gif)
+![訂閱功能](https://i.imgur.com/EUoBjSx.gif)
 
 #### `播放清單功能`
 - 首頁頁面：新增會員專屬播放清單。
 - 頻道頁面：加入喜愛的單元到播放清單。
 - 播放清單頁面：會員能編輯播放清單名稱、一鍵播放清單內全部單元，也可將單元從播放清單移除。
 
-![播放清單](./img/playlist.gif)
+![播放清單](https://i.imgur.com/jD64Hso.gif)
 
 #### `音樂播放器功能`
 - 音樂播放器：播放、暫停當前播放單元、選取播放清單中下一個與前一個單元，並可操控進度條的時間進度及控制音量。
 - 單元播放功能：在頁面側邊欄、頻道頁面、播放清單頁面，提供單元播放、暫停的按鍵，讓會員自在點選單元播放。
 
-![播放器](./img/musicPlayer.gif)
-![單元播放](./img/playingBtn.gif)
+![播放器](https://i.imgur.com/MUWbvso.gif)
+![單元播放](https://i.imgur.com/3jsLBdH.gif)
 
 
 #### `支援 RWD`
