@@ -1,15 +1,14 @@
 import { useEffect } from "react";
-import { addRecords } from "../WebAPI/me";
+import { addRecord } from "../utils";
 
-export default function useBeforeUnload(audio, currentEpisode) {
+export default function useBeforeUnload(audio, currentEpisodeId) {
   useEffect(() => {
     const handleBeforeunload = (e) => {
       // 如果目前沒有播放內容
-      if (!currentEpisode.id) return;
+      if (!currentEpisodeId) return;
 
       e.preventDefault();
-      const currentTime = audio.current.currentTime.toFixed(2);
-      addRecords(currentEpisode.id, currentTime);
+      addRecord(audio, currentEpisodeId);
     };
 
     window.addEventListener("beforeunload", handleBeforeunload);
@@ -17,5 +16,5 @@ export default function useBeforeUnload(audio, currentEpisode) {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeunload);
     };
-  }, [audio, currentEpisode]);
+  }, [audio, currentEpisodeId]);
 }

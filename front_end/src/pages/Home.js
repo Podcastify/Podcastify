@@ -12,7 +12,6 @@ import {
 } from "../WebAPI/listenAPI";
 import useUser from "../hooks/useUser";
 
-
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -39,7 +38,6 @@ export default function Home() {
     setIsLoading(true);
     getMightLovePodcasts().then((response) => {
       let hotPodcastsByGenres = response.data.podcasts;
-      console.log(response);
       setCurrentHotPodcasts(hotPodcastsByGenres);
     });
     getHotPodcastsInTaiwan().then((res) => {

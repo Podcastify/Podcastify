@@ -12,9 +12,12 @@ import Progress from "./Progress";
 import Content from "./Content";
 import Control from "./PlayerControl";
 import Sound from "./Sound";
+import AlertMessage from "../AlertMessage";
 import useBeforeUnload from "../../hooks/useBeforeUnload";
 import useMusicPlayer from "../../hooks/useMusicPlayer";
 import useCurrentEpisode from "../../hooks/useCurrentEpisode";
+import useAlertMessage from "../../hooks/useAlertMessage";
+import useUser from "../../hooks/useUser";
 import { Link, useLocation } from "react-router-dom";
 import { memo } from "react";
 
@@ -145,10 +148,20 @@ const PlaylistControl = styled(Link)`
 const Audio = styled.audio``;
 
 function PlaylistBtn() {
+  const { userInfo } = useUser();
+
   return (
-    <PlaylistControl to="/myplaylist">
-      <Icon.PlaylistBtn />
-    </PlaylistControl>
+    <>
+      {userInfo ? (
+        <PlaylistControl to="/myplaylist">
+          <Icon.PlaylistBtn />
+        </PlaylistControl>
+      ) : (
+        <PlaylistControl to="/">
+          <Icon.PlaylistBtn />
+        </PlaylistControl>
+      )}
+    </>
   );
 }
 
@@ -156,6 +169,7 @@ const MemoPlaylistBtn = memo(PlaylistBtn);
 
 export default function MusicPlayer() {
   const { currentEpisode } = useCurrentEpisode();
+  const { alert } = useAlertMessage();
   const {
     audioRef,
     getCurrentTime,
@@ -168,7 +182,7 @@ export default function MusicPlayer() {
     handleEnd,
   } = useMusicPlayer();
 
-  useBeforeUnload(audioRef, currentEpisode);
+  useBeforeUnload(audioRef, currentEpisode.id);
 
   // 如果在註冊頁面或是登入頁面不顯示
   const location = useLocation();
@@ -177,28 +191,31 @@ export default function MusicPlayer() {
   }
 
   return (
-    <Container>
-      <Player>
-        <MemoPlaylistBtn />
-        <Audio
-          src={currentEpisode.src}
-          type="audio/mpeg"
-          ref={audioRef}
-          onTimeUpdate={getCurrentTime}
-          onLoadedMetadata={onLoadData}
-          preload="auto"
-          onEnded={handleEnd}
-        />
-        <Progress
-          percentage={percentage}
-          onChange={onChange}
-          duration={duration}
-          currentTime={currentTime}
-        />
-        {currentEpisode.src && <Content currentEpisode={currentEpisode} />}
-        <Control audioRef={audioRef} handleSong={handleSong} />
-        <Sound audioRef={audioRef} />
-      </Player>
-    </Container>
+    <>
+      {alert && <AlertMessage />}
+      <Container>
+        <Player>
+          <MemoPlaylistBtn />
+          <Audio
+            src={currentEpisode.src}
+            type="audio/mpeg"
+            ref={audioRef}
+            onTimeUpdate={getCurrentTime}
+            onLoadedMetadata={onLoadData}
+            preload="auto"
+            onEnded={handleEnd}
+          />
+          <Progress
+            percentage={percentage}
+            onChange={onChange}
+            duration={duration}
+            currentTime={currentTime}
+          />
+          {currentEpisode.src && <Content currentEpisode={currentEpisode} />}
+          <Control audioRef={audioRef} handleSong={handleSong} />
+          <Sound audioRef={audioRef} />
+        </Player>
+      </Container>
+    </>
   );
 }

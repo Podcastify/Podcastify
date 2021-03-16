@@ -10,8 +10,6 @@ import {
 import GlobalStyle from "./constants/globalStyle";
 import { theme } from "./constants/theme";
 import { getAuthToken } from "./utils";
-import { getMyInfo } from "./WebAPI/me";
-import { getEpisodeInfo } from "./WebAPI/listenAPI";
 import Playlist from "./pages/Playlist";
 import Channel from "./pages/Channel";
 import Register from "./pages/Register";
@@ -31,14 +29,12 @@ function App() {
   const [userPlayedRecord, setUserPlayedRecord] = useState([]);
   const [currentEpisode, setCurrentEpisode] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [Alert, setAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
     function getUser() {
       if (getAuthToken()) {
         setInitialUserContext(
-          getMyInfo,
-          getEpisodeInfo,
           setUserInfo,
           setUserPlaylists,
           setUserPlayedRecord,
@@ -50,7 +46,7 @@ function App() {
   }, []);
 
   const AlertMessageContextValue = {
-    Alert,
+    alert,
     setAlert,
   };
 

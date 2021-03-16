@@ -5,12 +5,10 @@ import UserForm from "../components/UserForm";
 import Images from "../components/Images";
 import { useHistory } from "react-router-dom";
 import { login, register } from "../WebAPI/users";
-import { getMyInfo } from "../WebAPI/me";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
 import { getAuthToken } from "../utils";
-import { getEpisodeInfo } from "../WebAPI/listenAPI";
 import { setInitialUserContext } from "../utils";
 
 const RegisterPageWrapper = styled.div`
@@ -26,6 +24,7 @@ const StyledLogo = styled(Images.PodcastifyLogo)`
 const RegisterForm = styled(UserForm)`
   margin: auto auto;
   height: auto;
+  width: 100%;
 `;
 
 const FormArea = styled.div`
@@ -38,9 +37,16 @@ const FormArea = styled.div`
 const BtnContainer = styled.div`
   max-width: 32.7rem;
   margin: 0 auto;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justift-content: center;
+  align-items: center;
 `;
 
-const LoginBtn = styled(Input)``;
+const LoginBtn = styled(Input)`
+  width: 100%;
+`;
 
 const formInputs = [
   {
@@ -145,8 +151,6 @@ export default function Register() {
       window.localStorage.removeItem("podcastifyToken");
       window.localStorage.setItem("podcastifyToken", result.token);
       setInitialUserContext(
-        getMyInfo,
-        getEpisodeInfo,
         setUserInfo,
         setUserPlaylists,
         setUserPlayedRecord,
@@ -167,21 +171,21 @@ export default function Register() {
   return (
     <RegisterPageWrapper>
       <StyledLogo />
-      {/* <FormArea> */}
-      <RegisterForm
-        formTitle={"會員註冊"}
-        inputs={inputs}
-        handlers={handlers}
-        onSubmit={handleRegister}
-      />
-      <BtnContainer>
+      <FormArea>
+        <RegisterForm
+          formTitle={"會員註冊"}
+          inputs={inputs}
+          handlers={handlers}
+          onSubmit={handleRegister}
+        />
+        <BtnContainer>
         <LoginBtn
           {...loginBtnInput}
           handlers={loginBtnHandlers}
           onClick={handleLoginBtn}
         />
       </BtnContainer>
-      {/* </FormArea> */}
+      </FormArea>
     </RegisterPageWrapper>
   );
 }

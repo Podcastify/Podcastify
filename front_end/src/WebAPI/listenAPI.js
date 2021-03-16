@@ -13,22 +13,33 @@ export const getSearchPodcast = (keyword) => {
   ).then((res) => res.json());
 };
 
-export const getSearchEpisode = (keyword) => {
-  // 將字串進行 UTF-8 編碼
-  const encodeWord = encodeURIComponent(keyword);
-  return fetch(
-    `${BASE_URL}/listenAPI/search/?q=${encodeWord}&type=episode&language=Chinese&region=tw&safe_mode=0
-  `,
-    {
-      method: "GET",
-    }
-  ).then((res) => res.json());
-};
-
 // You Might Also Like with random genres
 export const getMightLovePodcasts = () => {
-  // let randomGenres = Math.floor(Math.random() * 200) + 150;
-  // let randomGenres = randomNumber.toString();
+  const genres = [
+    144,
+    151,
+    93,
+    133,
+    111,
+    168,
+    117,
+    88,
+    125,
+    132,
+    82,
+    134,
+    99,
+    69,
+    107,
+    122,
+    77,
+    68,
+    127,
+    135,
+    100,
+  ];
+  const randomIndex = Math.floor(Math.random() * 21);
+  const randomGenres = genres[randomIndex];
 
   return fetch(
     `${BASE_URL}/listenAPI/best_podcasts?genre_id=114&region=tw&safe_mode=0`,
