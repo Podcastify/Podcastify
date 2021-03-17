@@ -3,7 +3,7 @@ import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import useUser from "../hooks/useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import {
@@ -17,6 +17,8 @@ import {
 import { addPlaylist, deleteEpisodeFromPlaylist } from "../WebAPI/me";
 import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
+import PopUpMessage from "../components/PopUpMessage";
+import usePageStatus from "../hooks/usePageStatus";
 
 const Container = styled.div`
   width: 100%;
@@ -747,8 +749,13 @@ const formInputs = [
 function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
   const { setUserPlaylists } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+  const { setIsLoading } = usePageStatus();
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpText, setPopUpText] = useState(null);
+  const [confirmed, setConfirmed] = useState(false);
 
   const deleteEpisode = useCallback(async () => {
+    setIsLoading(true);
     await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
     const newPlaylist = userPlaylists.map((playlist) => {
       let { Episodes, ...rest } = playlist;
@@ -757,12 +764,20 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
     });
 
     setUserPlaylists(newPlaylist);
-  }, [userPlaylists, episodeInfo, setUserPlaylists]);
+    setIsLoading(false);
+  }, [userPlaylists, episodeInfo, setUserPlaylists, setIsLoading]);
 
   const handleDeleteIconClick = async (e) => {
     e.preventDefault();
-    deleteEpisode();
+    setPopUpText("確定將此單元從播放清單中刪除嗎？");
+    setShowPopUp(true);
   };
+
+  useEffect(() => {
+    if (confirmed) {
+      deleteEpisode();
+    }
+  }, [confirmed, deleteEpisode]);
 
   const handlePlayPauseBtn = () => {
     handlePlaylistPlayPauseBtn(
@@ -774,43 +789,53 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
   };
 
   return (
-    <Details>
-      <Summary>
-        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
-          {currentEpisode.id === episodeInfo.id ? (
-            currentEpisode.playing ? (
-              <PauseBtnControl>
-                <Images.PodcastPauseBtn />
-              </PauseBtnControl>
+    <>
+      {showPopUp && (
+        <PopUpMessage
+          text={popUpText}
+          button={'deleteEpisode'}
+          setShowPopUp={setShowPopUp}
+          setConfirmed={setConfirmed}
+        />
+      )}
+      <Details>
+        <Summary>
+          <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+            {currentEpisode.id === episodeInfo.id ? (
+              currentEpisode.playing ? (
+                <PauseBtnControl>
+                  <Images.PodcastPauseBtn />
+                </PauseBtnControl>
+              ) : (
+                <PlayBtnControl>
+                  <Images.PodcastPlayBtn />
+                </PlayBtnControl>
+              )
             ) : (
               <PlayBtnControl>
                 <Images.PodcastPlayBtn />
               </PlayBtnControl>
-            )
-          ) : (
-            <PlayBtnControl>
-              <Images.PodcastPlayBtn />
-            </PlayBtnControl>
-          )}
-        </PlayPauseBtnControl>
-        <Text>
-          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
-          <EpisodeDescription
-            dangerouslySetInnerHTML={
-              episodeInfo.description
-                ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
-                : { __html: "沒東西" }
-            }
-          ></EpisodeDescription>
-          <ChannelName>
-            {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
-          </ChannelName>
-        </Text>
-        <DeleteBtnControl onClick={handleDeleteIconClick}>
-          <Images.DeleteBtn />
-        </DeleteBtnControl>
-      </Summary>
-    </Details>
+            )}
+          </PlayPauseBtnControl>
+          <Text>
+            <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+            <EpisodeDescription
+              dangerouslySetInnerHTML={
+                episodeInfo.description
+                  ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
+                  : { __html: "沒東西" }
+              }
+            ></EpisodeDescription>
+            <ChannelName>
+              {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
+            </ChannelName>
+          </Text>
+          <DeleteBtnControl onClick={handleDeleteIconClick}>
+            <Images.DeleteBtn />
+          </DeleteBtnControl>
+        </Summary>
+      </Details>
+    </>
   );
 }
 

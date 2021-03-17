@@ -611,6 +611,8 @@ function EpisodeInfoDetails({
   episodeInfo,
   setShowPopUp,
   setPopUpText,
+  setIsLoading,
+  confirmedAddPlaylist,
 }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
@@ -623,9 +625,13 @@ function EpisodeInfoDetails({
   };
 
   const addEpisode = useCallback(async () => {
+    setIsLoading(true);
+
     if (!userPlaylists[0]) {
-      alert("please add an playlist first");
-      history.push("/myplaylist");
+      setIsLoading(false);
+      setPopUpText("請先新增播放清單");
+      setShowPopUp(true);
+      return;
     }
     await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
 
@@ -640,16 +646,23 @@ function EpisodeInfoDetails({
     });
 
     setUserPlaylists(newPlaylist);
+    setIsLoading(false);
     setShowPopUp(true);
     setPopUpText("已新增至您的播放清單");
   }, [
     setUserPlaylists,
     userPlaylists,
     episodeInfo,
-    history,
     setShowPopUp,
     setPopUpText,
+    setIsLoading,
   ]);
+
+  useEffect(() => {
+    if (confirmedAddPlaylist) {
+      history.push("/myplaylist");
+    }
+  }, [confirmedAddPlaylist, history]);
 
   const handleAddIconClick = async (e) => {
     e.preventDefault();
@@ -729,7 +742,7 @@ function EpisodeInfoDetails({
             }),
           }}
         ></EpisodeDetails>
-        <AddToPlayList>
+        <AddToPlayList onClick={handleAddIconClick}>
           <AddControl>
             <Images.AddToPlayListBtn />
           </AddControl>
@@ -746,9 +759,10 @@ function EpisodeInfoDetails({
 export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
-  const { isLoading, setIsLoading } = usePageStatus();
+  const { setIsLoading } = usePageStatus();
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpText, setPopUpText] = useState(null);
+  const [confirmedAddPlaylist, setConfirmedAddPlaylist] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -761,8 +775,14 @@ export default function Channel() {
 
   return (
     <>
-      {isLoading && <Loading />}
-      {showPopUp && <PopUpMessage text={popUpText} />}
+      {showPopUp && (
+        <PopUpMessage
+          text={popUpText}
+          button={"addPlaylist"}
+          setShowPopUp={setShowPopUp}
+          setConfirmedAddPlaylist={setConfirmedAddPlaylist}
+        />
+      )}
       <Container>
         <Main>
           <Div>
@@ -782,6 +802,8 @@ export default function Channel() {
                         key={el.id}
                         setShowPopUp={setShowPopUp}
                         setPopUpText={setPopUpText}
+                        setIsLoading={setIsLoading}
+                        confirmedAddPlaylist={confirmedAddPlaylist}
                       />
                     ))
                   : ""}

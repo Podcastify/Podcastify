@@ -310,7 +310,13 @@ export default function ChannelSidebar({ podcastInfo }) {
 
   return (
     <>
-      {showPopUp && <PopUpMessage text={popUpText} />}
+      {showPopUp && (
+        <PopUpMessage
+          text={popUpText}
+          button={false}
+          setShowPopUp={setShowPopUp}
+        />
+      )}
       <SidebarContainer>
         <InfoCardWrapper>
           {podcastInfo ? (
