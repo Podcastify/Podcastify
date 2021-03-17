@@ -52,30 +52,46 @@ export const handlePlaylistPlayPauseBtn = (
   });
 };
 
-export const getPlayRecordDetail = async (playedRecords) => {
+export const getPlayRecordDetail = async (playedRecords, setAlert) => {
   let record = [];
 
   if (playedRecords.length !== 0) {
+    // 過濾無效 id
+    const filterRecord = playedRecords.filter(
+      (record) => record.episodeId.length === 32
+    );
+
     // 節省打 API 次數，只取最後四筆播放紀錄
     let lastFourPlayedRecords = [];
-    if (playedRecords.length > 4) {
+    if (filterRecord.length > 4) {
       for (let i = 0; i < 4; i++) {
-        lastFourPlayedRecords[i] = playedRecords[i];
+        lastFourPlayedRecords[i] = filterRecord[i];
       }
     } else {
-      for (let i = 0; i < playedRecords.length; i++) {
-        lastFourPlayedRecords[i] = playedRecords[i];
+      for (let i = 0; i < filterRecord.length; i++) {
+        lastFourPlayedRecords[i] = filterRecord[i];
       }
     }
 
     // 拿到播放紀錄的單集詳細資料
-    let playedRecordsDetails = await Promise.all(
-      lastFourPlayedRecords.map(async (ep) => {
-        if (ep.episodeId.length !== 32) return;
-        const episodeInfo = await getEpisodeInfo(ep.episodeId);
-        return episodeInfo.data;
-      })
-    );
+    let playedRecordsDetails;
+
+    try {
+      playedRecordsDetails = await Promise.all(
+        lastFourPlayedRecords.map(async (ep) => {
+          const episodeInfo = await getEpisodeInfo(ep.episodeId);
+
+          if (!episodeInfo.ok) {
+            setAlert(true);
+            return;
+          }
+          setAlert(false);
+          return episodeInfo.data;
+        })
+      );
+    } catch {
+      setAlert(true);
+    }
 
     // 播放紀錄資料重整
     for (let i = 0; i < playedRecordsDetails.length; i++) {
@@ -92,10 +108,20 @@ export const setInitialUserContext = async (
   setUserInfo,
   setUserPlaylists,
   setUserPlayedRecord,
-  setUserSubscription
+  setUserSubscription,
+  setAlert,
+  setIsLoading
 ) => {
-  const response = await getMyInfo();
-  if (response.ok) {
+  try {
+    setIsLoading(true);
+
+    const response = await getMyInfo();
+    if (!response.ok) {
+      setAlert(true);
+      setIsLoading(false);
+      return;
+    }
+
     let {
       playlists,
       subscriptions,
@@ -122,13 +148,17 @@ export const setInitialUserContext = async (
       })
     );
 
-    // 取得紀錄並設定 context
-    getPlayRecordDetail(playedRecords).then((record) => {
-      setUserPlayedRecord(record);
-    });
+    // 取得紀錄詳細資訊
+    const record = await getPlayRecordDetail(playedRecords, setAlert);
 
+    setUserPlayedRecord(record);
     setUserInfo(userInfo);
     setUserPlaylists(playlists);
     setUserSubscription(subscriptions);
+    setIsLoading(false);
+    setAlert(false);
+  } catch {
+    setIsLoading(false);
+    setAlert(true);
   }
 };

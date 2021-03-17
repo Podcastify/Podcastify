@@ -38,7 +38,9 @@ function App() {
           setUserInfo,
           setUserPlaylists,
           setUserPlayedRecord,
-          setUserSubscription
+          setUserSubscription,
+          setAlert,
+          setIsLoading
         );
       }
     }

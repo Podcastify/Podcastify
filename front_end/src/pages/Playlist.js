@@ -854,13 +854,13 @@ export default function Playlist() {
                   <Subtitle>
                     {!userInfo
                       ? ""
-                      : userPlaylists.length > 0
+                      : userPlaylists && userPlaylists.length > 0
                       ? userPlaylists[0].name
                       : "播放列表"}
                     ，共{" "}
                     {!userInfo
                       ? ""
-                      : userPlaylists.length > 0
+                      : userPlaylists && userPlaylists.length > 0
                       ? userPlaylists[0].Episodes.length
                       : 0}{" "}
                     部單元
@@ -883,12 +883,12 @@ export default function Playlist() {
                 <ChannelNameHeader>頻道名稱</ChannelNameHeader>
               </TitleHeader>
               <Body>
-                {userPlaylists.length === 0 ? (
+                {userPlaylists && userPlaylists.length === 0 ? (
                   <RemindBlock>
                     <RemindText>尚無播放清單，請先新增播放清單</RemindText>
                     <AddPlaylist>新增播放清單</AddPlaylist>
                   </RemindBlock>
-                ) : userPlaylists[0].Episodes.length > 0 ? (
+                ) : userPlaylists && userPlaylists[0].Episodes.length > 0 ? (
                   userPlaylists[0].Episodes.map((episodeInfo) => (
                     <EpisodeInfoDetails
                       key={episodeInfo.id}
@@ -896,13 +896,15 @@ export default function Playlist() {
                       userPlaylists={userPlaylists}
                     />
                   ))
-                ) : (
+                ) : userPlaylists && userPlaylists[0].Episodes.length === 0 ? (
                   <RemindBlock>
                     <RemindText>
                       {userPlaylists[0].name} 為空，請至頻道頁面將單元新增進{" "}
                       {userPlaylists[0].name}
                     </RemindText>
                   </RemindBlock>
+                ) : (
+                  ""
                 )}
               </Body>
             </PlayList>

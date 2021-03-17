@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Images from "./Images";
 import styled from "styled-components";
 import {
@@ -8,6 +8,7 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import useAlertMessage from "../hooks/useAlertMessage";
 
 const ErrorContainer = styled.div`
   position: absolute;
@@ -40,11 +41,13 @@ const ErrorContainer = styled.div`
   ${MEDIA_QUERY_SM} {
     height: 26vh;
     padding: 0 5px;
+    border-radius: 15px;
   }
 
   ${MEDIA_QUERY_XS} {
     height: 30vh;
     width: 60vw;
+    border-radius: 15px;
   }
 `;
 
@@ -96,6 +99,7 @@ const CloseBtnControl = styled.div`
 `;
 
 const ErrorControl = styled.div`
+  margin-bottom: 10px;
   svg {
     width: 84px;
     height: 84px;
@@ -150,27 +154,28 @@ const ErrorBlock = styled.div`
   flex-direction: column;
   align-items: center;
   color: ${(props) => props.theme.white};
-  font-size: 30px;
-  line-height: 2;
+  font-size: 32px;
+  line-height: 1.5;
   letter-spacing: 2px;
+  padding: 15px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 20px;
+    font-size: 24px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 18px;
+    font-size: 22px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 18px;
+    font-size: 22px;
     margin-top: 10px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 18px;
+    font-size: 22px;
     margin-top: 15px;
   }
 
@@ -180,27 +185,33 @@ const ErrorBlock = styled.div`
   }
 `;
 
-export default function AlertMessage() {
-  const [showAlert, setShowAlert] = useState(true);
+export default function AlertMessage({ text }) {
+  const { setAlert } = useAlertMessage();
 
   const handleClosedButton = () => {
-    setShowAlert(false);
+    setAlert(false);
   };
 
   return (
-    showAlert && (
-      <ErrorContainer>
-        <CloseBtnControl onClick={handleClosedButton}>
+    <ErrorContainer>
+      <CloseBtnControl onClick={handleClosedButton}>
+        <Images.Error />
+      </CloseBtnControl>
+      <ErrorBlock>
+        <ErrorControl>
           <Images.Error />
-        </CloseBtnControl>
-        <ErrorBlock>
-          <ErrorControl>
-            <Images.Error />
-          </ErrorControl>
-          <div>連線錯誤</div>
-          <div>請稍後重新再試一次</div>
-        </ErrorBlock>
-      </ErrorContainer>
-    )
+        </ErrorControl>
+        {!text ? (
+          <>
+            <div>連線錯誤</div>
+            <div>請稍後重新再試一次</div>
+          </>
+        ) : (
+          <>
+            <div>{text}</div>
+          </>
+        )}
+      </ErrorBlock>
+    </ErrorContainer>
   );
 }
