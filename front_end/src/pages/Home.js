@@ -10,7 +10,10 @@ import {
   getMightLovePodcasts,
   getHotPodcastsInTaiwan,
 } from "../WebAPI/listenAPI";
+import { getRecords } from "../WebAPI/me";
 import useUser from "../hooks/useUser";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { getPlayRecordDetail } from "../utils";
 
 const Container = styled.div`
   width: 100%;
@@ -29,38 +32,52 @@ const MainWrapper = styled(Main)`
 `;
 
 export default function Home() {
-  const { userInfo } = useUser;
+  const { userInfo, userPlayedRecord } = useUser;
+  const { setAlert } = useAlertMessage();
   const { isLoading, setIsLoading } = usePageStatus();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
+  const [recentPlayedEpisodes, setRecentPlayedEpisodes] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    getMightLovePodcasts().then((response) => {
-      let hotPodcastsByGenres = response.data.podcasts;
-      setCurrentHotPodcasts(hotPodcastsByGenres);
+    // getMightLovePodcasts().then((res) => {
+    //   let hotPodcastsByGenres = res.data.podcasts;
+    //   setCurrentHotPodcasts(hotPodcastsByGenres);
+    // });
+    // getHotPodcastsInTaiwan().then((res) => {
+    //   let hotPodcastsInTaiwan = res.data.podcasts;
+    //   setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
+    //   console.log(hotPodcastsInTaiwan);
+    //   setIsLoading(false);
+    // });
+
+    getRecords().then((res) => {
+      if (res.ok) {
+        let playedRecord = res.data;
+        getPlayRecordDetail(playedRecord).then((record) => {
+          let recentPlayedEpisodes = record;
+          setRecentPlayedEpisodes(recentPlayedEpisodes);
+          console.log(recentPlayedEpisodes);
+        });
+      } else {
+        setAlert(true);
+      }
     });
-    getHotPodcastsInTaiwan().then((res) => {
-      let hotPodcastsInTaiwan = res.data.podcasts;
-      setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
-      setIsLoading(false);
-    });
-  }, [setIsLoading]);
+  }, [setAlert]);
 
   return (
-    <>
-      {isLoading && <Loading />}
-      <Container>
-        <MainWrapper>
-          <Div>
-            <Sidebar />
-            <InfoCard
-              currentHotPodcasts={currentHotPodcasts}
-              hotPodactsInTaiwan={hotPodcastsInTaiwan}
-            />
-          </Div>
-        </MainWrapper>
-      </Container>
-    </>
+    <Container>
+      <MainWrapper>
+        <Div>
+          <Sidebar />
+          <InfoCard
+            currentHotPodcasts={currentHotPodcasts}
+            hotPodactsInTaiwan={hotPodcastsInTaiwan}
+            recentPlayedEpisodes={recentPlayedEpisodes}
+            userInfo={userInfo}
+          />
+        </Div>
+      </MainWrapper>
+    </Container>
   );
 }

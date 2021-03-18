@@ -187,7 +187,12 @@ const breakPoints = [
   { width: 500, itemsToShow: 4, itemsToScroll: 4, pagination: false },
 ];
 
-export default function InfoCard({ currentHotPodcasts, hotPodactsInTaiwan }) {
+export default function InfoCard({
+  currentHotPodcasts,
+  hotPodactsInTaiwan,
+  recentPlayedEpisodes,
+  userInfo,
+}) {
   return (
     <PodcastInfoContainer>
       <Div>
@@ -249,28 +254,33 @@ export default function InfoCard({ currentHotPodcasts, hotPodactsInTaiwan }) {
               : ""}
           </Carousel>
         </PodcastInfoWrapper>
-        {/* <PodcastInfoWrapper>
+        <PodcastInfoWrapper>
           <PodcastInfoTitle># 最近播放單元</PodcastInfoTitle>
           <Carousel
-            itemsToScroll={1}
             breakPoints={breakPoints}
             itemPadding={[0, 10]}
             className="InfoCard"
           >
-            {currentHotPodcasts
-              ? currentHotPodcasts.map((data) => (
-                  <InfoCardWrapper to={`/channel/${data.id}`} key={data.id}>
+            {recentPlayedEpisodes
+              ? recentPlayedEpisodes.map((data) => (
+                  <InfoCardWrapper
+                    to={`/channel/${data.episode.podcast.id}`}
+                    key={data.episode.id}
+                  >
                     <InfoCardPhoto>
                       <img
-                        src={data.image}
-                        alt={`The Podcast titled: ${data.title}`}
+                        src={data.episode.image}
+                        alt={`The Podcast titled: ${data.episode.title}`}
                       />
                     </InfoCardPhoto>
-                    <InfoCardTitle>{data.title}</InfoCardTitle>
-                    {currentHotPodcasts && (
+                    <InfoCardTitle>{data.episode.title}</InfoCardTitle>
+                    {recentPlayedEpisodes.length > 0 && (
                       <InfoCardContent
                         dangerouslySetInnerHTML={{
-                          __html: data.description.replace(/<[^>]+>/g, ""),
+                          __html: data.episode.description.replace(
+                            /<[^>]+>/g,
+                            ""
+                          ),
                         }}
                       ></InfoCardContent>
                     )}
@@ -278,7 +288,7 @@ export default function InfoCard({ currentHotPodcasts, hotPodactsInTaiwan }) {
                 ))
               : ""}
           </Carousel>
-        </PodcastInfoWrapper> */}
+        </PodcastInfoWrapper>
       </Div>
     </PodcastInfoContainer>
   );
