@@ -17,8 +17,9 @@ import { useCallback, useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import usePageStatus from "../hooks/usePageStatus";
-import Loading from "../components/Loading";
 import PopUpMessage from "../components/PopUpMessage";
+import useAlertMessage from "../hooks/useAlertMessage";
+import AlertMessage from "../components/AlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -110,6 +111,7 @@ const TitleHeader = styled.div`
 
   ${MEDIA_QUERY_XL} {
     font-size: 24px;
+    margin-left: 88.5px;
   }
 `;
 
@@ -118,7 +120,7 @@ const EpisodeTitleHeader = styled.div`
   margin-right: 20px;
 
   ${MEDIA_QUERY_XL} {
-    width: 220px;
+    width: 190px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -147,7 +149,7 @@ const ChannelNameHeader = styled(EpisodeTitleHeader)`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 170px;
+    width: 160px;
     margin-left: 0;
   }
 `;
@@ -320,6 +322,7 @@ const Text = styled.div`
   min-height: 58px;
 
   ${MEDIA_QUERY_XL} {
+    left: 88.5px;
     font-size: 20px;
   }
 
@@ -375,7 +378,7 @@ const EpisodeTitle = styled.div`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 220px;
+    width: 190px;
     margin: 0 20px 0 0;
   }
 
@@ -416,7 +419,7 @@ const ChannelName = styled(EpisodeTitle)`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 170px;
+    width: 160px;
     margin-left: 0;
   }
 `;
@@ -606,18 +609,17 @@ const CollapseControl = styled.div`
   }
 `;
 
-function EpisodeInfoDetails({
-  podcastInfo,
-  episodeInfo,
-  setShowPopUp,
-  setPopUpText,
-  setIsLoading,
-  confirmedAddPlaylist,
-}) {
+function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const { userPlaylists, setUserPlaylists } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+  const { isLoading, setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpText, setPopUpText] = useState(null);
+  const [confirmedAddPlaylist, setConfirmedAddPlaylist] = useState(false);
+  const [btnFunction, setBtnFunction] = useState(null);
 
   const onToggle = (e) => {
     e.preventDefault();
@@ -625,19 +627,56 @@ function EpisodeInfoDetails({
   };
 
   const addEpisode = useCallback(async () => {
+    if (isLoading) return;
     setIsLoading(true);
 
     if (!userPlaylists[0]) {
       setIsLoading(false);
       setPopUpText("請先新增播放清單");
+      setBtnFunction("addPlaylist");
       setShowPopUp(true);
       return;
     }
-    await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
 
-    const response = await getEpisodeInfo(episodeInfo.id);
+    let result;
+    try {
+      result = await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(err);
+      setAlert(true);
+      return;
+    }
+
+    if (!result.ok) {
+      setIsLoading(false);
+      if (result.errorMessage === "Duplicate episode in the playlist.") {
+        setAlertText("此單元已在您的播放清單");
+      } else {
+        setAlertText(result.errorMessage);
+      }
+      setAlert(true);
+      return;
+    }
+
+    let response;
+    try {
+      response = await getEpisodeInfo(episodeInfo.id);
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(err);
+      setAlert(true);
+      return;
+    }
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setAlertText(result.errorMessage);
+      setAlert(true);
+      return;
+    }
+
     const newEpisode = response.data;
-
     const newPlaylist = userPlaylists.map((playlist) => {
       if (playlist.id !== userPlaylists[0].id) return playlist;
       let { Episodes, ...rest } = playlist;
@@ -647,15 +686,20 @@ function EpisodeInfoDetails({
 
     setUserPlaylists(newPlaylist);
     setIsLoading(false);
-    setShowPopUp(true);
+    setBtnFunction(null);
     setPopUpText("已新增至您的播放清單");
+    setShowPopUp(true);
   }, [
     setUserPlaylists,
     userPlaylists,
     episodeInfo,
     setShowPopUp,
     setPopUpText,
+    isLoading,
     setIsLoading,
+    setAlert,
+    setBtnFunction,
+    setAlertText,
   ]);
 
   useEffect(() => {
@@ -696,63 +740,73 @@ function EpisodeInfoDetails({
   };
 
   return (
-    <Details open={isOpen} onClick={onToggle}>
-      <Summary open={isOpen}>
-        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
-          {currentEpisode.id === episodeInfo.id ? (
-            currentEpisode.playing ? (
-              <PauseBtnControl>
-                <Images.PodcastPauseBtn />
-              </PauseBtnControl>
+    <>
+      {showPopUp && (
+        <PopUpMessage
+          text={popUpText}
+          button={btnFunction}
+          setShowPopUp={setShowPopUp}
+          setConfirmedAddPlaylist={setConfirmedAddPlaylist}
+        />
+      )}
+      <Details open={isOpen} onClick={onToggle}>
+        <Summary open={isOpen}>
+          <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+            {currentEpisode.id === episodeInfo.id ? (
+              currentEpisode.playing ? (
+                <PauseBtnControl>
+                  <Images.PodcastPauseBtn />
+                </PauseBtnControl>
+              ) : (
+                <PlayBtnControl>
+                  <Images.PodcastPlayBtn />
+                </PlayBtnControl>
+              )
             ) : (
               <PlayBtnControl>
                 <Images.PodcastPlayBtn />
               </PlayBtnControl>
-            )
-          ) : (
-            <PlayBtnControl>
-              <Images.PodcastPlayBtn />
-            </PlayBtnControl>
-          )}
-        </PlayPauseBtnControl>
-        <Text>
-          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
-          <EpisodeDescription
+            )}
+          </PlayPauseBtnControl>
+          <Text>
+            <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+            <EpisodeDescription
+              dangerouslySetInnerHTML={{
+                __html: episodeInfo.description.replace(/<[^>]+>/g, ""),
+              }}
+            ></EpisodeDescription>
+            <ChannelName>{podcastInfo.title}</ChannelName>
+          </Text>
+          <AddToPlayListControl>
+            <Images.AddToPlayListBtn onClick={handleAddIconClick} />
+          </AddToPlayListControl>
+        </Summary>
+        <DetailsBlock>
+          <DetailsHeader>
+            <DetailsEpisodeName>{episodeInfo.title}</DetailsEpisodeName>
+            <DetailsDurationTime>{`${Math.floor(
+              episodeInfo.audio_length_sec / 60
+            )}分鐘`}</DetailsDurationTime>
+          </DetailsHeader>
+          <EpisodeDetails
             dangerouslySetInnerHTML={{
-              __html: episodeInfo.description.replace(/<[^>]+>/g, ""),
+              __html: episodeInfo.description.replace({
+                __html: episodeInfo.description,
+              }),
             }}
-          ></EpisodeDescription>
-          <ChannelName>{podcastInfo.title}</ChannelName>
-        </Text>
-        <AddToPlayListControl>
-          <Images.AddToPlayListBtn onClick={handleAddIconClick} />
-        </AddToPlayListControl>
-      </Summary>
-      <DetailsBlock>
-        <DetailsHeader>
-          <DetailsEpisodeName>{episodeInfo.title}</DetailsEpisodeName>
-          <DetailsDurationTime>{`${Math.floor(
-            episodeInfo.audio_length_sec / 60
-          )}分鐘`}</DetailsDurationTime>
-        </DetailsHeader>
-        <EpisodeDetails
-          dangerouslySetInnerHTML={{
-            __html: episodeInfo.description.replace({
-              __html: episodeInfo.description,
-            }),
-          }}
-        ></EpisodeDetails>
-        <AddToPlayList onClick={handleAddIconClick}>
-          <AddControl>
-            <Images.AddToPlayListBtn />
-          </AddControl>
-          <AddText>加入播放清單</AddText>
-        </AddToPlayList>
-        <CollapseControl onClick={onToggle}>
-          <Images.CollapseBtn />
-        </CollapseControl>
-      </DetailsBlock>
-    </Details>
+          ></EpisodeDetails>
+          <AddToPlayList onClick={handleAddIconClick}>
+            <AddControl>
+              <Images.AddToPlayListBtn />
+            </AddControl>
+            <AddText>加入播放清單</AddText>
+          </AddToPlayList>
+          <CollapseControl onClick={onToggle}>
+            <Images.CollapseBtn />
+          </CollapseControl>
+        </DetailsBlock>
+      </Details>
+    </>
   );
 }
 
@@ -760,9 +814,6 @@ export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
   const { setIsLoading } = usePageStatus();
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [popUpText, setPopUpText] = useState(null);
-  const [confirmedAddPlaylist, setConfirmedAddPlaylist] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -774,44 +825,30 @@ export default function Channel() {
   }, [podcastId, setIsLoading]);
 
   return (
-    <>
-      {showPopUp && (
-        <PopUpMessage
-          text={popUpText}
-          button={"addPlaylist"}
-          setShowPopUp={setShowPopUp}
-          setConfirmedAddPlaylist={setConfirmedAddPlaylist}
-        />
-      )}
-      <Container>
-        <Main>
-          <Div>
-            <ChannelSidebar podcastInfo={podcastInfo} />
-            <PlayList>
-              <TitleHeader>
-                <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-                <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
-                <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-              </TitleHeader>
-              <Body>
-                {podcastInfo
-                  ? podcastInfo.episodes.map((el) => (
-                      <EpisodeInfoDetails
-                        podcastInfo={podcastInfo}
-                        episodeInfo={el}
-                        key={el.id}
-                        setShowPopUp={setShowPopUp}
-                        setPopUpText={setPopUpText}
-                        setIsLoading={setIsLoading}
-                        confirmedAddPlaylist={confirmedAddPlaylist}
-                      />
-                    ))
-                  : ""}
-              </Body>
-            </PlayList>
-          </Div>
-        </Main>
-      </Container>
-    </>
+    <Container>
+      <Main>
+        <Div>
+          <ChannelSidebar podcastInfo={podcastInfo} />
+          <PlayList>
+            <TitleHeader>
+              <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+              <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
+              <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+            </TitleHeader>
+            <Body>
+              {podcastInfo
+                ? podcastInfo.episodes.map((el) => (
+                    <EpisodeInfoDetails
+                      podcastInfo={podcastInfo}
+                      episodeInfo={el}
+                      key={el.id}
+                    />
+                  ))
+                : ""}
+            </Body>
+          </PlayList>
+        </Div>
+      </Main>
+    </Container>
   );
 }

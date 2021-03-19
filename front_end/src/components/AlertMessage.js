@@ -15,39 +15,36 @@ const ErrorContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40vw;
-  height: 35vh;
+  width: 30vw;
+  height: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #333333;
-  border-radius: 30px;
+  background: ${(props) => props.theme.pop_up};
+  border-radius: 20px;
   z-index: 10;
   box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2);
   display: flex;
+  padding: 40px;
 
   ${MEDIA_QUERY_XL} {
-    height: 38vh;
+    width: 35vw;
   }
 
   ${MEDIA_QUERY_LG} {
-    height: 36vh;
+    width: 35vw;
   }
 
   ${MEDIA_QUERY_MD} {
-    height: 30vh;
+    width: 50vw;
   }
 
   ${MEDIA_QUERY_SM} {
-    height: 26vh;
-    padding: 0 5px;
-    border-radius: 15px;
+    width: 80vw;
   }
 
   ${MEDIA_QUERY_XS} {
-    height: 30vh;
-    width: 60vw;
-    border-radius: 15px;
+    width: 80vw;
   }
 `;
 

@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const BtnContainer = styled.button`
   cursor: pointer;
   font-size: 17px;
-  border: 3px solid #d0d0d0;
-  color: #d0d0d0;
+  border: 3px solid ${(props) => props.theme.grey};
+  color: ${(props) => props.theme.grey};
   padding: 6px 10px;
   text-decoration: none;
 
@@ -14,16 +14,16 @@ export const BtnContainer = styled.button`
 
   &:hover {
     border: hidden;
-    color: #ffffff;
-    background: #8fe2ff;
-    border: 3px solid #8fe2ff;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.hover_color};
+    border: 3px solid ${(props) => props.theme.hover_color};
   }
 
   &:active {
     border: hidden;
-    color: #ffffff;
-    background: #0079f2;
-    border: 3px solid #0079f2;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.click_color};
+    border: 3px solid ${(props) => props.theme.click_color};
   }
 `;
 
@@ -36,9 +36,9 @@ export const BtnLogInContainer = styled.div`
   cursor: pointer;
   width: 100px;
   font-size: 17px;
-  border: 3px solid #d0d0d0;
+  border: 3px solid ${(props) => props.theme.grey};
   border-radius: 14px;
-  color: #d0d0d0;
+  color: ${(props) => props.theme.grey};
   padding: 8px 6px;
   text-decoration: none;
 
@@ -48,16 +48,16 @@ export const BtnLogInContainer = styled.div`
 
   &:hover {
     border: hidden;
-    color: #ffffff;
-    background: #8fe2ff;
-    border: 3px solid #8fe2ff;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.hover_color};
+    border: 3px solid ${(props) => props.theme.hover_color};
   }
 
   &:active {
     border: hidden;
-    color: #ffffff;
-    background: #0079f2;
-    border: 3px solid #0079f2;
+    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.click_color};
+    border: 3px solid ${(props) => props.theme.click_color};
   }
 `;
 

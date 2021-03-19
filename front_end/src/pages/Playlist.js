@@ -19,6 +19,9 @@ import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
 import PopUpMessage from "../components/PopUpMessage";
 import usePageStatus from "../hooks/usePageStatus";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { BtnContainer } from "../components/ButtonGroup";
+import AlertMessage from "../components/AlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -330,6 +333,7 @@ const TitleHeader = styled.div`
 
   ${MEDIA_QUERY_XL} {
     font-size: 24px;
+    margin-left: 88.5px;
   }
 `;
 
@@ -338,7 +342,7 @@ const EpisodeTitleHeader = styled.div`
   margin-right: 20px;
 
   ${MEDIA_QUERY_XL} {
-    width: 220px;
+    width: 190px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -365,7 +369,7 @@ const ChannelNameHeader = styled(EpisodeTitleHeader)`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 170px;
+    width: 160px;
     margin-left: 0;
   }
 `;
@@ -560,6 +564,7 @@ const Text = styled.div`
   min-height: 58px;
 
   ${MEDIA_QUERY_XL} {
+    left: 88.5px;
     font-size: 20px;
   }
 
@@ -609,7 +614,7 @@ const EpisodeTitle = styled.div`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 220px;
+    width: 190px;
     margin: 0 20px 0 0;
   }
 
@@ -650,7 +655,7 @@ const ChannelName = styled(EpisodeTitle)`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 170px;
+    width: 160px;
     margin-left: 0;
   }
 `;
@@ -709,15 +714,22 @@ const RemindText = styled.div`
   }
 `;
 
-const AddPlaylist = styled.button`
+const AddPlaylist = styled(BtnContainer)`
+  border-radius: 10px;
+  border: 1.5px solid ${(props) => props.theme.white};
   color: ${(props) => props.theme.white};
-  border-radius: 3px;
-  border: 1px solid ${(props) => props.theme.white};
   background-color: unset;
   margin-top: 15px;
   padding: 10px;
   outline: none;
-  cursor: pointer;
+
+  &:hover {
+    border: 1.5px solid ${(props) => props.theme.hover_color};
+  }
+
+  &:active {
+    border: 1.5px solid ${(props) => props.theme.click_color};
+  }
 `;
 
 const formInputs = [
@@ -746,38 +758,81 @@ const formInputs = [
   },
 ];
 
-function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
-  const { setUserPlaylists } = useUser();
+function EpisodeInfoDetails({
+  episodeInfo,
+  setShowPopUp,
+  setPopUpText,
+  setButtonText,
+  confirmed,
+  setConfirmed,
+}) {
+  const { userPlaylists, setUserPlaylists } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
-  const { setIsLoading } = usePageStatus();
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [popUpText, setPopUpText] = useState(null);
-  const [confirmed, setConfirmed] = useState(false);
+  const { isLoading, setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
+  const [deleteEpisodeId, setDeleteEpisodeId] = useState(null);
 
-  const deleteEpisode = useCallback(async () => {
-    setIsLoading(true);
-    await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
-    const newPlaylist = userPlaylists.map((playlist) => {
-      let { Episodes, ...rest } = playlist;
-      Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
-      return { Episodes, ...rest };
-    });
+  const deleteEpisode = useCallback(
+    async (episodeId) => {
+      if (isLoading) return;
+      setIsLoading(true);
 
-    setUserPlaylists(newPlaylist);
-    setIsLoading(false);
-  }, [userPlaylists, episodeInfo, setUserPlaylists, setIsLoading]);
+      let response;
+      try {
+        response = await deleteEpisodeFromPlaylist(
+          userPlaylists[0].id,
+          episodeId
+        );
+      } catch (err) {
+        setIsLoading(false);
+        setAlertText(err);
+        setAlert(true);
+        return;
+      }
+
+      if (!response.ok) {
+        setIsLoading(false);
+        setAlertText(response.errorMessage);
+        setAlert(true);
+        return;
+      }
+
+      const newPlaylist = userPlaylists.map((playlist) => {
+        let { Episodes, ...rest } = playlist;
+        Episodes = Episodes.filter((ep) => ep.id !== episodeId);
+        return { Episodes, ...rest };
+      });
+
+      setUserPlaylists(newPlaylist);
+      setConfirmed(false);
+      setIsLoading(false);
+    },
+    [
+      userPlaylists,
+      setUserPlaylists,
+      setIsLoading,
+      isLoading,
+      setAlert,
+      setAlertText,
+      setConfirmed,
+    ]
+  );
 
   const handleDeleteIconClick = async (e) => {
     e.preventDefault();
+    setDeleteEpisodeId(episodeInfo.id);
     setPopUpText("確定將此單元從播放清單中刪除嗎？");
+    setButtonText("deleteEpisode");
     setShowPopUp(true);
   };
 
   useEffect(() => {
-    if (confirmed) {
-      deleteEpisode();
-    }
-  }, [confirmed, deleteEpisode]);
+    if (!confirmed || !deleteEpisodeId) return;
+
+    deleteEpisode(deleteEpisodeId);
+    setDeleteEpisodeId(null);
+    setConfirmed(false);
+  }, [confirmed, deleteEpisode, setConfirmed, deleteEpisodeId]);
 
   const handlePlayPauseBtn = () => {
     handlePlaylistPlayPauseBtn(
@@ -789,53 +844,43 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
   };
 
   return (
-    <>
-      {showPopUp && (
-        <PopUpMessage
-          text={popUpText}
-          button={'deleteEpisode'}
-          setShowPopUp={setShowPopUp}
-          setConfirmed={setConfirmed}
-        />
-      )}
-      <Details>
-        <Summary>
-          <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
-            {currentEpisode.id === episodeInfo.id ? (
-              currentEpisode.playing ? (
-                <PauseBtnControl>
-                  <Images.PodcastPauseBtn />
-                </PauseBtnControl>
-              ) : (
-                <PlayBtnControl>
-                  <Images.PodcastPlayBtn />
-                </PlayBtnControl>
-              )
+    <Details>
+      <Summary>
+        <PlayPauseBtnControl onClick={handlePlayPauseBtn}>
+          {currentEpisode.id === episodeInfo.id ? (
+            currentEpisode.playing ? (
+              <PauseBtnControl>
+                <Images.PodcastPauseBtn />
+              </PauseBtnControl>
             ) : (
               <PlayBtnControl>
                 <Images.PodcastPlayBtn />
               </PlayBtnControl>
-            )}
-          </PlayPauseBtnControl>
-          <Text>
-            <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
-            <EpisodeDescription
-              dangerouslySetInnerHTML={
-                episodeInfo.description
-                  ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
-                  : { __html: "沒東西" }
-              }
-            ></EpisodeDescription>
-            <ChannelName>
-              {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
-            </ChannelName>
-          </Text>
-          <DeleteBtnControl onClick={handleDeleteIconClick}>
-            <Images.DeleteBtn />
-          </DeleteBtnControl>
-        </Summary>
-      </Details>
-    </>
+            )
+          ) : (
+            <PlayBtnControl>
+              <Images.PodcastPlayBtn />
+            </PlayBtnControl>
+          )}
+        </PlayPauseBtnControl>
+        <Text>
+          <EpisodeTitle>{episodeInfo.title}</EpisodeTitle>
+          <EpisodeDescription
+            dangerouslySetInnerHTML={
+              episodeInfo.description
+                ? { __html: episodeInfo.description.replace(/<[^>]+>/g, "") }
+                : { __html: "沒東西" }
+            }
+          ></EpisodeDescription>
+          <ChannelName>
+            {episodeInfo.podcast ? episodeInfo.podcast.title : "社畜日記"}
+          </ChannelName>
+        </Text>
+        <DeleteBtnControl onClick={handleDeleteIconClick}>
+          <Images.DeleteBtn />
+        </DeleteBtnControl>
+      </Summary>
+    </Details>
   );
 }
 
@@ -843,10 +888,19 @@ export default function Playlist() {
   const { userPlaylists, userInfo } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpText, setPopUpText] = useState(null);
+  const [buttonText, setButtonText] = useState(null);
+  const [confirmed, setConfirmed] = useState(false);
 
   const handlePlayWholePlaylist = () => {
     // 如果播放清單是空的
-    if (userPlaylists.length === 0) return;
+    if (userPlaylists.length === 0) {
+      setButtonText(null);
+      setPopUpText("請先新增播放清單");
+      setShowPopUp(true);
+      return;
+    }
 
     const episode = userPlaylists[0].Episodes[0];
     setCurrentEpisode({
@@ -862,11 +916,25 @@ export default function Playlist() {
   };
 
   const handleRenameBtnClick = () => {
+    if (userPlaylists.length === 0) {
+      setButtonText(null);
+      setPopUpText("請先新增播放清單");
+      setShowPopUp(true);
+      return;
+    }
     setShowEditForm(true);
   };
 
   return (
     <Container>
+      {showPopUp && (
+        <PopUpMessage
+          text={popUpText}
+          button={buttonText}
+          setShowPopUp={setShowPopUp}
+          setConfirmed={setConfirmed}
+        />
+      )}
       <Main>
         <Div>
           <Sidebar />
@@ -918,7 +986,11 @@ export default function Playlist() {
                     <EpisodeInfoDetails
                       key={episodeInfo.id}
                       episodeInfo={episodeInfo}
-                      userPlaylists={userPlaylists}
+                      setShowPopUp={setShowPopUp}
+                      setPopUpText={setPopUpText}
+                      setButtonText={setButtonText}
+                      confirmed={confirmed}
+                      setConfirmed={setConfirmed}
                     />
                   ))
                 ) : userPlaylists && userPlaylists[0].Episodes.length === 0 ? (

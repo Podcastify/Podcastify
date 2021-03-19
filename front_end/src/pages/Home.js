@@ -11,8 +11,6 @@ import {
   getHotPodcastsInTaiwan,
 } from "../WebAPI/listenAPI";
 import useUser from "../hooks/useUser";
-import AlertMessage from "../components/AlertMessage";
-import useAlertMessage from "../hooks/useAlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -35,7 +33,6 @@ export default function Home() {
   const { isLoading, setIsLoading } = usePageStatus();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
-  const { alert } = useAlertMessage();
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,7 +50,6 @@ export default function Home() {
   return (
     <>
       {isLoading && <Loading />}
-      {alert && <AlertMessage text={null} />}
       <Container>
         <MainWrapper>
           <Div>

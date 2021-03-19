@@ -30,6 +30,7 @@ function App() {
   const [currentEpisode, setCurrentEpisode] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [alertText, setAlertText] = useState(null);
 
   useEffect(() => {
     function getUser() {
@@ -50,6 +51,8 @@ function App() {
   const AlertMessageContextValue = {
     alert,
     setAlert,
+    alertText,
+    setAlertText,
   };
 
   const pageStatusContextValue = {

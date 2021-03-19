@@ -10,7 +10,7 @@ import {
 } from "../constants/breakpoints";
 import { BtnContainer } from "./ButtonGroup";
 
-const Background = styled.div`
+export const Background = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -23,7 +23,7 @@ const Background = styled.div`
   z-index: 10;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -33,8 +33,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #333333;
-  border-radius: 30px;
+  background: ${(props) => props.theme.pop_up};
+  border-radius: 20px;
   z-index: 10;
   box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -53,17 +53,15 @@ const Container = styled.div`
   }
 
   ${MEDIA_QUERY_SM} {
-    height: auto;
     width: 80vw;
   }
 
   ${MEDIA_QUERY_XS} {
-    height: auto;
     width: 80vw;
   }
 `;
 
-const CloseBtnControl = styled.div`
+export const CloseBtnControl = styled.div`
   cursor: pointer;
   position: absolute;
   top: 18px;
@@ -194,7 +192,7 @@ export default function PopUpMessage({
   setConfirmed,
   setConfirmedAddPlaylist,
 }) {
-  const handleClosedButton = () => {
+  const handleClosedBtn = () => {
     setShowPopUp(false);
   };
 
@@ -221,7 +219,7 @@ export default function PopUpMessage({
   return (
     <Background>
       <Container>
-        <CloseBtnControl onClick={handleClosedButton}>
+        <CloseBtnControl onClick={handleClosedBtn}>
           <Images.Error />
         </CloseBtnControl>
         <TextWrapper>
