@@ -22,7 +22,7 @@ const ErrorContainer = styled.div`
   align-items: center;
   background: ${(props) => props.theme.pop_up};
   border-radius: 20px;
-  z-index: 10;
+  z-index: 15;
   box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   padding: 40px;

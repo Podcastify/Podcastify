@@ -16,6 +16,9 @@ import {
   Container,
   CloseBtnControl,
 } from "../components/PopUpMessage";
+import usePageStatus from "../hooks/usePageStatus";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
 
 const CoverPage = styled(Background)``;
 const FormContainer = styled(Container)`
@@ -85,17 +88,21 @@ const Form = styled(UserForm)`
   background: ${(props) => props.theme.pop_up};
 `;
 
-export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
+export default function CoverPageForm({ title, formInputs, setShowForm }) {
   const { inputs, handlers } = useInputs(formInputs);
   const { setUserPlaylists, userPlaylists } = useUser();
+  const { isLoading, setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
 
   const handleCloseBtnClick = (e) => {
-    setShowEditForm(false);
+    setShowForm(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleRenamePlaylist = async (e) => {
     e.preventDefault();
-    console.log(inputs);
+    if (isLoading) return;
+    setIsLoading(true);
+
     const filters = ["name"];
     const editInformation = {};
     inputs.forEach((input) => {
@@ -107,22 +114,91 @@ export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
     });
     let result;
     const { name } = editInformation;
+
     try {
       result = await renamePlaylist(userPlaylists[0].id, name);
     } catch (err) {
-      console.log(err);
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
     }
-    if (result.ok) {
-      const [playlist, ...rest] = userPlaylists;
-      setUserPlaylists([
-        {
-          ...playlist,
-          name,
-          ...rest,
-        },
-      ]);
-      setShowEditForm(false);
+
+    if (!result.ok) {
+      setIsLoading(false);
+      setAlertText(result.errorMessage);
+      setAlert(true);
+      return;
     }
+
+    const [playlist, ...rest] = userPlaylists;
+    setUserPlaylists([
+      {
+        ...playlist,
+        name,
+        ...rest,
+      },
+    ]);
+    setIsLoading(false);
+    setShowForm(false);
+    setAlert(false);
+  };
+
+  const handleAddPlaylist = async (e) => {
+    e.preventDefault();
+
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const filters = ["name"];
+    const playlistInformation = {};
+    inputs.forEach((input) => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          playlistInformation[filter] = input.attributes.value;
+        }
+      }
+    });
+
+    let response;
+    try {
+      response = await addPlaylist(playlistInformation.name);
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
+    }
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setAlertText(response.errorMessage);
+      setAlert(true);
+      return;
+    }
+
+    let myPlaylists;
+    try {
+      myPlaylists = await getAllMyPlaylists();
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
+    }
+
+    if (!myPlaylists.ok) {
+      setIsLoading(false);
+      setAlertText(myPlaylists.errorMessage);
+      setAlert(true);
+      return;
+    }
+
+    myPlaylists = myPlaylists.data.map((playlist) => ({ ...playlist }));
+    setUserPlaylists(myPlaylists);
+    setShowForm(false);
+    setAlert(false);
+    setIsLoading(false);
   };
 
   return (
@@ -134,7 +210,20 @@ export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
             <Icon.Error />
           </CloseBtn>
         </Headline>
-        <Form inputs={inputs} handlers={handlers} onSubmit={handleSubmit} />
+        {title === "編輯播放清單名稱" && (
+          <Form
+            inputs={inputs}
+            handlers={handlers}
+            onSubmit={handleRenamePlaylist}
+          />
+        )}
+        {title === "新增播放清單" && (
+          <Form
+            inputs={inputs}
+            handlers={handlers}
+            onSubmit={handleAddPlaylist}
+          />
+        )}
       </FormContainer>
     </CoverPage>
   );

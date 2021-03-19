@@ -153,7 +153,7 @@ export default function Register() {
     try {
       result = await register(username, password);
     } catch (err) {
-      setAlertText(err);
+      setAlertText(String(err));
       setAlert(true);
       return;
     }

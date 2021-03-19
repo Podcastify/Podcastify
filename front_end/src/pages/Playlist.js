@@ -21,7 +21,6 @@ import PopUpMessage from "../components/PopUpMessage";
 import usePageStatus from "../hooks/usePageStatus";
 import useAlertMessage from "../hooks/useAlertMessage";
 import { BtnContainer } from "../components/ButtonGroup";
-import AlertMessage from "../components/AlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -730,6 +729,11 @@ const AddPlaylist = styled(BtnContainer)`
   &:active {
     border: 1.5px solid ${(props) => props.theme.click_color};
   }
+
+  ${MEDIA_QUERY_XXL} {
+    margin-top: 30px;
+    padding: 20px;
+  }
 `;
 
 const formInputs = [
@@ -785,7 +789,7 @@ function EpisodeInfoDetails({
         );
       } catch (err) {
         setIsLoading(false);
-        setAlertText(err);
+        setAlertText(String(err));
         setAlert(true);
         return;
       }
@@ -887,11 +891,12 @@ function EpisodeInfoDetails({
 export default function Playlist() {
   const { userPlaylists, userInfo } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
-  const [showEditForm, setShowEditForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpText, setPopUpText] = useState(null);
   const [btnUsage, setBtnUsage] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [formTitle, setFormTitle] = useState(null);
 
   const handlePlayWholePlaylist = () => {
     // 如果播放清單是空的
@@ -922,7 +927,13 @@ export default function Playlist() {
       setShowPopUp(true);
       return;
     }
-    setShowEditForm(true);
+    setFormTitle("編輯播放清單名稱");
+    setShowForm(true);
+  };
+
+  const handleAddPlaylistBtn = () => {
+    setFormTitle("新增播放清單");
+    setShowForm(true);
   };
 
   return (
@@ -979,7 +990,9 @@ export default function Playlist() {
                 {userPlaylists && userPlaylists.length === 0 ? (
                   <RemindBlock>
                     <RemindText>尚無播放清單，請先新增播放清單</RemindText>
-                    <AddPlaylist>新增播放清單</AddPlaylist>
+                    <AddPlaylist onClick={handleAddPlaylistBtn}>
+                      新增播放清單
+                    </AddPlaylist>
                   </RemindBlock>
                 ) : userPlaylists && userPlaylists[0].Episodes.length > 0 ? (
                   userPlaylists[0].Episodes.map((episodeInfo) => (
@@ -1008,11 +1021,11 @@ export default function Playlist() {
           </PlaylistWrapper>
         </Div>
       </Main>
-      {showEditForm && (
+      {showForm && (
         <PopUpForm
-          title="編輯播放清單名稱"
+          title={formTitle}
           formInputs={formInputs}
-          setShowEditForm={setShowEditForm}
+          setShowForm={setShowForm}
         />
       )}
     </Container>

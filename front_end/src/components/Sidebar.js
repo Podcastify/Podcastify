@@ -16,6 +16,7 @@ import { useState } from "react";
 import UserForm from "../components/UserForm";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import { handlePlaylistPlayPauseBtn } from "../utils";
+import PopUpForm from "../components/PopUpForm";
 
 const SidebarWrapper = styled(SidebarContainer)`
   position: relative;
@@ -322,43 +323,6 @@ const formInputs = [
   },
 ];
 
-function CoverPageForm({ showForm, setShowForm }) {
-  const { setUserPlaylists } = useUser();
-  const { inputs, handlers } = useInputs(formInputs);
-  const handleAddPlaylist = async (e) => {
-    e.preventDefault();
-    const filters = ["name"];
-    const playlistInformation = {};
-    inputs.forEach((input) => {
-      for (const filter of filters) {
-        if (filter === input.attributes.name) {
-          playlistInformation[filter] = input.attributes.value;
-        }
-      }
-    });
-    await addPlaylist(playlistInformation.name);
-    let myPlaylists = await getAllMyPlaylists();
-    myPlaylists = myPlaylists.data.map((playlist) => ({ ...playlist }));
-    setUserPlaylists(myPlaylists);
-    setShowForm(false);
-  };
-
-  return (
-    <CoverPage>
-      <FormContainer>
-        <CloseBtnControl onClick={() => setShowForm(false)}>
-          <Icon.Error />
-        </CloseBtnControl>
-        <AddPlaylistForm
-          inputs={inputs}
-          handlers={handlers}
-          onSubmit={handleAddPlaylist}
-        />
-      </FormContainer>
-    </CoverPage>
-  );
-}
-
 function SidebarListPlayPauseBtn({ episodeInfo }) {
   const { userPlaylists } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
@@ -397,6 +361,10 @@ export default function Sidebar() {
   const [showForm, setShowForm] = useState(false);
   const { userPlaylists, userInfo } = useUser();
 
+  const AddPlaylistForm = () => {
+    setShowForm(true);
+  };
+
   return (
     <SidebarWrapper>
       {userInfo ? (
@@ -411,13 +379,7 @@ export default function Sidebar() {
               e.preventDefault();
             }}
           >
-            <SidebarTitle
-              onClick={() => {
-                setShowForm(true);
-              }}
-            >
-              新增播放清單
-            </SidebarTitle>
+            <SidebarTitle onClick={AddPlaylistForm}>新增播放清單</SidebarTitle>
           </Link>
         )
       ) : (
@@ -457,7 +419,11 @@ export default function Sidebar() {
         )}
       </SideListContainer>
       {showForm && (
-        <CoverPageForm showForm={showForm} setShowForm={setShowForm} />
+        <PopUpForm
+          title="新增播放清單"
+          formInputs={formInputs}
+          setShowForm={setShowForm}
+        />
       )}
     </SidebarWrapper>
   );

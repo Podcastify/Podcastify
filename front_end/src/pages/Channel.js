@@ -643,7 +643,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
       result = await addEpisodeToPlaylist(userPlaylists[0].id, episodeInfo.id);
     } catch (err) {
       setIsLoading(false);
-      setAlertText(err);
+      setAlertText(String(err));
       setAlert(true);
       return;
     }
@@ -664,7 +664,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
       response = await getEpisodeInfo(episodeInfo.id);
     } catch (err) {
       setIsLoading(false);
-      setAlertText(err);
+      setAlertText(String(err));
       setAlert(true);
       return;
     }

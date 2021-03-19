@@ -186,7 +186,7 @@ export default function Login() {
     try {
       result = await login(username, password);
     } catch (err) {
-      setAlertText(err);
+      setAlertText(String(err));
       setAlert(true);
       return;
     }
