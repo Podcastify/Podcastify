@@ -4,7 +4,6 @@ import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
-import Loading from "../components/Loading";
 import usePageStatus from "../hooks/usePageStatus";
 import {
   getMightLovePodcasts,
@@ -30,7 +29,7 @@ const MainWrapper = styled(Main)`
 
 export default function Home() {
   const { userInfo } = useUser;
-  const { isLoading, setIsLoading } = usePageStatus();
+  const { setIsLoading } = usePageStatus();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
 
@@ -48,19 +47,16 @@ export default function Home() {
   }, [setIsLoading]);
 
   return (
-    <>
-      {isLoading && <Loading />}
-      <Container>
-        <MainWrapper>
-          <Div>
-            <Sidebar />
-            <InfoCard
-              currentHotPodcasts={currentHotPodcasts}
-              hotPodactsInTaiwan={hotPodcastsInTaiwan}
-            />
-          </Div>
-        </MainWrapper>
-      </Container>
-    </>
+    <Container>
+      <MainWrapper>
+        <Div>
+          <Sidebar />
+          <InfoCard
+            currentHotPodcasts={currentHotPodcasts}
+            hotPodactsInTaiwan={hotPodcastsInTaiwan}
+          />
+        </Div>
+      </MainWrapper>
+    </Container>
   );
 }

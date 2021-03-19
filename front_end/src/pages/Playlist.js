@@ -14,7 +14,7 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { addPlaylist, deleteEpisodeFromPlaylist } from "../WebAPI/me";
+import { deleteEpisodeFromPlaylist } from "../WebAPI/me";
 import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
 import PopUpMessage from "../components/PopUpMessage";

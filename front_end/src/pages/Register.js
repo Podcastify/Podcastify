@@ -1,5 +1,4 @@
 //TODO Register page layout
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
@@ -8,7 +7,6 @@ import { login, register } from "../WebAPI/users";
 import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
-import { getAuthToken } from "../utils";
 import { setInitialUserContext } from "../utils";
 import useAlertMessage from "../hooks/useAlertMessage";
 import usePageStatus from "../hooks/usePageStatus";

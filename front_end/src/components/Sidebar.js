@@ -10,10 +10,7 @@ import {
 import { SidebarContainer } from "./ChannelSidebar";
 import { Link } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import useInputs from "../hooks/useInputs";
-import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
 import { useState } from "react";
-import UserForm from "../components/UserForm";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
@@ -198,103 +195,6 @@ const SidebarListContent = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`;
-
-const CoverPage = styled.div`
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  z-index: 99;
-  background: rgba(0, 0, 0, 0.7);
-`;
-
-const AddPlaylistForm = styled(UserForm)`
-  height: auto;
-  margin: 0 auto;
-  background: #333333;
-`;
-
-const FormContainer = styled(SideListContainer)`
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 20px 20px 0 rgba(33, 25, 24, 0.2);
-  background-color: #333333;
-`;
-
-const CloseBtnControl = styled.div`
-  svg {
-    width: 40px;
-    height: 40px;
-  }
-  margin-right: 20px;
-  cursor: pointer;
-
-  &:hover {
-    g {
-      opacity: 1;
-    }
-  }
-
-  ${MEDIA_QUERY_XL} {
-    svg {
-      width: 40px;
-      height: 40px;
-    }
-  }
-
-  ${MEDIA_QUERY_LG} {
-    svg {
-      width: 30px;
-      height: 30px;
-    }
-  }
-
-  ${MEDIA_QUERY_MD} {
-    svg {
-      width: 40px;
-      height: 40px;
-    }
-  }
-
-  ${MEDIA_QUERY_SM} {
-    svg {
-      width: 45px;
-      height: 45px;
-    }
-    margin-right: 16px;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    svg {
-      width: 45px;
-      height: 45px;
-    }
-    margin-right: 16px;
-  }
-
-  &:hover {
-    circle {
-      opacity: 1;
-    }
-  }
-
-  ${MEDIA_QUERY_SM} {
-    margin-right: 0;
-  }
-
-  ${MEDIA_QUERY_XS} {
-    margin-right: 0;
-  }
 `;
 
 const formInputs = [

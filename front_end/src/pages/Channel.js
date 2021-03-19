@@ -19,7 +19,6 @@ import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import usePageStatus from "../hooks/usePageStatus";
 import PopUpMessage from "../components/PopUpMessage";
 import useAlertMessage from "../hooks/useAlertMessage";
-import AlertMessage from "../components/AlertMessage";
 
 const Container = styled.div`
   width: 100%;

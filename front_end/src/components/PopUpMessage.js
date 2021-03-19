@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Images from "./Images";
 import styled from "styled-components";
 import {
