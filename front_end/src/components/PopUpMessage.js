@@ -8,8 +8,9 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
+import { BtnContainer } from "./ButtonGroup";
 
-const Background = styled.div`
+export const Background = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -22,46 +23,45 @@ const Background = styled.div`
   z-index: 10;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40vw;
-  height: 35vh;
+  width: 30vw;
+  height: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #333333;
-  border-radius: 30px;
+  background: ${(props) => props.theme.pop_up};
+  border-radius: 20px;
   z-index: 10;
   box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2);
   display: flex;
+  padding: 40px;
 
   ${MEDIA_QUERY_XL} {
-    height: 38vh;
+    width: 35vw;
   }
 
   ${MEDIA_QUERY_LG} {
-    height: 36vh;
+    width: 35vw;
   }
 
   ${MEDIA_QUERY_MD} {
-    height: 30vh;
+    width: 50vw;
   }
 
   ${MEDIA_QUERY_SM} {
-    height: 26vh;
-    padding: 0 5px;
+    width: 80vw;
   }
 
   ${MEDIA_QUERY_XS} {
-    height: 30vh;
-    width: 60vw;
+    width: 80vw;
   }
 `;
 
-const CloseBtnControl = styled.div`
+export const CloseBtnControl = styled.div`
   cursor: pointer;
   position: absolute;
   top: 18px;
@@ -114,55 +114,130 @@ const TextWrapper = styled.div`
   align-items: center;
   justify-content: center;
   color: ${(props) => props.theme.white};
-  font-size: 30px;
-  line-height: 2;
-  letter-spacing: 2px;
+  font-size: 25px;
+  line-height: 1.5;
+  letter-spacing: 1.5px;
+  width: 100%;
+  margin-top: 30px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 26px;
-    margin-top: 10px;
+    font-size: 20px;
+    margin-top: 20px;
   }
 
   ${MEDIA_QUERY_LG} {
-    font-size: 22px;
-    margin-top: 10px;
+    font-size: 17px;
+    margin-top: 20px;
   }
 
   ${MEDIA_QUERY_MD} {
-    font-size: 18px;
-    margin-top: 10px;
+    font-size: 17px;
+    margin-top: 20px;
   }
 
   ${MEDIA_QUERY_SM} {
-    font-size: 18px;
-    margin-top: 15px;
+    font-size: 17px;
+    margin-top: 10px;
   }
 
   ${MEDIA_QUERY_XS} {
-    font-size: 18px;
-    margin: 15px 5px 0 5px;
+    font-size: 15px;
+    margin-top: 10px;
   }
 `;
 
-export default function PopUptMessage({ text }) {
-  const [showAlert, setShowAlert] = useState(true);
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 40px;
+`;
 
-  const handleClosedButton = () => {
-    setShowAlert(false);
+const ConfirmBtn = styled(BtnContainer)`
+  background-color: unset;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 25px;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 20px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 15px;
+  }
+`;
+
+const CancelBtn = styled(ConfirmBtn)`
+  margin-top: 15px;
+`;
+
+export default function PopUpMessage({
+  text,
+  button,
+  setShowPopUp,
+  setConfirmed,
+  setConfirmedAddPlaylist,
+}) {
+  const handleClosedBtn = () => {
+    setShowPopUp(false);
+  };
+
+  const handleConfirmDeleteBtn = () => {
+    setConfirmed(true);
+    setShowPopUp(false);
+  };
+
+  const handleCancelDeleteBtn = () => {
+    setConfirmed(false);
+    setShowPopUp(false);
+  };
+
+  const handleConfirmAddBtn = () => {
+    setConfirmedAddPlaylist(true);
+    setShowPopUp(false);
+  };
+
+  const handleCancelAddBtn = () => {
+    setConfirmedAddPlaylist(false);
+    setShowPopUp(false);
   };
 
   return (
-    showAlert && (
-      <Background>
-        <Container>
-          <CloseBtnControl onClick={handleClosedButton}>
-            <Images.Error />
-          </CloseBtnControl>
-          <TextWrapper>
-            <div>{text}</div>
-          </TextWrapper>
-        </Container>
-      </Background>
-    )
+    <Background>
+      <Container>
+        <CloseBtnControl onClick={handleClosedBtn}>
+          <Images.Error />
+        </CloseBtnControl>
+        <TextWrapper>
+          <div>{text}</div>
+        </TextWrapper>
+        {button === "deleteEpisode" && (
+          <Buttons>
+            <ConfirmBtn onClick={handleConfirmDeleteBtn}>確定</ConfirmBtn>
+            <CancelBtn onClick={handleCancelDeleteBtn}>取消</CancelBtn>
+          </Buttons>
+        )}
+        {button === "addPlaylist" && (
+          <Buttons>
+            <ConfirmBtn onClick={handleConfirmAddBtn}>確定</ConfirmBtn>
+            <CancelBtn onClick={handleCancelAddBtn}>取消</CancelBtn>
+          </Buttons>
+        )}
+      </Container>
+    </Background>
   );
 }

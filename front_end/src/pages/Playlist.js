@@ -3,7 +3,7 @@ import { Main, Div } from "../components/Main";
 import Images from "../components/Images";
 import PlaylistImage from "../images/My_Playlist_2x.png";
 import styled from "styled-components";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import useUser from "../hooks/useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import {
@@ -14,9 +14,14 @@ import {
   MEDIA_QUERY_XL,
   MEDIA_QUERY_XXL,
 } from "../constants/breakpoints";
-import { deleteEpisodeFromPlaylist } from "../WebAPI/me";
+import { addPlaylist, deleteEpisodeFromPlaylist } from "../WebAPI/me";
 import { handlePlaylistPlayPauseBtn } from "../utils";
 import PopUpForm from "../components/PopUpForm";
+import PopUpMessage from "../components/PopUpMessage";
+import usePageStatus from "../hooks/usePageStatus";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { BtnContainer } from "../components/ButtonGroup";
+import AlertMessage from "../components/AlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -156,6 +161,7 @@ const PlaylistName = styled.div`
 `;
 const Subtitle = styled.div`
   font-size: 26px;
+  line-height: 20px;
   word-break: break-word;
 
   ${MEDIA_QUERY_XL} {
@@ -327,6 +333,7 @@ const TitleHeader = styled.div`
 
   ${MEDIA_QUERY_XL} {
     font-size: 24px;
+    margin-left: 88.5px;
   }
 `;
 
@@ -335,7 +342,7 @@ const EpisodeTitleHeader = styled.div`
   margin-right: 20px;
 
   ${MEDIA_QUERY_XL} {
-    width: 220px;
+    width: 190px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -362,7 +369,7 @@ const ChannelNameHeader = styled(EpisodeTitleHeader)`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 170px;
+    width: 160px;
     margin-left: 0;
   }
 `;
@@ -557,6 +564,7 @@ const Text = styled.div`
   min-height: 58px;
 
   ${MEDIA_QUERY_XL} {
+    left: 88.5px;
     font-size: 20px;
   }
 
@@ -606,7 +614,7 @@ const EpisodeTitle = styled.div`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 220px;
+    width: 190px;
     margin: 0 20px 0 0;
   }
 
@@ -647,7 +655,7 @@ const ChannelName = styled(EpisodeTitle)`
   }
 
   ${MEDIA_QUERY_XL} {
-    width: 170px;
+    width: 160px;
     margin-left: 0;
   }
 `;
@@ -660,6 +668,67 @@ const DeleteBtnControl = styled.div`
     display: none;
     width: 25px;
     height: 25px;
+  }
+`;
+
+const RemindBlock = styled.div`
+  color: ${(props) => props.theme.white};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  ${MEDIA_QUERY_SM} {
+    margin-top: 17px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    margin-top: 15px;
+  }
+`;
+
+const RemindText = styled.div`
+  font-size: 25px;
+  letter-spacing: 1.3px;
+  line-height: 25px;
+
+  ${MEDIA_QUERY_XL} {
+    font-size: 20px;
+  }
+
+  ${MEDIA_QUERY_LG} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_MD} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_SM} {
+    font-size: 17px;
+  }
+
+  ${MEDIA_QUERY_XS} {
+    font-size: 15px;
+  }
+`;
+
+const AddPlaylist = styled(BtnContainer)`
+  border-radius: 10px;
+  border: 1.5px solid ${(props) => props.theme.white};
+  color: ${(props) => props.theme.white};
+  background-color: unset;
+  margin-top: 15px;
+  padding: 10px;
+  outline: none;
+
+  &:hover {
+    border: 1.5px solid ${(props) => props.theme.hover_color};
+  }
+
+  &:active {
+    border: 1.5px solid ${(props) => props.theme.click_color};
   }
 `;
 
@@ -689,25 +758,81 @@ const formInputs = [
   },
 ];
 
-function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
-  const { setUserPlaylists } = useUser();
+function EpisodeInfoDetails({
+  episodeInfo,
+  setShowPopUp,
+  setPopUpText,
+  setBtnUsage,
+  confirmed,
+  setConfirmed,
+}) {
+  const { userPlaylists, setUserPlaylists } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+  const { isLoading, setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
+  const [deleteEpisodeId, setDeleteEpisodeId] = useState(null);
 
-  const deleteEpisode = useCallback(async () => {
-    await deleteEpisodeFromPlaylist(userPlaylists[0].id, episodeInfo.id);
-    const newPlaylist = userPlaylists.map((playlist) => {
-      let { Episodes, ...rest } = playlist;
-      Episodes = Episodes.filter((ep) => ep.id !== episodeInfo.id);
-      return { Episodes, ...rest };
-    });
+  const deleteEpisode = useCallback(
+    async (episodeId) => {
+      if (isLoading) return;
+      setIsLoading(true);
 
-    setUserPlaylists(newPlaylist);
-  }, [userPlaylists, episodeInfo, setUserPlaylists]);
+      let response;
+      try {
+        response = await deleteEpisodeFromPlaylist(
+          userPlaylists[0].id,
+          episodeId
+        );
+      } catch (err) {
+        setIsLoading(false);
+        setAlertText(err);
+        setAlert(true);
+        return;
+      }
+
+      if (!response.ok) {
+        setIsLoading(false);
+        setAlertText(response.errorMessage);
+        setAlert(true);
+        return;
+      }
+
+      const newPlaylist = userPlaylists.map((playlist) => {
+        let { Episodes, ...rest } = playlist;
+        Episodes = Episodes.filter((ep) => ep.id !== episodeId);
+        return { Episodes, ...rest };
+      });
+
+      setUserPlaylists(newPlaylist);
+      setConfirmed(false);
+      setIsLoading(false);
+    },
+    [
+      userPlaylists,
+      setUserPlaylists,
+      setIsLoading,
+      isLoading,
+      setAlert,
+      setAlertText,
+      setConfirmed,
+    ]
+  );
 
   const handleDeleteIconClick = async (e) => {
     e.preventDefault();
-    deleteEpisode();
+    setDeleteEpisodeId(episodeInfo.id);
+    setPopUpText("確定將此單元從播放清單中刪除嗎？");
+    setBtnUsage("deleteEpisode");
+    setShowPopUp(true);
   };
+
+  useEffect(() => {
+    if (!confirmed || !deleteEpisodeId) return;
+
+    deleteEpisode(deleteEpisodeId);
+    setDeleteEpisodeId(null);
+    setConfirmed(false);
+  }, [confirmed, deleteEpisode, setConfirmed, deleteEpisodeId]);
 
   const handlePlayPauseBtn = () => {
     handlePlaylistPlayPauseBtn(
@@ -760,13 +885,22 @@ function EpisodeInfoDetails({ episodeInfo, userPlaylists }) {
 }
 
 export default function Playlist() {
-  const { userPlaylists } = useUser();
+  const { userPlaylists, userInfo } = useUser();
   const { setCurrentEpisode } = useCurrentEpisode();
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpText, setPopUpText] = useState(null);
+  const [btnUsage, setBtnUsage] = useState(null);
+  const [confirmed, setConfirmed] = useState(false);
 
   const handlePlayWholePlaylist = () => {
     // 如果播放清單是空的
-    if (userPlaylists.length === 0) return;
+    if (userPlaylists.length === 0) {
+      setBtnUsage(null);
+      setPopUpText("請先新增播放清單");
+      setShowPopUp(true);
+      return;
+    }
 
     const episode = userPlaylists[0].Episodes[0];
     setCurrentEpisode({
@@ -782,73 +916,105 @@ export default function Playlist() {
   };
 
   const handleRenameBtnClick = () => {
+    if (userPlaylists.length === 0) {
+      setBtnUsage(null);
+      setPopUpText("請先新增播放清單");
+      setShowPopUp(true);
+      return;
+    }
     setShowEditForm(true);
   };
 
   return (
-      <Container>
-        <Main>
-          <Div>
-            <Sidebar />
-            <PlaylistWrapper>
-              <PlaylistHeader>
-                <Photo />
-                <TitleWrapper>
-                  <TitleText>
-                    <PlaylistName>我的播放清單</PlaylistName>
-                    <Subtitle>
-                      {userPlaylists.length > 0
-                        ? userPlaylists[0].name
-                        : "播放列表"}
-                      ，共{" "}
-                      {userPlaylists.length > 0
-                        ? userPlaylists[0].Episodes.length
-                        : 0}{" "}
-                      部單元
-                    </Subtitle>
-                  </TitleText>
-                  <Buttons>
-                    <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
-                      <Images.PodcastPlayBtn />
-                    </PlaylistPlayBtnControl>
-                    <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
-                      <Images.RenamePlaylistBtn />
-                    </RenamePlaylistBtnControl>
-                  </Buttons>
-                </TitleWrapper>
-              </PlaylistHeader>
-              <PlayList>
-                {userPlaylists.length > 0 && (
-                  <TitleHeader>
-                    <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
-                    <EpisodeDescriptionHeader>
-                      單元描述
-                    </EpisodeDescriptionHeader>
-                    <ChannelNameHeader>頻道名稱</ChannelNameHeader>
-                  </TitleHeader>
+    <Container>
+      {showPopUp && (
+        <PopUpMessage
+          text={popUpText}
+          button={btnUsage}
+          setShowPopUp={setShowPopUp}
+          setConfirmed={setConfirmed}
+        />
+      )}
+      <Main>
+        <Div>
+          <Sidebar />
+          <PlaylistWrapper>
+            <PlaylistHeader>
+              <Photo />
+              <TitleWrapper>
+                <TitleText>
+                  <PlaylistName>我的播放清單</PlaylistName>
+                  <Subtitle>
+                    {!userInfo
+                      ? ""
+                      : userPlaylists && userPlaylists.length > 0
+                      ? userPlaylists[0].name
+                      : "播放列表"}
+                    ，共{" "}
+                    {!userInfo
+                      ? ""
+                      : userPlaylists && userPlaylists.length > 0
+                      ? userPlaylists[0].Episodes.length
+                      : 0}{" "}
+                    部單元
+                  </Subtitle>
+                </TitleText>
+                <Buttons>
+                  <PlaylistPlayBtnControl onClick={handlePlayWholePlaylist}>
+                    <Images.PodcastPlayBtn />
+                  </PlaylistPlayBtnControl>
+                  <RenamePlaylistBtnControl onClick={handleRenameBtnClick}>
+                    <Images.RenamePlaylistBtn />
+                  </RenamePlaylistBtnControl>
+                </Buttons>
+              </TitleWrapper>
+            </PlaylistHeader>
+            <PlayList>
+              <TitleHeader>
+                <EpisodeTitleHeader>單元名稱</EpisodeTitleHeader>
+                <EpisodeDescriptionHeader>單元描述</EpisodeDescriptionHeader>
+                <ChannelNameHeader>頻道名稱</ChannelNameHeader>
+              </TitleHeader>
+              <Body>
+                {userPlaylists && userPlaylists.length === 0 ? (
+                  <RemindBlock>
+                    <RemindText>尚無播放清單，請先新增播放清單</RemindText>
+                    <AddPlaylist>新增播放清單</AddPlaylist>
+                  </RemindBlock>
+                ) : userPlaylists && userPlaylists[0].Episodes.length > 0 ? (
+                  userPlaylists[0].Episodes.map((episodeInfo) => (
+                    <EpisodeInfoDetails
+                      key={episodeInfo.id}
+                      episodeInfo={episodeInfo}
+                      setShowPopUp={setShowPopUp}
+                      setPopUpText={setPopUpText}
+                      setBtnUsage={setBtnUsage}
+                      confirmed={confirmed}
+                      setConfirmed={setConfirmed}
+                    />
+                  ))
+                ) : userPlaylists && userPlaylists[0].Episodes.length === 0 ? (
+                  <RemindBlock>
+                    <RemindText>
+                      {userPlaylists[0].name} 為空，請至頻道頁面將單元新增進{" "}
+                      {userPlaylists[0].name}
+                    </RemindText>
+                  </RemindBlock>
+                ) : (
+                  ""
                 )}
-                <Body>
-                  {userPlaylists.length > 0
-                    ? userPlaylists[0].Episodes.map((episodeInfo) => (
-                        <EpisodeInfoDetails
-                          key={episodeInfo.id}
-                          episodeInfo={episodeInfo}
-                          userPlaylists={userPlaylists}
-                        />
-                      ))
-                    : ""}
-                </Body>
-              </PlayList>
-            </PlaylistWrapper>
-          </Div>
-        </Main>
-        {showEditForm && (
-          <PopUpForm
-            title="編輯播放清單名稱"
-            formInputs={formInputs}
-            setShowEditForm={setShowEditForm}
-          />
-        )}
-      </Container>
+              </Body>
+            </PlayList>
+          </PlaylistWrapper>
+        </Div>
+      </Main>
+      {showEditForm && (
+        <PopUpForm
+          title="編輯播放清單名稱"
+          formInputs={formInputs}
+          setShowEditForm={setShowEditForm}
+        />
+      )}
+    </Container>
   );
 }

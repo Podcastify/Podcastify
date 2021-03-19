@@ -10,6 +10,9 @@ import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
 import { getAuthToken } from "../utils";
 import { setInitialUserContext } from "../utils";
+import useAlertMessage from "../hooks/useAlertMessage";
+import usePageStatus from "../hooks/usePageStatus";
+import AlertMessage from "../components/AlertMessage";
 
 const RegisterPageWrapper = styled.div`
   max-width: 1920px;
@@ -40,7 +43,7 @@ const BtnContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  justift-content: center;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -117,6 +120,8 @@ export default function Register() {
     setUserSubscription,
   } = useUser();
   const history = useHistory();
+  const { alert, setAlert, alertText, setAlertText } = useAlertMessage();
+  const { setIsLoading } = usePageStatus();
 
   const handleLoginBtn = (e) => {
     e.preventDefault();
@@ -134,17 +139,24 @@ export default function Register() {
         }
       }
     });
+
     if (
       registerInformation.password !== registerInformation.password_double_check
     ) {
-      alert("兩次密碼不符，請重新確認");
+      setAlertText("兩次密碼不符，請重新確認");
+      setAlert(true);
       return;
     }
+
     const { username, password } = registerInformation;
     let result;
     try {
       result = await register(username, password);
-    } catch (err) {}
+    } catch (err) {
+      setAlertText(err);
+      setAlert(true);
+      return;
+    }
 
     if (result.ok) {
       const result = await login(username, password);
@@ -154,13 +166,23 @@ export default function Register() {
         setUserInfo,
         setUserPlaylists,
         setUserPlayedRecord,
-        setUserSubscription
+        setUserSubscription,
+        setAlert,
+        setIsLoading
       );
       history.push("/");
-    } else {
-      alert(result.errorMessage || result.error);
       return;
     }
+
+    if (result.error === "username must be unique") {
+      setAlertText("此帳號已被註冊，請更換帳號");
+      setAlert(true);
+      return;
+    }
+
+    setAlertText(result.error || result.errorMessage);
+    setAlert(true);
+    return;
   };
 
   const { inputs, handlers } = useInputs(formInputs);
@@ -170,6 +192,7 @@ export default function Register() {
 
   return (
     <RegisterPageWrapper>
+      {alert && <AlertMessage text={alertText} />}
       <StyledLogo />
       <FormArea>
         <RegisterForm
@@ -179,12 +202,12 @@ export default function Register() {
           onSubmit={handleRegister}
         />
         <BtnContainer>
-        <LoginBtn
-          {...loginBtnInput}
-          handlers={loginBtnHandlers}
-          onClick={handleLoginBtn}
-        />
-      </BtnContainer>
+          <LoginBtn
+            {...loginBtnInput}
+            handlers={loginBtnHandlers}
+            onClick={handleLoginBtn}
+          />
+        </BtnContainer>
       </FormArea>
     </RegisterPageWrapper>
   );

@@ -25,11 +25,12 @@ import { setInitialUserContext } from "./utils";
 function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [userSubscription, setUserSubscription] = useState([]);
-  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [userPlaylists, setUserPlaylists] = useState(null);
   const [userPlayedRecord, setUserPlayedRecord] = useState([]);
   const [currentEpisode, setCurrentEpisode] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [alertText, setAlertText] = useState(null);
 
   useEffect(() => {
     function getUser() {
@@ -38,7 +39,9 @@ function App() {
           setUserInfo,
           setUserPlaylists,
           setUserPlayedRecord,
-          setUserSubscription
+          setUserSubscription,
+          setAlert,
+          setIsLoading
         );
       }
     }
@@ -48,6 +51,8 @@ function App() {
   const AlertMessageContextValue = {
     alert,
     setAlert,
+    alertText,
+    setAlertText,
   };
 
   const pageStatusContextValue = {

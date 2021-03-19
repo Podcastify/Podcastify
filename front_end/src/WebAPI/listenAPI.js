@@ -42,7 +42,7 @@ export const getMightLovePodcasts = () => {
   const randomGenres = genres[randomIndex];
 
   return fetch(
-    `${BASE_URL}/listenAPI/best_podcasts?genre_id=114&region=tw&safe_mode=0`,
+    `${BASE_URL}/listenAPI/best_podcasts?genre_id=${randomGenres}&region=tw&safe_mode=0`,
     {
       method: "GET",
     }

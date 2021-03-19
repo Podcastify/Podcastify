@@ -169,7 +169,7 @@ const MemoPlaylistBtn = memo(PlaylistBtn);
 
 export default function MusicPlayer() {
   const { currentEpisode } = useCurrentEpisode();
-  const { alert } = useAlertMessage();
+  const { alert, alertText } = useAlertMessage();
   const {
     audioRef,
     getCurrentTime,
@@ -192,7 +192,7 @@ export default function MusicPlayer() {
 
   return (
     <>
-      {alert && <AlertMessage />}
+      {alert && <AlertMessage text={alertText} />}
       <Container>
         <Player>
           <MemoPlaylistBtn />
