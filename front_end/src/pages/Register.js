@@ -120,9 +120,8 @@ export default function Register() {
     setUserSubscription,
   } = useUser();
   const history = useHistory();
-  const { alert, setAlert } = useAlertMessage();
+  const { alert, setAlert, alertText, setAlertText } = useAlertMessage();
   const { setIsLoading } = usePageStatus();
-  const [alertText, setAlertText] = useState(null);
 
   const handleLoginBtn = (e) => {
     e.preventDefault();
@@ -148,6 +147,7 @@ export default function Register() {
       setAlert(true);
       return;
     }
+
     const { username, password } = registerInformation;
     let result;
     try {

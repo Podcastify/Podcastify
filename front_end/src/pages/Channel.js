@@ -619,7 +619,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpText, setPopUpText] = useState(null);
   const [confirmedAddPlaylist, setConfirmedAddPlaylist] = useState(false);
-  const [btnFunction, setBtnFunction] = useState(null);
+  const [btnUsage, setBtnUsage] = useState(null);
 
   const onToggle = (e) => {
     e.preventDefault();
@@ -633,7 +633,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     if (!userPlaylists[0]) {
       setIsLoading(false);
       setPopUpText("請先新增播放清單");
-      setBtnFunction("addPlaylist");
+      setBtnUsage("addPlaylist");
       setShowPopUp(true);
       return;
     }
@@ -686,7 +686,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
 
     setUserPlaylists(newPlaylist);
     setIsLoading(false);
-    setBtnFunction(null);
+    setBtnUsage(null);
     setPopUpText("已新增至您的播放清單");
     setShowPopUp(true);
   }, [
@@ -698,13 +698,14 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     isLoading,
     setIsLoading,
     setAlert,
-    setBtnFunction,
+    setBtnUsage,
     setAlertText,
   ]);
 
   useEffect(() => {
     if (confirmedAddPlaylist) {
       history.push("/myplaylist");
+      setConfirmedAddPlaylist(false);
     }
   }, [confirmedAddPlaylist, history]);
 
@@ -744,7 +745,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
       {showPopUp && (
         <PopUpMessage
           text={popUpText}
-          button={btnFunction}
+          button={btnUsage}
           setShowPopUp={setShowPopUp}
           setConfirmedAddPlaylist={setConfirmedAddPlaylist}
         />

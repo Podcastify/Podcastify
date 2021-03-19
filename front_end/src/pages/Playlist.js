@@ -762,7 +762,7 @@ function EpisodeInfoDetails({
   episodeInfo,
   setShowPopUp,
   setPopUpText,
-  setButtonText,
+  setBtnUsage,
   confirmed,
   setConfirmed,
 }) {
@@ -822,7 +822,7 @@ function EpisodeInfoDetails({
     e.preventDefault();
     setDeleteEpisodeId(episodeInfo.id);
     setPopUpText("確定將此單元從播放清單中刪除嗎？");
-    setButtonText("deleteEpisode");
+    setBtnUsage("deleteEpisode");
     setShowPopUp(true);
   };
 
@@ -890,13 +890,13 @@ export default function Playlist() {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpText, setPopUpText] = useState(null);
-  const [buttonText, setButtonText] = useState(null);
+  const [btnUsage, setBtnUsage] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
   const handlePlayWholePlaylist = () => {
     // 如果播放清單是空的
     if (userPlaylists.length === 0) {
-      setButtonText(null);
+      setBtnUsage(null);
       setPopUpText("請先新增播放清單");
       setShowPopUp(true);
       return;
@@ -917,7 +917,7 @@ export default function Playlist() {
 
   const handleRenameBtnClick = () => {
     if (userPlaylists.length === 0) {
-      setButtonText(null);
+      setBtnUsage(null);
       setPopUpText("請先新增播放清單");
       setShowPopUp(true);
       return;
@@ -930,7 +930,7 @@ export default function Playlist() {
       {showPopUp && (
         <PopUpMessage
           text={popUpText}
-          button={buttonText}
+          button={btnUsage}
           setShowPopUp={setShowPopUp}
           setConfirmed={setConfirmed}
         />
@@ -988,7 +988,7 @@ export default function Playlist() {
                       episodeInfo={episodeInfo}
                       setShowPopUp={setShowPopUp}
                       setPopUpText={setPopUpText}
-                      setButtonText={setButtonText}
+                      setBtnUsage={setBtnUsage}
                       confirmed={confirmed}
                       setConfirmed={setConfirmed}
                     />

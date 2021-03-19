@@ -162,9 +162,8 @@ export default function Login() {
     setUserSubscription,
   } = useUser();
   const history = useHistory();
-  const { alert, setAlert } = useAlertMessage();
+  const { alert, setAlert, alertText, setAlertText } = useAlertMessage();
   const { setIsLoading } = usePageStatus();
-  const [alertText, setAlertText] = useState(null);
 
   const handleToRegisterBtn = (e) => {
     e.preventDefault();
