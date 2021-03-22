@@ -1,4 +1,3 @@
-import { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
@@ -17,6 +16,9 @@ import useInputs from "../hooks/useInputs";
 import useUser from "../hooks/useUser";
 import Input from "../components/UserInput";
 import { setInitialUserContext } from "../utils";
+import useAlertMessage from "../hooks/useAlertMessage";
+import usePageStatus from "../hooks/usePageStatus";
+import AlertMessage from "../components/AlertMessage";
 
 const LoginPageWrapper = styled.div`
   max-width: 1920px;
@@ -39,7 +41,7 @@ const BtnContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  justift-content: center;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -83,16 +85,16 @@ const FormArea = styled.div`
   align-items: center;
   justify-content: center;
   ${MEDIA_QUERY_XS} {
-    margin: auto 65px
+    margin: auto 65px;
   }
   ${MEDIA_QUERY_SM} {
-    margin: auto 65px
+    margin: auto 65px;
   }
   ${MEDIA_QUERY_MD} {
-    margin: auto 65px
+    margin: auto 65px;
   }
   ${MEDIA_QUERY_LG} {
-    margin: auto 65px
+    margin: auto 65px;
   }
 `;
 
@@ -159,6 +161,8 @@ export default function Login() {
     setUserSubscription,
   } = useUser();
   const history = useHistory();
+  const { alert, setAlert, alertText, setAlertText } = useAlertMessage();
+  const { setIsLoading } = usePageStatus();
 
   const handleToRegisterBtn = (e) => {
     e.preventDefault();
@@ -181,7 +185,9 @@ export default function Login() {
     try {
       result = await login(username, password);
     } catch (err) {
-      console.log(err);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
     }
 
     if (result.ok) {
@@ -191,14 +197,27 @@ export default function Login() {
         setUserInfo,
         setUserPlaylists,
         setUserPlayedRecord,
-        setUserSubscription
+        setUserSubscription,
+        setAlert,
+        setIsLoading
       );
       history.push("/");
-    } else {
-      window.localStorage.removeItem("podcastifyToken");
-      alert(result.errorMessage);
       return;
     }
+    window.localStorage.removeItem("podcastifyToken");
+
+    if (
+      result.errorMessage ===
+      "Invalid inputs, please check your username or password again."
+    ) {
+      setAlertText("帳號或密碼有誤，請重新輸入一次");
+      setAlert(true);
+      return;
+    }
+
+    setAlertText(result.errorMessage);
+    setAlert(true);
+    return;
   };
 
   const { inputs, handlers } = useInputs(formInputs);
@@ -209,6 +228,7 @@ export default function Login() {
 
   return (
     <LoginPageWrapper>
+      {alert && <AlertMessage text={alertText} />}
       <MainContainer>
         <CoverImage></CoverImage>
         <FormArea>
