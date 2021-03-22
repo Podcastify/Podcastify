@@ -1,4 +1,3 @@
-import { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
@@ -186,7 +185,7 @@ export default function Login() {
     try {
       result = await login(username, password);
     } catch (err) {
-      setAlertText(err);
+      setAlertText(String(err));
       setAlert(true);
       return;
     }

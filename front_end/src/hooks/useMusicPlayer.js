@@ -2,8 +2,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import useAlertMessage from "../hooks/useAlertMessage";
-import { addRecord, getPlayRecordDetail } from "../utils";
-import { getRecords } from "../WebAPI/me";
+import { addRecord } from "../utils";
 
 export default function useMusicPlayer() {
   const audioRef = useRef();
