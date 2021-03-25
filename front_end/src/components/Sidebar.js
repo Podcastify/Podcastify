@@ -34,10 +34,6 @@ const SidebarWrapper = styled(SidebarContainer)`
     bottom: 0;
   }
 
-  ${MEDIA_QUERY_LG} {
-    position: relative;
-  }
-
   ${MEDIA_QUERY_MD} {
     display: none;
   }
@@ -75,12 +71,12 @@ const SidebarTitle = styled.h3`
 
   ${MEDIA_QUERY_XS} {
     font-size: 18px;
-    margin: 2px 10px 10px 25px;
   }
 `;
 
 export const SideListContainer = styled.div`
   overflow-y: scroll;
+  width: 100%;
   height: 92%;
 
   &::-webkit-scrollbar {

@@ -26,7 +26,6 @@ const GlobalStyle = createGlobalStyle`
   body::after {
     content: "";
     background: #3E3A39;
-    mix-blend-mode: screen;
     opacity: 1;
     top: 0;
     left: 0;

@@ -61,7 +61,6 @@ export default function Home() {
             currentHotPodcasts={currentHotPodcasts}
             hotPodactsInTaiwan={hotPodcastsInTaiwan}
             userPlayedRecord={userPlayedRecord}
-            userInfo={userInfo}
           />
         </Div>
       </MainWrapper>
