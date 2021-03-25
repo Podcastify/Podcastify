@@ -4,7 +4,6 @@ import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
 import styled from "styled-components";
 import { MEDIA_QUERY_XS } from "../constants/breakpoints";
-import Loading from "../components/Loading";
 import usePageStatus from "../hooks/usePageStatus";
 import {
   getMightLovePodcasts,

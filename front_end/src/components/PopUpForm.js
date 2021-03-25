@@ -9,54 +9,38 @@ import {
 } from "../constants/breakpoints";
 import UserForm from "../components/UserForm";
 import useInputs from "../hooks/useInputs";
-import { SideListContainer } from "./Sidebar";
 import { renamePlaylist } from "../WebAPI/me";
 import useUser from "../hooks/useUser";
+import {
+  Background,
+  Container,
+  CloseBtnControl,
+} from "../components/PopUpMessage";
+import usePageStatus from "../hooks/usePageStatus";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { addPlaylist, getAllMyPlaylists } from "../WebAPI/me";
 
-const CoverPage = styled.div`
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  z-index: 99;
-  background: rgba(0, 0, 0, 0.7);
-`;
-
-const FormContainer = styled(SideListContainer)`
+const CoverPage = styled(Background)``;
+const FormContainer = styled(Container)`
   width: 400px;
   height: 420px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-  border-radius: 15px;
-  background-color: ${(props) => props.theme.pop_up};
 
   ${MEDIA_QUERY_XL} {
     width: 350px;
     height: 360px;
   }
-
   ${MEDIA_QUERY_LG} {
     width: 300px;
     height: 310px;
   }
-
   ${MEDIA_QUERY_MD} {
     width: 300px;
     height: 310px;
   }
-
   ${MEDIA_QUERY_SM} {
     width: 300px;
     height: 310px;
   }
-
   ${MEDIA_QUERY_XS} {
     width: 250px;
     height: 260px;
@@ -76,7 +60,7 @@ const Title = styled.div`
   font-size: 30px;
 
   ${MEDIA_QUERY_XL} {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   ${MEDIA_QUERY_LG} {
@@ -96,55 +80,7 @@ const Title = styled.div`
   }
 `;
 
-const CloseBtnControl = styled.div`
-  svg {
-    width: 40px;
-    height: 40px;
-  }
-  cursor: pointer;
-
-  // 設計稿上未點擊時 opactity 就是 1，沒有做 hover 樣式
-  /* &:hover {
-    g {
-      opacity: 1;
-    }
-  } */
-
-  ${MEDIA_QUERY_XL} {
-    svg {
-      width: 34px;
-      height: 34px;
-    }
-  }
-
-  ${MEDIA_QUERY_LG} {
-    svg {
-      width: 26px;
-      height: 26px;
-    }
-  }
-
-  ${MEDIA_QUERY_MD} {
-    svg {
-      width: 26px;
-      height: 26px;
-    }
-  }
-
-  ${MEDIA_QUERY_SM} {
-    svg {
-      width: 26px;
-      height: 26px;
-    }
-  }
-
-  ${MEDIA_QUERY_XS} {
-    svg {
-      width: 26px;
-      height: 26px;
-    }
-  }
-`;
+const CloseBtn = styled(CloseBtnControl)``;
 
 const Form = styled(UserForm)`
   height: auto;
@@ -152,59 +88,142 @@ const Form = styled(UserForm)`
   background: ${(props) => props.theme.pop_up};
 `;
 
-export default function CoverPageForm({ title, formInputs, setShowEditForm }) {
+export default function CoverPageForm({ title, formInputs, setShowForm }) {
   const { inputs, handlers } = useInputs(formInputs);
   const { setUserPlaylists, userPlaylists } = useUser();
+  const { isLoading, setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
 
-  const handleCloseBtnClick = e => {
-    setShowEditForm(false);
-  }
+  const handleCloseBtnClick = (e) => {
+    setShowForm(false);
+  };
 
-  const handleSubmit = async e => {
+  const handleRenamePlaylist = async (e) => {
     e.preventDefault();
-    console.log(inputs);
-    const filters = ['name'];
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const filters = ["name"];
     const editInformation = {};
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       for (const filter of filters) {
         if (filter === input.attributes.name) {
-          editInformation[filter] = input.attributes.value
+          editInformation[filter] = input.attributes.value;
         }
       }
-    })
+    });
     let result;
     const { name } = editInformation;
+
     try {
       result = await renamePlaylist(userPlaylists[0].id, name);
     } catch (err) {
-      console.log(err)
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
     }
-    if (result.ok) {
-      const [playlist, ...rest] = userPlaylists;
-      setUserPlaylists([
-        {
-          ...playlist,
-          name
+
+    if (!result.ok) {
+      setIsLoading(false);
+      setAlertText(result.errorMessage);
+      setAlert(true);
+      return;
+    }
+
+    const [playlist, ...rest] = userPlaylists;
+    setUserPlaylists([
+      {
+        ...playlist,
+        name,
+        ...rest,
+      },
+    ]);
+    setIsLoading(false);
+    setShowForm(false);
+    setAlert(false);
+  };
+
+  const handleAddPlaylist = async (e) => {
+    e.preventDefault();
+
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const filters = ["name"];
+    const playlistInformation = {};
+    inputs.forEach((input) => {
+      for (const filter of filters) {
+        if (filter === input.attributes.name) {
+          playlistInformation[filter] = input.attributes.value;
         }
-      ])
-      setShowEditForm(false);
+      }
+    });
+
+    let response;
+    try {
+      response = await addPlaylist(playlistInformation.name);
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
     }
-  }
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setAlertText(response.errorMessage);
+      setAlert(true);
+      return;
+    }
+
+    let myPlaylists;
+    try {
+      myPlaylists = await getAllMyPlaylists();
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
+    }
+
+    if (!myPlaylists.ok) {
+      setIsLoading(false);
+      setAlertText(myPlaylists.errorMessage);
+      setAlert(true);
+      return;
+    }
+
+    myPlaylists = myPlaylists.data.map((playlist) => ({ ...playlist }));
+    setUserPlaylists(myPlaylists);
+    setShowForm(false);
+    setAlert(false);
+    setIsLoading(false);
+  };
 
   return (
     <CoverPage>
       <FormContainer>
         <Headline>
           <Title>{title}</Title>
-          <CloseBtnControl onClick={handleCloseBtnClick}>
+          <CloseBtn onClick={handleCloseBtnClick}>
             <Icon.Error />
-          </CloseBtnControl>
+          </CloseBtn>
         </Headline>
-        <Form
-          inputs={inputs}
-          handlers={handlers}
-          onSubmit={handleSubmit}
-        />
+        {title === "編輯播放清單名稱" && (
+          <Form
+            inputs={inputs}
+            handlers={handlers}
+            onSubmit={handleRenamePlaylist}
+          />
+        )}
+        {title === "新增播放清單" && (
+          <Form
+            inputs={inputs}
+            handlers={handlers}
+            onSubmit={handleAddPlaylist}
+          />
+        )}
       </FormContainer>
     </CoverPage>
   );
