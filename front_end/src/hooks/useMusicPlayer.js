@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
 import { addRecord } from "../utils";
+import useAlertMessage from "../hooks/useAlertMessage";
 
 export default function useMusicPlayer() {
   const audioRef = useRef();
@@ -11,6 +12,7 @@ export default function useMusicPlayer() {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [firstLoad, setFirstLoad] = useState(true);
+  const { setAlert, setAlertText } = useAlertMessage();
 
   // 如果有播放紀錄，設定為目前播放
   useEffect(() => {
@@ -56,8 +58,15 @@ export default function useMusicPlayer() {
     (keyword) => {
       const playlist = userPlaylists[0];
 
-      // 如果非會員或不是播放播放清單
-      if (!userInfo || !currentEpisode.playmode) return;
+      // 非會員
+      if (!userInfo) {
+        setAlertText("登入後即可播放");
+        setAlert(true);
+        return;
+      }
+
+      // 如果不是播放播放清單
+      if (!currentEpisode.playmode) return;
 
       // 如果播放清單只有一首
       if (playlist.Episodes.length === 1) return;

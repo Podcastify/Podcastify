@@ -166,16 +166,6 @@ function PlayerControl({ handleSong, audioRef }) {
     });
   };
 
-  const handleNextAndPrevSongBtn = (keyword) => {
-    // 如果非會員
-    if (!userInfo) {
-      setAlertText("登入後即可播放");
-      setAlert(true);
-      return;
-    }
-    handleSong(keyword);
-  };
-
   useEffect(() => {
     if (currentEpisode.playing) {
       audioRef.current.play();
@@ -186,7 +176,7 @@ function PlayerControl({ handleSong, audioRef }) {
 
   return (
     <Control>
-      <PrevControl onClick={() => handleNextAndPrevSongBtn("last")}>
+      <PrevControl onClick={() => handleSong("last")}>
         <Icon.PreviousBtn />
       </PrevControl>
       <PlayPauseControl onClick={handlePlayPauseBtn}>
@@ -200,7 +190,7 @@ function PlayerControl({ handleSong, audioRef }) {
           </PlayControl>
         )}
       </PlayPauseControl>
-      <NextControl onClick={() => handleNextAndPrevSongBtn("next")}>
+      <NextControl onClick={() => handleSong("next")}>
         <Icon.NextBtn />
       </NextControl>
     </Control>
