@@ -190,8 +190,7 @@ const breakPoints = [
 export default function InfoCard({
   currentHotPodcasts,
   hotPodactsInTaiwan,
-  recentPlayedEpisodes,
-  userInfo,
+  userPlayedRecord,
 }) {
   return (
     <PodcastInfoContainer>
@@ -254,41 +253,46 @@ export default function InfoCard({
               : ""}
           </Carousel>
         </PodcastInfoWrapper>
-        <PodcastInfoWrapper>
-          <PodcastInfoTitle># 最近播放單元</PodcastInfoTitle>
-          <Carousel
-            breakPoints={breakPoints}
-            itemPadding={[0, 10]}
-            className="InfoCard"
-          >
-            {recentPlayedEpisodes
-              ? recentPlayedEpisodes.map((data) => (
-                  <InfoCardWrapper
-                    to={`/channel/${data.episode.podcast.id}`}
-                    key={data.episode.id}
-                  >
-                    <InfoCardPhoto>
-                      <img
-                        src={data.episode.image}
-                        alt={`The Podcast titled: ${data.episode.title}`}
-                      />
-                    </InfoCardPhoto>
-                    <InfoCardTitle>{data.episode.title}</InfoCardTitle>
-                    {recentPlayedEpisodes.length > 0 && (
-                      <InfoCardContent
-                        dangerouslySetInnerHTML={{
-                          __html: data.episode.description.replace(
-                            /<[^>]+>/g,
-                            ""
-                          ),
-                        }}
-                      ></InfoCardContent>
-                    )}
-                  </InfoCardWrapper>
-                ))
-              : ""}
-          </Carousel>
-        </PodcastInfoWrapper>
+        {userPlayedRecord.length > 3 ? (
+          <PodcastInfoWrapper>
+            <PodcastInfoTitle># 最近播放單元</PodcastInfoTitle>
+
+            <Carousel
+              breakPoints={breakPoints}
+              itemPadding={[0, 10]}
+              className="InfoCard"
+            >
+              {userPlayedRecord
+                ? userPlayedRecord.map((data) => (
+                    <InfoCardWrapper
+                      to={`/channel/${data.episode.podcast.id}`}
+                      key={data.episode.id}
+                    >
+                      <InfoCardPhoto>
+                        <img
+                          src={data.episode.image}
+                          alt={`The Podcast titled: ${data.episode.title}`}
+                        />
+                      </InfoCardPhoto>
+                      <InfoCardTitle>{data.episode.title}</InfoCardTitle>
+                      {userPlayedRecord.length > 0 && (
+                        <InfoCardContent
+                          dangerouslySetInnerHTML={{
+                            __html: data.episode.description.replace(
+                              /<[^>]+>/g,
+                              ""
+                            ),
+                          }}
+                        ></InfoCardContent>
+                      )}
+                    </InfoCardWrapper>
+                  ))
+                : ""}
+            </Carousel>
+          </PodcastInfoWrapper>
+        ) : (
+          ""
+        )}
       </Div>
     </PodcastInfoContainer>
   );

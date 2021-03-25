@@ -32,38 +32,26 @@ const MainWrapper = styled(Main)`
 `;
 
 export default function Home() {
-  const { userInfo, userPlayedRecord } = useUser;
+  const { userInfo, userPlayedRecord, setUserPlayedRecord } = useUser();
   const { setAlert } = useAlertMessage();
-  const { isLoading, setIsLoading } = usePageStatus();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
-  const [recentPlayedEpisodes, setRecentPlayedEpisodes] = useState([]);
 
   useEffect(() => {
-    // getMightLovePodcasts().then((res) => {
-    //   let hotPodcastsByGenres = res.data.podcasts;
-    //   setCurrentHotPodcasts(hotPodcastsByGenres);
-    // });
-    // getHotPodcastsInTaiwan().then((res) => {
-    //   let hotPodcastsInTaiwan = res.data.podcasts;
-    //   setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
-    //   console.log(hotPodcastsInTaiwan);
-    //   setIsLoading(false);
-    // });
-
-    getRecords().then((res) => {
-      if (res.ok) {
-        let playedRecord = res.data;
-        getPlayRecordDetail(playedRecord).then((record) => {
-          let recentPlayedEpisodes = record;
-          setRecentPlayedEpisodes(recentPlayedEpisodes);
-          console.log(recentPlayedEpisodes);
-        });
-      } else {
-        setAlert(true);
-      }
+    getMightLovePodcasts().then((res) => {
+      let hotPodcastsByGenres = res.data.podcasts;
+      setCurrentHotPodcasts(hotPodcastsByGenres);
     });
-  }, [setAlert]);
+    getHotPodcastsInTaiwan().then((res) => {
+      let hotPodcastsInTaiwan = res.data.podcasts;
+      setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
+    });
+
+    if (!userInfo) {
+      return;
+    }
+    setUserPlayedRecord(userPlayedRecord);
+  }, [userInfo, setUserPlayedRecord, userPlayedRecord]);
 
   return (
     <Container>
@@ -73,7 +61,7 @@ export default function Home() {
           <InfoCard
             currentHotPodcasts={currentHotPodcasts}
             hotPodactsInTaiwan={hotPodcastsInTaiwan}
-            recentPlayedEpisodes={recentPlayedEpisodes}
+            userPlayedRecord={userPlayedRecord}
             userInfo={userInfo}
           />
         </Div>
