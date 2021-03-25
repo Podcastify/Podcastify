@@ -1,18 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
-import useAlertMessage from "../hooks/useAlertMessage";
 import { addRecord } from "../utils";
 
 export default function useMusicPlayer() {
   const audioRef = useRef();
-  const {
-    userPlaylists,
-    userPlayedRecord,
-    userInfo,
-    setUserPlayedRecord,
-  } = useUser();
-  const { setAlert } = useAlertMessage();
+  const { userPlaylists, userPlayedRecord, userInfo } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -21,6 +14,8 @@ export default function useMusicPlayer() {
 
   // 如果有播放紀錄，設定為目前播放
   useEffect(() => {
+    if (!firstLoad) return;
+
     let data = userPlayedRecord[0];
     if (!data) return;
     if (data && data.episode === undefined) return;
@@ -36,7 +31,8 @@ export default function useMusicPlayer() {
       playmode: null,
       playing: false,
     });
-  }, [userPlayedRecord, setCurrentEpisode]);
+    setFirstLoad(false);
+  }, [userPlayedRecord, setCurrentEpisode, firstLoad]);
 
   // 非會員 progress bar 歸零
   useEffect(() => {
@@ -53,19 +49,7 @@ export default function useMusicPlayer() {
 
     // 將記錄存進資料庫
     addRecord(audioRef, currentEpisode.id);
-
-    // 從資料庫抓紀錄、打 API 拿詳細資料後再放入 context
-    // getRecords().then((response) => {
-    //   if (response.ok) {
-    //     const playedRecord = response.data;
-    //     getPlayRecordDetail(playedRecord).then((record) => {
-    //       setUserPlayedRecord(record);
-    //     });
-    //   } else {
-    //     setAlert(true);
-    //   }
-    // });
-  }, [currentEpisode.id, setUserPlayedRecord, setAlert]);
+  }, [currentEpisode.id]);
 
   // 上一首或下一首
   const handleSong = useCallback(

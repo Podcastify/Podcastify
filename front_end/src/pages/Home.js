@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import InfoCard from "../components/InfoCard";
 import Sidebar from "../components/Sidebar";
 import { Main, Div } from "../components/Main";
@@ -37,10 +37,33 @@ export default function Home() {
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
   const { setIsLoading } = usePageStatus();
 
+  const getRecordsFromDB = useCallback(async () => {
+    if (!userInfo) return;
+
+    let result;
+    try {
+      result = await getRecords();
+    } catch (err) {
+      setAlertText(String(err));
+      setAlert(true);
+      return;
+    }
+
+    if (!result.ok) {
+      setAlertText(String(result.errorMessage));
+      setAlert(true);
+      return;
+    }
+    result = result.data;
+
+    let records = await getPlayRecordDetail(result, setAlert);
+    setUserPlayedRecord(records);
+  }, [setAlert, setAlertText, userInfo, setUserPlayedRecord]);
+
   useEffect(() => {
     setIsLoading(true);
 
-    // You Might Also Like
+    //You Might Also Like
     getMightLovePodcasts()
       .then((response) => {
         if (!response.ok) {
@@ -51,7 +74,6 @@ export default function Home() {
         }
 
         setCurrentHotPodcasts(response.data.podcasts);
-        setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -59,7 +81,7 @@ export default function Home() {
         setAlert(true);
       });
 
-    // Hot Podcast
+    //Hot Podcast
     getHotPodcastsInTaiwan()
       .then((res) => {
         if (!res.ok) {
@@ -70,7 +92,6 @@ export default function Home() {
         }
 
         setHotPodcastsInTaiwan(res.data.podcasts);
-        setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -78,17 +99,9 @@ export default function Home() {
         setAlert(true);
       });
 
-    if (!userInfo) {
-      return;
-    }
-    setUserPlayedRecord(userPlayedRecord);
-  }, [
-    setIsLoading,
-    setAlert,
-    setAlertText,
-    setUserPlayedRecord,
-    userPlayedRecord,
-  ]);
+    getRecordsFromDB();
+    setIsLoading(false);
+  }, [setIsLoading, setAlert, setAlertText, getRecordsFromDB]);
 
   return (
     <Container>
@@ -99,7 +112,6 @@ export default function Home() {
             currentHotPodcasts={currentHotPodcasts}
             hotPodactsInTaiwan={hotPodcastsInTaiwan}
             userPlayedRecord={userPlayedRecord}
-            userInfo={userInfo}
           />
         </Div>
       </MainWrapper>
