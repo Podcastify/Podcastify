@@ -9,8 +9,10 @@ import {
   getMightLovePodcasts,
   getHotPodcastsInTaiwan,
 } from "../WebAPI/listenAPI";
+import { getRecords } from "../WebAPI/me";
 import useUser from "../hooks/useUser";
 import useAlertMessage from "../hooks/useAlertMessage";
+import { getPlayRecordDetail } from "../utils";
 
 const Container = styled.div`
   width: 100%;
@@ -29,11 +31,11 @@ const MainWrapper = styled(Main)`
 `;
 
 export default function Home() {
-  const { userInfo } = useUser;
-  const { setIsLoading } = usePageStatus();
+  const { userInfo, userPlayedRecord, setUserPlayedRecord } = useUser();
+  const { setAlert, setAlertText } = useAlertMessage();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
-  const { setAlert, setAlertText } = useAlertMessage();
+  const { setIsLoading } = usePageStatus();
 
   useEffect(() => {
     setIsLoading(true);
@@ -75,7 +77,18 @@ export default function Home() {
         setAlertText(String(err));
         setAlert(true);
       });
-  }, [setIsLoading, setAlert, setAlertText]);
+
+    if (!userInfo) {
+      return;
+    }
+    setUserPlayedRecord(userPlayedRecord);
+  }, [
+    setIsLoading,
+    setAlert,
+    setAlertText,
+    setUserPlayedRecord,
+    userPlayedRecord,
+  ]);
 
   return (
     <Container>
@@ -85,6 +98,8 @@ export default function Home() {
           <InfoCard
             currentHotPodcasts={currentHotPodcasts}
             hotPodactsInTaiwan={hotPodcastsInTaiwan}
+            userPlayedRecord={userPlayedRecord}
+            userInfo={userInfo}
           />
         </Div>
       </MainWrapper>
