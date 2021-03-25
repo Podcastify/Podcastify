@@ -835,10 +835,18 @@ export default function Channel() {
 
     getPodcastInfo(podcastId)
       .then((response) => {
+        if (!response.ok) {
+          setIsLoading(false);
+          setAlertText(response.errorMessage);
+          setAlert(true);
+          return;
+        }
+
         setPodcastInfo(response.data);
         setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         setAlertText(String(err));
         setAlert(true);
         return;

@@ -10,6 +10,7 @@ import {
   getHotPodcastsInTaiwan,
 } from "../WebAPI/listenAPI";
 import useUser from "../hooks/useUser";
+import useAlertMessage from "../hooks/useAlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -32,19 +33,49 @@ export default function Home() {
   const { setIsLoading } = usePageStatus();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
+  const { setAlert, setAlertText } = useAlertMessage();
 
   useEffect(() => {
     setIsLoading(true);
-    getMightLovePodcasts().then((response) => {
-      let hotPodcastsByGenres = response.data.podcasts;
-      setCurrentHotPodcasts(hotPodcastsByGenres);
-    });
-    getHotPodcastsInTaiwan().then((res) => {
-      let hotPodcastsInTaiwan = res.data.podcasts;
-      setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
-      setIsLoading(false);
-    });
-  }, [setIsLoading]);
+
+    // You Might Also Like
+    getMightLovePodcasts()
+      .then((response) => {
+        if (!response.ok) {
+          setIsLoading(false);
+          setAlertText(response.errorMessage);
+          setAlert(true);
+          return;
+        }
+
+        setCurrentHotPodcasts(response.data.podcasts);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setAlertText(String(err));
+        setAlert(true);
+      });
+
+    // Hot Podcast
+    getHotPodcastsInTaiwan()
+      .then((res) => {
+        if (!res.ok) {
+          setIsLoading(false);
+          setAlertText(res.errorMessage);
+          setAlert(true);
+          return;
+        }
+
+        setHotPodcastsInTaiwan(res.data.podcasts);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setAlertText(String(err));
+        setAlert(true);
+      });
+  }, [setIsLoading, setAlert, setAlertText]);
 
   return (
     <Container>
