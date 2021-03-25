@@ -17,7 +17,7 @@ import {
   MEDIA_QUERY_LG,
   MEDIA_QUERY_MD,
   MEDIA_QUERY_SM,
-  MEDIA_QUERY_XS
+  MEDIA_QUERY_XS,
 } from "../constants/breakpoints";
 
 const Container = styled.div`
@@ -38,7 +38,7 @@ const SectionContainer = styled(Container)`
 
 const ManagementForm = styled(UserForm)`
   margin-top: 5px;
-`
+`;
 
 const PageTitle = styled.h1`
   color: #ffffff;
@@ -70,13 +70,10 @@ const TitleContainer = styled(SectionContainer)`
   align-items: center;
   justify-content: stretch;
   ${MEDIA_QUERY_XXL} {
-    
   }
   ${MEDIA_QUERY_XL} {
-
   }
   ${MEDIA_QUERY_LG} {
-
   }
   ${MEDIA_QUERY_MD} {
     flex-direction: column;
@@ -116,14 +113,13 @@ const ManageButton = styled.div`
     background-color: ${(props) => props.theme.click_color};
   }
   ${MEDIA_QUERY_MD} {
-    
   }
   ${MEDIA_QUERY_SM} {
   }
   ${MEDIA_QUERY_XS} {
-      & ~ & {
-        margin-top: 5px
-      }
+    & ~ & {
+      margin-top: 5px;
+    }
   }
 `;
 
@@ -152,7 +148,7 @@ export default function UserManagement() {
           value: "",
           placeholder: isEditing ? "舊密碼" : "********",
           readOnly: !isEditing,
-          required: true
+          required: true,
         },
         title: isEditing ? "請輸入舊密碼" : "密碼",
       },
@@ -163,9 +159,9 @@ export default function UserManagement() {
           value: "",
           placeholder: "您的新密碼",
           style: {
-            display: isEditing ? "" : "none"
+            display: isEditing ? "" : "none",
           },
-          required: true
+          required: true,
         },
         title: !isEditing ? "" : "請輸入新密碼",
       },
@@ -176,48 +172,50 @@ export default function UserManagement() {
           value: "",
           placeholder: "請再輸入一次新密碼",
           style: {
-            display: isEditing ? "" : "none"
+            display: isEditing ? "" : "none",
           },
-          required: true
+          required: true,
         },
         title: !isEditing ? "" : "確認新密碼",
       },
     ];
-    return preparedInputs
-  }, [isEditing, userInfo])
+    return preparedInputs;
+  }, [isEditing, userInfo]);
 
-  const { inputs, setInputs, handlers } = useInputs(formInputs)
-  
-  const handleChangeBtnClick = async e => {
+  const { inputs, setInputs, handlers } = useInputs(formInputs);
+
+  const handleChangeBtnClick = async (e) => {
     if (inputs[3].attributes.value !== inputs[2].attributes.value) {
-      const newInputs = [...inputs, { ...inputs[2], errorMessage: "兩次密碼不符" }, { ...inputs[3], errorMessage: "兩次密碼不符" }]
+      const newInputs = [
+        ...inputs,
+        { ...inputs[2], errorMessage: "兩次密碼不符" },
+        { ...inputs[3], errorMessage: "兩次密碼不符" },
+      ];
       setInputs(newInputs);
-      return alert('密碼不符')
+      return alert("密碼不符");
     }
-    const filters = ['oldPassword', 'newPassword'];
-    const updateInformation = {}
-    inputs.forEach(input => {
+    const filters = ["oldPassword", "newPassword"];
+    const updateInformation = {};
+    inputs.forEach((input) => {
       for (const filter of filters) {
         if (filter === input.attributes.name) {
-          updateInformation[filter] = input.attributes.value
+          updateInformation[filter] = input.attributes.value;
         }
       }
-    })
+    });
     const { oldPassword: password, newPassword } = updateInformation;
     if (!password || !newPassword) return alert("請輸入所有欄位");
     let result;
     try {
       result = await changeUserProfile(password, newPassword);
-    } catch (err) {
-
-    }
+    } catch (err) {}
     if (result.ok) {
-      alert('profile updated');
+      alert("profile updated");
       setIsEditing(false);
     } else {
-      alert('something went wrong')
+      alert("something went wrong");
     }
-  }
+  };
 
   return (
     <Container>
@@ -226,21 +224,14 @@ export default function UserManagement() {
           <SectionContainer>
             <TitleContainer>
               <PageTitle>會員資料</PageTitle>
-              <ManageButton
-                key="management"
-                onClick={handleManagementBtnClick}
-              >
+              <ManageButton key="management" onClick={handleManagementBtnClick}>
                 管理我的帳戶
               </ManageButton>
-              {
-                isEditing &&
-               <ManageButton
-                  key="change"
-                  onClick={handleChangeBtnClick}
-                >
+              {isEditing && (
+                <ManageButton key="change" onClick={handleChangeBtnClick}>
                   確認變更資料
                 </ManageButton>
-              }
+              )}
             </TitleContainer>
             <ManagementForm
               id="profileForm"

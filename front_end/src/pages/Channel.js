@@ -611,7 +611,7 @@ const CollapseControl = styled.div`
 function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
-  const { userPlaylists, setUserPlaylists } = useUser();
+  const { userInfo, userPlaylists, setUserPlaylists } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
   const { isLoading, setIsLoading } = usePageStatus();
   const { setAlert, setAlertText } = useAlertMessage();
@@ -701,6 +701,7 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
     setAlertText,
   ]);
 
+  // 沒有播放清單，確認欲新增時導致播放清單頁面
   useEffect(() => {
     if (confirmedAddPlaylist) {
       history.push("/myplaylist");
@@ -710,10 +711,23 @@ function EpisodeInfoDetails({ podcastInfo, episodeInfo }) {
 
   const handleAddIconClick = async (e) => {
     e.preventDefault();
+
+    if (!userInfo) {
+      setAlertText("登入後即可加入播放清單");
+      setAlert(true);
+      return;
+    }
+
     addEpisode();
   };
 
   const handlePlayPauseBtn = () => {
+    if (!userInfo) {
+      setAlertText("登入後即可播放");
+      setAlert(true);
+      return;
+    }
+
     if (!episodeInfo || !podcastInfo) return;
 
     // 如果現在播放內容就是該集內容，先確認播放狀況
@@ -814,15 +828,22 @@ export default function Channel() {
   const { podcastId } = useParams();
   const [podcastInfo, setPodcastInfo] = useState();
   const { setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
 
   useEffect(() => {
     setIsLoading(true);
 
-    getPodcastInfo(podcastId).then((response) => {
-      setPodcastInfo(response.data);
-      setIsLoading(false);
-    });
-  }, [podcastId, setIsLoading]);
+    getPodcastInfo(podcastId)
+      .then((response) => {
+        setPodcastInfo(response.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setAlertText(String(err));
+        setAlert(true);
+        return;
+      });
+  }, [podcastId, setIsLoading, setAlert, setAlertText]);
 
   return (
     <Container>
