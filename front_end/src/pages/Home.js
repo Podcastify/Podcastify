@@ -9,7 +9,10 @@ import {
   getMightLovePodcasts,
   getHotPodcastsInTaiwan,
 } from "../WebAPI/listenAPI";
+import { getRecords } from "../WebAPI/me";
 import useUser from "../hooks/useUser";
+import useAlertMessage from "../hooks/useAlertMessage";
+import { getPlayRecordDetail } from "../utils";
 
 const Container = styled.div`
   width: 100%;
@@ -28,23 +31,26 @@ const MainWrapper = styled(Main)`
 `;
 
 export default function Home() {
-  const { userInfo } = useUser;
-  const { setIsLoading } = usePageStatus();
+  const { userInfo, userPlayedRecord, setUserPlayedRecord } = useUser();
+  const { setAlert } = useAlertMessage();
   const [currentHotPodcasts, setCurrentHotPodcasts] = useState([]);
   const [hotPodcastsInTaiwan, setHotPodcastsInTaiwan] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    getMightLovePodcasts().then((response) => {
-      let hotPodcastsByGenres = response.data.podcasts;
+    getMightLovePodcasts().then((res) => {
+      let hotPodcastsByGenres = res.data.podcasts;
       setCurrentHotPodcasts(hotPodcastsByGenres);
     });
     getHotPodcastsInTaiwan().then((res) => {
       let hotPodcastsInTaiwan = res.data.podcasts;
       setHotPodcastsInTaiwan(hotPodcastsInTaiwan);
-      setIsLoading(false);
     });
-  }, [setIsLoading]);
+
+    if (!userInfo) {
+      return;
+    }
+    setUserPlayedRecord(userPlayedRecord);
+  }, [userInfo, setUserPlayedRecord, userPlayedRecord]);
 
   return (
     <Container>
@@ -54,6 +60,8 @@ export default function Home() {
           <InfoCard
             currentHotPodcasts={currentHotPodcasts}
             hotPodactsInTaiwan={hotPodcastsInTaiwan}
+            userPlayedRecord={userPlayedRecord}
+            userInfo={userInfo}
           />
         </Div>
       </MainWrapper>

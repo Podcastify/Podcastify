@@ -346,7 +346,6 @@ function PodcastList({
   const deletePodcast = async () => {
     setIsLoading(true);
     await deleteSubsciption(podcastInfo.id);
-    console.log(podcastInfo.id);
     const newSubscription = userSubscription.filter(
       (data) => data.id !== podcastInfo.id
     );
