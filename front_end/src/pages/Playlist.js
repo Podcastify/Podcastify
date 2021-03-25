@@ -897,8 +897,16 @@ export default function Playlist() {
   const [btnUsage, setBtnUsage] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const [formTitle, setFormTitle] = useState(null);
+  const { setAlert, setAlertText } = useAlertMessage();
 
   const handlePlayWholePlaylist = () => {
+    // 非會員
+    if (!userInfo) {
+      setAlertText("登入後即可播放");
+      setAlert(true);
+      return;
+    }
+
     // 如果播放清單是空的
     if (userPlaylists.length === 0) {
       setBtnUsage(null);
@@ -921,6 +929,14 @@ export default function Playlist() {
   };
 
   const handleRenameBtnClick = () => {
+    // 非會員
+    if (!userInfo) {
+      setAlertText("登入後即可播放");
+      setAlert(true);
+      return;
+    }
+
+    // 如果播放清單是空的
     if (userPlaylists.length === 0) {
       setBtnUsage(null);
       setPopUpText("請先新增播放清單");

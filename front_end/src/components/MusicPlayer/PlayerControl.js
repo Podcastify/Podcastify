@@ -10,6 +10,7 @@ import {
 import useUser from "../../hooks/useUser";
 import useCurrentEpisode from "../../hooks/useCurrentEpisode";
 import { useEffect, memo } from "react";
+import useAlertMessage from "../../hooks/useAlertMessage";
 
 const Control = styled.div`
   display: flex;
@@ -145,10 +146,18 @@ const NextControl = styled(PrevControl)`
 function PlayerControl({ handleSong, audioRef }) {
   const { userInfo } = useUser();
   const { currentEpisode, setCurrentEpisode } = useCurrentEpisode();
+  const { setAlert, setAlertText } = useAlertMessage();
 
   const handlePlayPauseBtn = () => {
-    // 如果非會員且沒有播放內容
-    if (!userInfo || !currentEpisode.id) return;
+    // 如果非會員
+    if (!userInfo) {
+      setAlertText("登入後即可播放");
+      setAlert(true);
+      return;
+    }
+
+    // 如果沒有播放內容
+    if (!currentEpisode.id) return;
 
     const { playing, ...rest } = currentEpisode;
     setCurrentEpisode({

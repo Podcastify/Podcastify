@@ -17,6 +17,7 @@ import { getAllPodcastsInfo } from "../WebAPI/listenAPI";
 import { useParams } from "react-router-dom";
 import PopUpMessage from "./PopUpMessage";
 import useUser from "../hooks/useUser";
+import useAlertMessage from "../hooks/useAlertMessage";
 
 export const SidebarContainer = styled.aside`
   width: 22vw;
@@ -274,8 +275,14 @@ export default function ChannelSidebar({ podcastInfo }) {
   const [subscription, setSubscription] = useState(false);
   const [popUpText, setPopUpText] = useState(null);
   const [showPopUp, setShowPopUp] = useState(false);
+  const { setAlert, setAlertText } = useAlertMessage();
 
   const handleSubscriptionBtnClick = async () => {
+    if (!userInfo) {
+      setAlertText("登入後即可訂閱");
+      setAlert(true);
+      return;
+    }
     setShowPopUp(!showPopUp);
 
     if (!subscription) {
@@ -297,16 +304,24 @@ export default function ChannelSidebar({ podcastInfo }) {
   };
 
   useEffect(() => {
-    getMySubsciption().then((response) => {
-      let data = response.data;
-      const SubscribedId = data.find((item) => item.id === podcastId);
-      if (SubscribedId) {
-        setSubscription(true);
-      } else {
-        setSubscription(false);
-      }
-    });
-  }, [podcastId]);
+    if (!userInfo) return;
+
+    getMySubsciption()
+      .then((response) => {
+        let data = response.data;
+        const SubscribedId = data.find((item) => item.id === podcastId);
+        if (SubscribedId) {
+          setSubscription(true);
+        } else {
+          setSubscription(false);
+        }
+      })
+      .catch((err) => {
+        setAlertText(String(err));
+        setAlert(true);
+        return;
+      });
+  }, [podcastId, setAlertText, setAlert, userInfo]);
 
   return (
     <>

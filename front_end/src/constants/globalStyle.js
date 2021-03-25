@@ -45,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
     bottom: 0;
     right: 0;
     position: fixed;
-    z-index: -98;   
+    z-index: -98;
   }
 `;
 

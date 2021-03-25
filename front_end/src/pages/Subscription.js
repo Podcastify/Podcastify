@@ -13,8 +13,8 @@ import {
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
 import { deleteSubsciption } from "../WebAPI/me";
-import Loading from "../components/Loading";
 import usePageStatus from "../hooks/usePageStatus";
+import useAlertMessage from "../hooks/useAlertMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -330,22 +330,35 @@ const DeleteIcon = styled.div`
       top: 25px;
       left: 25px;
     }
-
-    &hover {
-    }
   }
 `;
 
-function PodcastList({
-  podcastInfo,
-  userSubscription,
-  setUserSubscription,
-  showDeletedBtn,
-  setIsLoading,
-}) {
+function PodcastList({ podcastInfo, showDeletedBtn }) {
+  const { setAlert, setAlertText } = useAlertMessage();
+  const { userSubscription, setUserSubscription } = useUser();
+  const { isLoading, setIsLoading } = usePageStatus();
+
   const deletePodcast = async () => {
+    if (isLoading) return;
     setIsLoading(true);
-    await deleteSubsciption(podcastInfo.id);
+
+    let result;
+    try {
+      result = await deleteSubsciption(podcastInfo.id);
+    } catch (err) {
+      setIsLoading(false);
+      setAlertText(String(err));
+      setAlert(true);
+      return;
+    }
+
+    if (!result.ok) {
+      setIsLoading(false);
+      setAlertText(result.errorMessage);
+      setAlert(true);
+      return;
+    }
+
     const newSubscription = userSubscription.filter(
       (data) => data.id !== podcastInfo.id
     );
@@ -375,52 +388,60 @@ function PodcastList({
 }
 
 export default function Subcription() {
-  const { userSubscription, setUserSubscription } = useUser();
+  const { userInfo, userSubscription } = useUser();
   const [showDeletedBtn, setShowDeletedBtn] = useState(false);
-  const { isLoading, setIsLoading } = usePageStatus();
+  const { setAlert, setAlertText } = useAlertMessage();
 
   const handleShowDeletedBtn = (e) => {
     e.preventDefault();
     setShowDeletedBtn(!showDeletedBtn);
   };
 
-  return (
-    <>
-      {isLoading && <Loading />}
-      <Container>
-        <MainWrapper>
-          <Div>
-            <Sidebar />
-            <ChannelContainer>
-              <ChannelWrapper>
-                <ChannelTitleBlock onClick={handleShowDeletedBtn}>
-                  <ChannelTitle># 訂閱中的頻道</ChannelTitle>
-                  {userSubscription.length > 0 && showDeletedBtn ? (
-                    <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
-                  ) : (
-                    <ChannelBtn>管理我的頻道</ChannelBtn>
-                  )}
-                </ChannelTitleBlock>
+  const handleBtnClick = () => {
+    if (!userInfo) {
+      setAlertText("請先登入");
+      setAlert(true);
+      return;
+    }
 
-                <ChannelItemWrapper>
-                  {userSubscription.length > 0
-                    ? userSubscription.map((podcastInfo) => (
-                        <PodcastList
-                          key={podcastInfo.id}
-                          podcastInfo={podcastInfo}
-                          userSubscription={userSubscription}
-                          setUserSubscription={setUserSubscription}
-                          showDeletedBtn={showDeletedBtn}
-                          setIsLoading={setIsLoading}
-                        />
-                      ))
-                    : ""}
-                </ChannelItemWrapper>
-              </ChannelWrapper>
-            </ChannelContainer>
-          </Div>
-        </MainWrapper>
-      </Container>
-    </>
+    if (userSubscription.length === 0) {
+      setAlertText("您目前沒有訂閱任何頻道");
+      setAlert(true);
+      return;
+    }
+  };
+
+  return (
+    <Container>
+      <MainWrapper>
+        <Div>
+          <Sidebar />
+          <ChannelContainer>
+            <ChannelWrapper>
+              <ChannelTitleBlock onClick={handleShowDeletedBtn}>
+                <ChannelTitle># 訂閱中的頻道</ChannelTitle>
+                {userSubscription.length > 0 && showDeletedBtn ? (
+                  <DeletedChannelBtn>管理我的頻道</DeletedChannelBtn>
+                ) : (
+                  <ChannelBtn onClick={handleBtnClick}>管理我的頻道</ChannelBtn>
+                )}
+              </ChannelTitleBlock>
+
+              <ChannelItemWrapper>
+                {userSubscription.length > 0
+                  ? userSubscription.map((podcastInfo) => (
+                      <PodcastList
+                        key={podcastInfo.id}
+                        podcastInfo={podcastInfo}
+                        showDeletedBtn={showDeletedBtn}
+                      />
+                    ))
+                  : ""}
+              </ChannelItemWrapper>
+            </ChannelWrapper>
+          </ChannelContainer>
+        </Div>
+      </MainWrapper>
+    </Container>
   );
 }

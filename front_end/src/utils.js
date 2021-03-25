@@ -85,7 +85,6 @@ export const getPlayRecordDetail = async (playedRecords, setAlert) => {
             setAlert(true);
             return;
           }
-          setAlert(false);
           return episodeInfo.data;
         })
       );
@@ -156,7 +155,6 @@ export const setInitialUserContext = async (
     setUserPlaylists(playlists);
     setUserSubscription(subscriptions);
     setIsLoading(false);
-    setAlert(false);
   } catch {
     setIsLoading(false);
     setAlert(true);
