@@ -1,0 +1,20 @@
+name:
+	Deploy ui
+
+on:
+	push:
+		branches:
+			- master
+		paths:
+			- 'ui/**/*.js'
+
+jobs:
+	deploy:
+		name: deploy to github page
+		runs-on: ubuntu-20.04
+		steps:
+			- name: npm deploy
+				run: |
+					cd ui
+					npm deploy
+
