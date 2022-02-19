@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/constants/InfoCard.css"],"names":[],"mappings":"AACA,eACE,mCACF,CAEA,mBACE,cACF","file":"main.d26ea7f4.chunk.css","sourcesContent":["/* round buttons on hover */\n.rec.rec-arrow {\n  background-color: rgba(255, 255, 255, 0.2);\n}\n\n.rec-carousel-item {\n  cursor: pointer;\n}\n"]}
