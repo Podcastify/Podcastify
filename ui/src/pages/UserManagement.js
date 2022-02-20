@@ -1,15 +1,9 @@
-import { useContext, useEffect, useState, useMemo } from "react";
+import { useContext, useState, useMemo } from "react";
 import styled from "styled-components";
 import { Main, Div } from "../components/Main";
 import { UserContext } from "../context/context";
 import UserForm from "../components/UserForm";
 import useInputs from "../hooks/useInputs";
-import {
-  BtnContainer,
-  BtnLogInContainer,
-  BtnLogIn,
-  ButtonName,
-} from "../components/ButtonGroup";
 import { changeUserProfile } from "../WebAPI/users";
 import {
   MEDIA_QUERY_XXL,

@@ -1,3 +1,5 @@
+// TODO fix this eslint
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useState, useEffect, useCallback } from "react";
 import useUser from "./useUser";
 import useCurrentEpisode from "../hooks/useCurrentEpisode";
