@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Podcastify/static/css/main.d26ea7f4.chunk.css",
-    "main.js": "/Podcastify/static/js/main.ed33ec4c.chunk.js",
-    "main.js.map": "/Podcastify/static/js/main.ed33ec4c.chunk.js.map",
+    "main.js": "/Podcastify/static/js/main.bc717d33.chunk.js",
+    "main.js.map": "/Podcastify/static/js/main.bc717d33.chunk.js.map",
     "runtime-main.js": "/Podcastify/static/js/runtime-main.28297d1f.js",
     "runtime-main.js.map": "/Podcastify/static/js/runtime-main.28297d1f.js.map",
     "static/css/2.679831fc.chunk.css": "/Podcastify/static/css/2.679831fc.chunk.css",
@@ -42,6 +42,6 @@
     "static/css/2.679831fc.chunk.css",
     "static/js/2.430554ef.chunk.js",
     "static/css/main.d26ea7f4.chunk.css",
-    "static/js/main.ed33ec4c.chunk.js"
+    "static/js/main.bc717d33.chunk.js"
   ]
 }
