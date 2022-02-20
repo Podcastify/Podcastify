@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import DemoImage from "../images/avatar.jpg";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,

@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Input from "./UserInput";
-import useInputs from "../hooks/useInputs";
 import {
   MEDIA_QUERY_XS,
   MEDIA_QUERY_SM,
   MEDIA_QUERY_MD,
-  MEDIA_QUERY_LG,
-  MEDIA_QUERY_XL,
 } from "../constants/breakpoints";
 
 const StyledForm = styled.form`

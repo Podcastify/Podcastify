@@ -4,14 +4,25 @@ on:
   push:
     branches:
       - master
-      - github-actions
     paths:
       - 'ui/**/*.js'
-
 jobs:
   deploy:
     runs-on: ubuntu-20.04
+    env:
+      MY_GITHUB_TOKEN: ${{ secrets.GHPAGE_TOKEN }}
+      MY_GITHUB_EMAIL: ${{ secrets.EMAIL }}
+      MY_GITHUB_USER: ${{ secrets.USER }}
     steps:
-      - name: npm deploy
+      - uses: actions/checkout@v2
+      - name: build 
         run: |
-          cd ui && npm deploy
+          cd ui
+          npm install
+          npm run build
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GHPAGE_TOKEN }}
+          publish_dir: './ui/build'
+          publish_branch: podcastify
