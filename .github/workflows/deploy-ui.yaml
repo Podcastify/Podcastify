@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-      - github-actions
-
+    paths:
+      - 'ui/**/*.js'
 jobs:
   deploy:
     runs-on: ubuntu-20.04
@@ -21,8 +21,8 @@ jobs:
           npm install
           npm run build
       - name: deploy
-        run: |
-          git config --global user.email ${MY_GITHUB_EMAIL}
-          git config --global user.name ${MY_GITHUB_USER}
-          git remote add origin "https://${MY_GITHUB_TOKEN}github.com/Podcastify/Podcastify.git"
-          npm run deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GHPAGE_TOKEN }}
+          publish_dir: './ui/build'
+          publish_branch: podcastify
