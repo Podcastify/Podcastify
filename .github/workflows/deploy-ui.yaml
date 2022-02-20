@@ -9,11 +9,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-20.04
+    env:
+      MY_GITHUB_TOKEN: ${{ secrets.GHPAGE_TOKEN }}
+      MY_GITHUB_EMAIL: ${{ secrets.EMAIL }}
+      MY_GITHUB_USER: ${{ secrets.USER }}
     steps:
       - uses: actions/checkout@v2
-      - name: build and deploy
+      - name: build 
         run: |
           cd ui
           npm install
           npm run build
+      - name: deploy
+        run: |
+          git config --global user.email ${MY_GITHUB_EMAIL}
+          git config --global user.name ${MY_GITHUB_USER}
+          git remote add origin "https://${MY_GITHUB_TOKEN}github.com/Podcastify/Podcastify.git"
           npm run deploy
