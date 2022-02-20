@@ -5,8 +5,6 @@ on:
     branches:
       - master
       - github-actions
-    paths:
-      - 'ui/**/*.js'
 
 jobs:
   deploy:
@@ -15,4 +13,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: npm deploy
         run: |
-          cd ui && npm run deploy
+          cd ui
+          npm run deploy
