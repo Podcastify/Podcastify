@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="95.177" height="95.177" viewBox="0 0 95.177 95.177">
+  <title>暫停</title>
+  <g transform="translate(-1073.54 -483.932)">
+    <rect width="67.3" height="67.3" rx="21.11" transform="translate(1073.54 531.521) rotate(-45)" fill="#e9502e"/>
+    <line y2="25.08" transform="translate(1112.564 518.98)" fill="#e9502e"/>
+    <rect width="7" height="25.08" transform="translate(1109.064 518.98)" fill="#fff"/>
+    <line y2="25.08" transform="translate(1129.694 518.98)" fill="#e9502e"/>
+    <rect width="7" height="25.08" transform="translate(1126.194 518.98)" fill="#fff"/>
+  </g>
+</svg>
