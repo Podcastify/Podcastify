@@ -1,16 +1,16 @@
-name:	Deploy ui
+name: Deploy ui
 
 on:
-	push:
-		branches:
-			- master
-		paths:
-			- 'ui/**/*.js'
+  push:
+    branches:
+      - master
+    paths:
+      - 'ui/**/*.js'
 
 jobs:
-	deploy:
-		runs-on: ubuntu-20.04
-		steps:
-			- name: npm deploy
-				run: |
-					cd ui && npm deploy
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: npm deploy
+        run: |
+          cd ui && npm deploy
