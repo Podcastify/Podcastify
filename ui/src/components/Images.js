@@ -19,7 +19,7 @@ import { ReactComponent as DeleteBtn } from "../images/Delete_from_list_Default.
 import { ReactComponent as RenamePlaylistBtn } from "../images/My_Playlist_rename.svg";
 import { ReactComponent as Error } from "../images/Error.svg";
 
-export default {
+const image = {
   PlayBtn,
   PauseBtn,
   NextBtn,
@@ -41,3 +41,5 @@ export default {
   RenamePlaylistBtn,
   Error,
 };
+
+export default image;
