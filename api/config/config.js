@@ -1,6 +1,16 @@
 require('dotenv').config();
+const {DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT} = process.env;
 
-export const DB_USER = process.env.DB_USER ?? 'root';
-export const DB_NAME = process.env.DB_NAME ?? 'podcastify';
-export const DB_PASSWORD = process.env.DB_PASSWORD ?? '';
-export const DB_HOST = process.env.CLEARDB_DATABASE_URL ? process.env.CLEARDB_DATABASE_URL : process.env.DB_HOST ? process.env.DB_HOST : '127.0.0.1';
+if (!DB_NAME || !DB_USER || !DB_PASSWORD || !DB_HOST || !DB_DIALECT) {
+    throw new Error('missing DB env');
+}
+
+const config = {
+    username: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    host: DB_HOST,
+    dialect: DB_DIALECT,
+};
+
+module.exports = config;
