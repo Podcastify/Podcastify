@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db:migrate": "sequelize db:migrate",
+    "db:migrate": "npx sequelize db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run db:migrate && node app.js"
   },
