@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:migrate": "sequelize db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "npm run db:migrate && node app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "express-generator": "^4.16.1",
     "json-server": "^0.16.3",
