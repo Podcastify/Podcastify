@@ -8,7 +8,7 @@
     "dev": "nodemon --exec babel-node ./src/app.js",
     "db:migrate": "npx sequelize db:migrate",
     "build": "babel src --out-dir dist",
-    "start": "npm run build && npm run db:migrate && node ./dist/app.js"
+    "start": "npm run db:migrate && npm run build && node ./dist/app.js"
   },
   "keywords": [],
   "author": "",
