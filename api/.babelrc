@@ -1,0 +1,16 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "Middleware": "./src/middleware",
+        "Model": "./src/models",
+        "Util": "./src/utils",
+        "Constant": "./src/constants",
+        "Controller": "./src/controllers"
+       }
+    }]
+  ]
+}

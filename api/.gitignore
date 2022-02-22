@@ -1,0 +1,13 @@
+node_modules
+ignored
+listen_api_test
+config.json
+testsql.js
+db.json
+.DS_Store
+migrations.bk
+ecosystem.config.js
+enviroment_variables
+.env
+.env*
+dist/
