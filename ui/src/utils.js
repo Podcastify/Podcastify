@@ -18,7 +18,7 @@ export const handlePlaylistPlayPauseBtn = (
 ) => {
   if (!episodeInfo) return;
 
-  // 取得目前該集數在播放列表的順序 test
+  // 取得目前該集數在播放列表的順序
   let playlistOrder;
   const episodes = userPlaylists[0].Episodes;
   for (let i = 0; i < episodes.length; i++) {
