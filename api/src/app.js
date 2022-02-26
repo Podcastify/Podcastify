@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import logger from 'morgan';
 
-import {API_PORT, SECRET, LISTEN_KEY} from 'Constant/index.js';
+import {API_PORT, SECRET, LISTEN_KEY} from './constants/index.js';
 import {requiredLogin} from './controllers/userControllers.js';
 
 import meRouter from './routes/me.js';
