@@ -1,4 +1,4 @@
-// TODO catch error function
+// TODO catch error function.
 
 const validator = (requiredFields) => (req, res, next) => {
     for (let i = 0; i < requiredFields.length; i++) {
