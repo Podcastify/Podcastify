@@ -24,9 +24,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(cors({preflightContinue: false}));
 app.use(express.static(join(__dirname, 'public')));
 app.use(init);
+app.options('*', cors()); // include before other routes
 
 app.use('/me', requiredLogin, meRouter);
 app.use('/users', usersRouter);
