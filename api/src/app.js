@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import logger from 'morgan';
 
-import {API_PORT, SECRET, LISTEN_KEY} from './constants/index.js';
+import {API_PORT, PODCASTIFY_SECRET, LISTEN_KEY} from './constants/index.js';
 import {requiredLogin} from './controllers/userControllers.js';
 
 import meRouter from './routes/me.js';
@@ -16,7 +16,7 @@ var app = express();
 const init = (req, res, next) => {
     res.locals.ok = false;
     app.locals.listenKey = LISTEN_KEY;
-    app.locals.secret = SECRET;
+    app.locals.secret = PODCASTIFY_SECRET;
     next();
 };
 
