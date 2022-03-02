@@ -1,5 +1,7 @@
-import { getAuthToken } from "../utils";
+// import { getAuthToken } from "../utils";
 import { BASE_URL } from "../constants/apiUrl";
+
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 // 取得會員資料
 export const getMyInfo = () => {

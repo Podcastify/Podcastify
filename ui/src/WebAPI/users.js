@@ -1,5 +1,7 @@
-import { BASE_URL } from "../constants/apiUrl";
+// import { BASE_URL } from "../constants/apiUrl";
 import { getAuthToken } from "../utils";
+
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const register = (username, password) => {
   return fetch(`${BASE_URL}/users/register`, {
