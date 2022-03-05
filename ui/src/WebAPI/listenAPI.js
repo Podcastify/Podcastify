@@ -1,6 +1,5 @@
-// import { BASE_URL } from "../constants/apiUrl";
+import { BASE_URL } from "../constants/apiUrl";
 
-const BASE_URL = process.env.REACT_APP_API_URL;
 
 // 搜尋功能
 export const getSearchPodcast = (keyword) => {
