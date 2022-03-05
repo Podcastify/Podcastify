@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import Images from "../components/Images";
@@ -26,8 +26,7 @@ const LoginPageWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const StyledLogo = styled(Images.PodcastifyLogo)`
-  cursor: pointer;
+const StyledLogo = styled(Link)`
   height: 75px;
 `;
 
@@ -232,7 +231,9 @@ export default function Login() {
       <MainContainer>
         <CoverImage></CoverImage>
         <FormArea>
-          <StyledLogo />
+          <StyledLogo to="/">
+            <Images.PodcastifyLogo />
+          </StyledLogo>
           <LoginForm
             formTitle={"會員登入"}
             inputs={inputs}
