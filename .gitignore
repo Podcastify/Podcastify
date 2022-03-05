@@ -7,5 +7,5 @@ db.json
 migrations.bk
 ecosystem.config.js
 enviroment_variables
-.env
-**/.env
+# .env
+# **/.env
