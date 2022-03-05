@@ -83,7 +83,7 @@ function App() {
           <CurrentEpisodeContext.Provider value={currentEpisodeContextValue}>
             <ThemeProvider theme={theme}>
               <GlobalStyle />
-              <Router>
+              <Router basename="/Podcastify">
                 <Navbar />
                 <Switch>
                   <Route exact path="/">
