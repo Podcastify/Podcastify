@@ -849,7 +849,7 @@ export default function Channel() {
         setIsLoading(false);
         setAlertText(String(err));
         setAlert(true);
-        return;
+
       });
   }, [podcastId, setIsLoading, setAlert, setAlertText]);
 
